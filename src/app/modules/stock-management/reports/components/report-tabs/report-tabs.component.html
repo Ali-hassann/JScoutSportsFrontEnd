@@ -1,0 +1,18 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Ledger">
+            <app-item-ledger-reports-tab></app-item-ledger-reports-tab>
+        </p-tabPanel>
+        <p-tabPanel header="Transaction">
+            <app-transaction-reports-tab></app-transaction-reports-tab>
+        </p-tabPanel>
+        <!-- <p-tabPanel header="Vender Ledger">
+            <app-party-ledger-reports-tab></app-party-ledger-reports-tab>
+        </p-tabPanel> -->
+        <p-tabPanel header="Summary">
+            <app-summary-reports-tab></app-summary-reports-tab>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

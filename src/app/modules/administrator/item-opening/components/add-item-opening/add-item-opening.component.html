@@ -1,0 +1,37 @@
+<!-- <form id="body" #f="ngForm">
+    <div ngModelGroup="itemOpeningGroup" #itemOpeningGroup="ngModelGroup" class="card p-fluid mt-0 grid">
+        <div class="field col-11 md:col-11 sm:col-12">
+        </div>
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="head" class="font-bold">Item *</label>
+            <p-dropdown name="Item" [(ngModel)]="itemOpening.ItemId" appendTo="body" scrollHeight="200px"
+                [options]="itemList" placeholder="Select Item" [ngModelOptions]="{standalone: true}" [filter]="true"
+                [showClear]="true" optionLabel="ItemName" optionValue="ItemId" [required]="true">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="itemOpeningGroup.control?.get('ItemId')?.invalid">Select Item.
+            </small>
+        </div>
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label class="font-bold" htmlFor="name">Quantity *</label>
+            <input [ngModelOptions]="{standalone: true}" selectAll pInputText name="OpeningQuantity"
+                [(ngModel)]="itemOpening.OpeningQuantity" type="number" placeholder="Enter Quantity" required />
+            <small class="p-error block" *ngIf="itemOpeningGroup.control?.get('OpeningQuantity')?.invalid">Quantity
+                is empty or invalid.
+            </small>
+        </div>
+        <div *hasRight="InventoryRights.CanShowPurchaseInvoicePrice" class="field col-6 md:col-6 sm:col-12">
+            <label class="font-bold" htmlFor="name">Price *</label>
+            <input [ngModelOptions]="{standalone: true}" selectAll pInputText name="OpeningPrice"
+                [(ngModel)]="itemOpening.OpeningPrice" type="number" placeholder="Enter Opening Price" />
+        </div>      
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton Category="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton Category="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form> -->

@@ -1,0 +1,145 @@
+<form [formGroup]="journalVoucherForm">
+    <div class="flex flex-wrap">
+
+        <div class=" col-12 md:col-3">
+            <label style="font-weight: bold;" htmlFor="Posting Account">Posting Account Title</label>
+            <p-dropdown [options]="(postingAccountsList)" optionLabel="PostingAccountsName" [filter]="true"
+                [showClear]="true" scrollHeight="150px" placeholder="Select Posting Account" [required]="true"
+                (onChange)="onPostingAccountChange($event)">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="frmCtrlPostingAccountsId.invalid && frmCtrlPostingAccountsId.touched">
+                Please select other posting account.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-2">
+            <label style="font-weight: bold;" htmlFor="Debit">Debit</label>
+            <input pInputText id="Debit" type="number" formControlName="DebitAmount"
+                (keyup)="onDebitAmountChange($event)" />
+
+            <small class="p-error block"
+                *ngIf="frmCtrlIsDebitAmountValid.value == false && !frmCtrlIsDebitAmountValid.touched">
+                Enter atleast (Debit or Credit) Amount.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-2">
+            <label style="font-weight: bold;" htmlFor="Credit">Credit</label>
+            <input pInputText id="Credit" type="number" formControlName="CreditAmount"
+                (keyup)="onCreditAmountChange($event)" />
+
+            <small class="p-error block"
+                *ngIf="frmCtrlIsCreditAmountValid.value == false && !frmCtrlIsCreditAmountValid.touched">
+                Enter atleast (Debit or Credit) Amount.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-4">
+            <label style="font-weight: bold;" htmlFor="Remarks">Remarks</label>
+            <input pInputText id="Remarks" type="text" formControlName="Narration" placeholder="Enter Narration" />
+        </div>
+
+        <div class="mt-apprx-3">
+            <button pButton pRipple icon="pi pi-plus-circle" (click)="addjournalVoucherDetail()"
+                class="p-button-raised p-button-primary">
+            </button>
+        </div>
+
+    </div>
+</form>
+<div class="col-12">
+    <p-table [value]="journalVoucherDetailList" dataKey="id" editMode="row" responsiveLayout="scroll"
+        scrollHeight="25vh" styleClass="p-datatable-gridlines p-datatable-sm">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="min-width: 6rem; color: black;">#Sr</th>
+                <th style="min-width: 20rem; color: black;">
+                    Posting Accounts Name
+                </th>
+
+                <th style="min-width: 22rem; color: black;">
+                    Remarks
+                </th>
+
+                <th style="min-width: 10rem; color: black;">
+                    Dr.Amount
+                </th>
+
+                <th style="min-width: 6rem; color: black;">
+                    Cr.Amount
+                </th>
+
+                <th style="min-width: 8rem; color: black;">
+                    Actions
+                </th>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-voucherDetail let-editing="editing" let-i="rowIndex">
+            <tr [pEditableRow]="voucherDetail">
+                <td style="min-width: 3rem;">
+                    <b>{{i + 1}}</b>
+                </td>
+                <td style="min-width: 20rem;">
+                    {{ voucherDetail | showSpecificProperty: 'PostingAccountsId': 'PostingAccountsName'}}
+                </td>
+
+                <td style="min-width: 22rem;">
+                    {{voucherDetail.Narration}}
+                </td>
+
+                <td style="min-width: 10rem;" pEditableColumn>
+
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="number" [(ngModel)]="voucherDetail.DebitAmount"
+                                (focusout)="onRowEditSave(voucherDetail, 'Debit', $event)"
+                                (keydown)="onRowEditSave(voucherDetail, 'Debit', $event)">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span BoldAmount> {{voucherDetail.DebitAmount}}</span>
+                        </ng-template>
+                    </p-cellEditor>
+
+                </td>
+
+                <td style="min-width: 6rem;" pEditableColumn>
+
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="number" [(ngModel)]="voucherDetail.CreditAmount"
+                                (focusout)="onRowEditSave(voucherDetail, 'Credit', $event)"
+                                (keydown)="onRowEditSave(voucherDetail, 'Credit', $event)">
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                            <span BoldAmount>
+                                {{voucherDetail.CreditAmount}}
+                            </span>
+
+                        </ng-template>
+                    </p-cellEditor>
+
+                </td>
+
+                <td style="min-width: 8rem;">
+                    <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                        (click)="deleteJournalVoucherDetail(i)"></i>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td style="min-width: 3rem; color: black;"></td>
+                <td style="min-width: 20rem; color: black;"></td>
+                <td style="min-width: 22rem; color: black; text-align: end;">Total : </td>
+                <!-- <td BoldAmount style="min-width: 26rem; color: black;"> Total Amount : {{total}}</td> -->
+                <td BoldAmount style="min-width: 10rem; color: black;">Dr : {{totalDebitAmount}}</td>
+                <td BoldAmount style="min-width: 6rem; color: black;">Cr : {{totalCreditAmount}} </td>
+                <td style="min-width: 8rem; color: black;"></td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</div>

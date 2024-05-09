@@ -1,0 +1,256 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="VoucherGroup" #VoucherGroup="ngModelGroup">
+
+            <div class="flex flex-wrap">
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date" style="font-weight: bold;">Date</label>
+                    <p-calendar [showIcon]="true" name="VoucherDate" dateFormat="d-M-y"
+                        [(ngModel)]="voucherMasterRequest.VoucherDate">
+                    </p-calendar>
+                </div>
+
+                <div class=" col-12 md:col-2">
+                    <label htmlFor="head" style="font-weight: bold;">Voucher Type</label>
+                    <p-dropdown [options]="VoucherTypeEnum" name="VoucherTypeId"
+                        [(ngModel)]="voucherMasterRequest.VoucherTypeId" scrollHeight="130px" placeholder="Voucher Type"
+                        [required]="true" optionLabel="name" optionValue="value">
+                    </p-dropdown>
+                    <!-- <small class="p-error block" *ngIf="!invoiceMasterRequest.ParticularId">Particular
+                        is empty or invalid.
+                    </small> -->
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
+                    <input pInputText id="RefNo" type="text" name="ReferenceNo"
+                        [(ngModel)]="voucherMasterRequest.ReferenceNo" placeholder="Enter RefNo" />
+                </div>
+
+                <div class=" col-12 md:col-2">
+                    <label htmlFor="head" style="font-weight: bold;">Order</label>
+                    <p-dropdown scrollHeight="130px" placeholder="Order No" [filter]="true" [showClear]="true"
+                        [required]="true" optionLabel="name">
+                    </p-dropdown>
+                    <!-- <small class="p-error block" *ngIf="!invoiceMasterRequest.ParticularId">Particular
+                        is empty or invalid.
+                    </small> -->
+                </div>
+
+                <div class="col-12 md:col-4">
+                    <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
+                    <input pInputText id="Remarks" name="Remarks" [(ngModel)]="voucherMasterRequest.Remarks" type="text"
+                        placeholder="Enter Remarks" />
+                </div>
+
+            </div>
+
+            <hr>
+
+            <p-tabView>
+                <p-tabPanel header="Voucher Details" leftIcon="pi pi-book">
+
+                    <div class="flex flex-wrap">
+
+                        <div class=" col-12 md:col-3">
+                            <label style="font-weight: bold;" htmlFor="Posting Account">Account Title</label>
+                            <p-dropdown [options]="(postingAccountsList)" optionLabel="PostingAccountsName"
+                                [filter]="true" [showClear]="true" scrollHeight="150px"
+                                placeholder="Select Posting Account" [required]="true" [(ngModel)]="addPostingJvDetail"
+                                [ngModelOptions]="{standalone: true}" (onChange)="onPostingAccountChange($event)">
+                            </p-dropdown>
+                            <!-- <small class="p-error block" *ngIf="frmCtrlPostingAccountsId.invalid && frmCtrlPostingAccountsId.touched">
+                                Please select other posting account.
+                            </small> -->
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <label style="font-weight: bold;" htmlFor="Debit">Debit</label>
+                            <input pInputText id="Debit" [(ngModel)]="addJVDetail.DebitAmount"
+                                (ngModelChange)="debitChange()" selectAll [ngModelOptions]="{standalone: true}"
+                                type="number" />
+
+                            <!-- <small class="p-error block"
+                                *ngIf="frmCtrlIsDebitAmountValid.value == false && !frmCtrlIsDebitAmountValid.touched">
+                                Enter atleast (Debit or Credit) Amount.
+                            </small> -->
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <label style="font-weight: bold;" htmlFor="Credit">Credit</label>
+                            <input pInputText id="Credit" [(ngModel)]="addJVDetail.CreditAmount"
+                                (ngModelChange)="creditChange()" selectAll [ngModelOptions]="{standalone: true}"
+                                type="number" />
+
+                            <!-- <small class="p-error block"
+                                *ngIf="frmCtrlIsCreditAmountValid.value == false && !frmCtrlIsCreditAmountValid.touched">
+                                Enter atleast (Debit or Credit) Amount.
+                            </small> -->
+                        </div>
+
+                        <div class="col-12 md:col-4">
+                            <label style="font-weight: bold;" htmlFor="Remarks">Narration</label>
+                            <input pInputText id="Remarks" type="text" [(ngModel)]="addJVDetail.Narration"
+                                placeholder="Enter Narration" [ngModelOptions]="{standalone: true}" />
+                        </div>
+
+                        <div class="mt-5">
+                            <button pButton pRipple icon="pi pi-plus-circle" (click)="addJournalVoucherDetail()"
+                                class="p-button-raised p-button-primary">
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <p-table [value]="voucherMasterRequest.VouchersDetailRequest" dataKey="VouchersDetailId"
+                        editMode="row" responsiveLayout="scroll" scrollHeight="25vh"
+                        styleClass="p-datatable-gridlines p-datatable-sm">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 6rem; color: black;">#Sr</th>
+                                <th style="min-width: 20rem; color: black;">
+                                    Posting Account Name
+                                </th>
+
+                                <th style="min-width: 10rem; color: black;">
+                                    Narration
+                                </th>
+
+                                <th style="min-width: 10rem; color: black;">
+                                    Dr.Amount
+                                </th>
+
+                                <th style="min-width: 9rem; color: black;">
+                                    Cr.Amount
+                                </th>
+
+                                <th style="min-width: 8rem; color: black;">
+                                    Actions
+                                </th>
+
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-invoiceDetail let-editing="editing" let-i="rowIndex">
+                            <tr [pEditableRow]="invoiceDetail">
+
+                                <td style="min-width: 3rem;">
+                                    <b>{{i + 1}}</b>
+                                </td>
+
+                                <td style="min-width: 8rem;">
+                                    {{ invoiceDetail.PostingAccountsName}}
+                                </td>
+
+                                <!-- <td style="min-width: 8rem;">
+                                    {{ invoiceDetail.Narration}}
+                                </td> -->
+                                <td style="min-width: 8rem;" pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="invoiceDetail.Narration"
+                                                [ngModelOptions]="{standalone: true}">
+                                        </ng-template>
+
+                                        <ng-template pTemplate="output">
+
+                                            <span>
+                                                {{invoiceDetail.Narration}}</span>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td style="min-width: 8rem;" pEditableColumn>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" [(ngModel)]="invoiceDetail.DebitAmount"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (ngModelChange)="onDetailChange(invoiceDetail,'debit')">
+
+                                        </ng-template>
+
+                                        <ng-template pTemplate="output">
+
+                                            <span BoldAmount>
+                                                {{invoiceDetail.DebitAmount}}</span>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <td style="min-width: 8rem;" pEditableColumn>
+
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" [(ngModel)]="invoiceDetail.CreditAmount"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (ngModelChange)="onDetailChange(invoiceDetail,'credit')">
+
+                                        </ng-template>
+
+                                        <ng-template pTemplate="output">
+
+                                            <span BoldAmount>
+                                                {{invoiceDetail.CreditAmount}}</span>
+                                        </ng-template>
+                                    </p-cellEditor>
+
+                                </td>
+
+                                <td style="min-width: 8rem;">
+                                    <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteVoucherDetail(i)"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <tr>
+                                <td style="min-width: 3rem; color: black;"></td>
+                                <td style="min-width: 20rem; color: black;"></td>
+                                <td style="min-width: 22rem; color: black; text-align: end;">Total : </td>
+                                <td BoldAmount style="min-width: 10rem; color: black;">Dr : {{totalDebitAmount}}</td>
+                                <td BoldAmount style="min-width: 6rem; color: black;">Cr : {{totalCreditAmount}} </td>
+                                <td style="min-width: 8rem; color: black;"></td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                </p-tabPanel>
+                <!-- <p-tabPanel header="Documents" leftIcon="pi pi-paperclip">
+                    <ng-template pTemplate="content">
+                        <app-gallery [Gallery]="images" (EmitGallery)="onGalleryChange($event)"></app-gallery>
+                    </ng-template>
+                </p-tabPanel> -->
+            </p-tabView>
+        </div>
+    </form>
+
+</div>
+
+<!-- <div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+</div> -->
+
+<hr>
+<div class="flex justify-content-end">
+    <span class="mr-3" *ngIf="isToShowAddNew" BoldAmount>{{voucherMasterRequest.SerialNumber}}</span>
+    <button *ngIf="isToShowAddNew" (click)="initialStage()" pButton pRipple type="button" label="Add New"
+        icon="pi pi-add-circle" class="p-button-raised p-button-primary mr-3">
+    </button>
+    <button *ngIf="isToShowAddNew" (click)="printVoucher()" pButton pRipple type="button" label="Print"
+        icon="pi pi-add-circle" class="p-button-raised p-button-primary mr-3">
+    </button>
+    <button (click)="close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+</div>

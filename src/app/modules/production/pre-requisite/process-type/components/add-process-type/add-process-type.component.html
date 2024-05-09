@@ -1,0 +1,42 @@
+<form id="body" #f="ngForm">
+    <div ngModelGroup="processTypeGroup" #processTypeGroup="ngModelGroup" class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Main Type Name *</label>
+            <p-dropdown appendTo="body" name="ProcessType" [(ngModel)]="processType.MainProcessTypeId"
+                scrollHeight="130px" [options]="mainProcessTypeList" placeholder="Select Main Process Type"
+                [filter]="true" [showClear]="true" optionLabel="name" optionValue="value" [required]="true">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="processTypeGroup.control?.get('MainProcessTypeId')?.invalid">Select
+                Main Process Type.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Process Type Name *</label>
+            <input (keyup.enter)="submit(f)" pInputText name="ProcessTypeName" [(ngModel)]="processType.ProcessTypeName"
+                type="text" placeholder="Enter Name " required />
+            <small class="p-error block" *ngIf="processTypeGroup.control?.get('ProcessTypeName')?.invalid">Process Type
+                Name
+                is empty or invalid.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Step No </label>
+            <input pInputText name="SortOrder" [(ngModel)]="processType.SortOrder" type="number"
+                placeholder="Enter Step No." required />
+            <small class="p-error block" *ngIf="processTypeGroup.control?.get('ProcessTypeName')?.invalid">Please Define
+                Step No.
+            </small>
+        </div>
+
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

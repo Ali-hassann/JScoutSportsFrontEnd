@@ -1,0 +1,14 @@
+<div class="p-formgrid grid">
+    <div class="col-3">
+        <label htmlFor="type">Voucher Type</label>
+        <br>
+        <p-dropdown [options]="voucherTypeList" optionLabel="name" placeholder="Select Voucher Type" [required]="true"
+            optionValue="value" [(ngModel)]="dailyTransactionRequest.VoucherTypeId">
+        </p-dropdown>
+    </div>
+    <div>
+        <button pButton label="Print" class="p-button-raised" style="margin-top: 2.3rem;" icon="pi pi-print"
+            (click)="printReport()"></button>
+    </div>
+</div>
+<iframe id="frame" [src]="" class="col-12"></iframe>

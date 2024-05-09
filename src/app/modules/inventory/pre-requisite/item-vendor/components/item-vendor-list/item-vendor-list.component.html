@@ -1,0 +1,76 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="itemVendorList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['ItemTypeName','ItemCategoryName']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[5,10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Item Vendors</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="ItemName">Item<p-sortIcon field="ItemName"></p-sortIcon></th>
+                        <th pSortableColumn="ItemCategoryName">Category<p-sortIcon field="ItemCategoryName"></p-sortIcon></th>
+                        <th pSortableColumn="UnitName">Unit<p-sortIcon field="UnitName"></p-sortIcon></th>
+                        <th pSortableColumn="PurchasePrice">Purchase<p-sortIcon field="PurchasePrice"></p-sortIcon></th>
+                        <th pSortableColumn="TotalParticulars">Vendors<p-sortIcon field="TotalParticulars"></p-sortIcon></th>
+                        <th pSortableColumn="ParticularDetail">Details<p-sortIcon field="ParticularDetail"></p-sortIcon></th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-itemVendor>
+                    <tr>                        
+                        <td><span class="p-column-title">ItemName</span>
+                            {{itemVendor.ItemName}}
+                        </td>
+
+                        <td><span class="p-column-title">ItemCategoryName</span>
+                            {{itemVendor.ItemCategoryName}}
+                        </td>
+
+                        <td><span class="p-column-title">UnitName</span>
+                            {{itemVendor.UnitName}}
+                        </td>
+                        
+                        <td><span class="p-column-title">PurchasePrice</span>
+                            {{itemVendor.PurchasePrice}}
+                        </td>
+
+                        <td><span class="p-column-title">TotalParticulars</span>
+                            {{itemVendor.TotalParticulars}}
+                        </td>
+                       
+                        <td><span class="p-column-title">ParticularDetail</span>
+                            {{itemVendor.ParticularDetail}}
+                        </td>
+                   
+                        <td>
+                            <div class="flex">
+                                <span>
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addItemVendor(itemVendor)"></i>
+                                </span>
+                                <span>
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteItemCategory(itemVendor)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog [key]="itemVendorToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

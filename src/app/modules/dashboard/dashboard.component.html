@@ -1,0 +1,125 @@
+<div class="grid">
+    <div class="col-12 lg:col-6 xl:col-2 ">
+        <div dr-cursor-pointer (click)="isToShowPayables(1)" class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Payables</span>
+                    <div class="text-900 font-medium text-xl">{{creditorsAmount}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-arrow-up-right text-blue-500 text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-green-500 font-medium">24 new </span>
+            <span class="text-500">since last visit</span> -->
+        </div>
+
+        <div class="mt-5">
+            <p-chart type="pie" [data]="incomeExpenseData" [options]="incomeExpenseoptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-2">
+        <div class="card mb-0">
+            <div dr-cursor-pointer (click)="isToShowPayables(0)" class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Receiveables</span>
+                    <div class="text-900 font-medium text-xl">{{debitorsAmount}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-arrow-down-left text-orange-500 text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-green-500 font-medium">%52+ </span>
+            <span class="text-500">since last week</span> -->
+        </div>
+
+        <div class="mt-5">
+            <p-chart type="pie" [data]="assetData" [options]="assetOptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-2">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Cash</span>
+                    <div class="text-900 font-medium text-xl">{{cashAmount}}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-dollar text-cyan-500 text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-green-500 font-medium">520 </span>
+            <span class="text-500">newly registered</span> -->
+        </div>
+
+        <div class="mt-5">
+            <p-chart type="pie" [data]="allTrialBalData" [options]="allTrialBalOptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 xl:col-6">
+        <div class="card">
+            <h5 class="center">Details</h5>
+            <p-table [value]="creditorDebitorList" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Title</th>
+                        <th pSortableColumn="name">Balance<p-sortIcon field="name"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td style="width: 15%; min-width: 5rem;">
+                            {{product.PostingAccountsName}}
+                        </td>
+                        <td style="width: 30%; min-width: 7rem;">{{product.ClosingBalance}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="col-12 xl:col-6">
+        <!-- <div class="card">
+            <h4> Income/Expense</h4> -->
+        <!-- <div class="card flex justify-content-center">
+                <div style="height: 60%; width: 60%;">
+                    <p-chart type="doughnut" [data]="data" [options]="chartOptions"
+                        [style]="{'width': '40%'}"></p-chart>
+                </div>
+            </div> -->
+
+        <!-- </div> -->
+        <div class="card">
+            <p-chart type="bar" [data]="banksChartData" [options]="banksChartOptions"></p-chart>
+        </div>
+    </div>
+    <div class="col-12 xl:col-6">
+        <div class="card">
+            <h5 class="center">Recent Transactions</h5>
+            <p-table [value]="transactionList" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Voucher#</th>
+                        <th pSortableColumn="name">Type<p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="price">Amount<p-sortIcon field="price"></p-sortIcon></th>
+                        <th>Date</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-transaction>
+                    <tr>
+                        <td style="width: 15%; min-width: 5rem;">
+                            {{transaction.transaction}}
+                        </td>
+                        <td style="width: 30%; min-width: 7rem;">{{transaction.type}}</td>
+                        <td style="width: 30%; min-width: 8rem;">{{transaction.amount}}</td>
+                        <td style="width: 25%;">
+                            {{transaction.date}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

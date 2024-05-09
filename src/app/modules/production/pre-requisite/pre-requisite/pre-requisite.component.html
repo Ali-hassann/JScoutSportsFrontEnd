@@ -1,0 +1,38 @@
+<div class="card">
+    <p-tabView [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Categories">
+            <app-product-category-list></app-product-category-list>
+        </p-tabPanel>
+
+        <p-tabPanel header="Articles">
+            <app-product-list></app-product-list>
+        </p-tabPanel>
+        <p-tabPanel header="Size">
+            <app-product-size-list></app-product-size-list>
+        </p-tabPanel>
+        <p-tabPanel header="Process Type">
+            <app-process-type-list></app-process-type-list>
+        </p-tabPanel>
+        <!--
+        <p-tabPanel  header="Planing">
+            <app-planing-list></app-planing-list>
+        </p-tabPanel> -->
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog #cd [style]="{width: '450px'}">
+    <ng-template pTemplate="header">
+        <div class="flex flex-column col-12">
+            <h3>Confirm</h3>
+            <div class="flex flex-row col-12">
+                <i class="pi pi-exclamation-triangle fs-25 mr-2"></i>
+                <div>Are you sure you want to delete the selected?</div>
+            </div>
+            <div class="flex flex-row col-12 justify-content-end">
+                <button type="button" pButton icon="pi pi-times" label="No" class="mr-2" (click)="cd.reject()"></button>
+                <button type="button" pButton icon="pi pi-check" label="Yes" (click)="cd.accept()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>

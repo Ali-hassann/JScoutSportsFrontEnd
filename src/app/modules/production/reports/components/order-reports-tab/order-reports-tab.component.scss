@@ -1,0 +1,16 @@
+iframe {
+    height: 70vh !important;
+}
+
+:host ::ng-deep .p-multiselect {
+    min-width: 100%;
+    max-width: 100%;
+}
+:host ::ng-deep .p-dropdown {
+    min-width: 100%;
+    max-width: 100%;
+}
+:host ::ng-deep .p-calendar {
+    min-width: 100%;
+    max-width: 100%;
+}

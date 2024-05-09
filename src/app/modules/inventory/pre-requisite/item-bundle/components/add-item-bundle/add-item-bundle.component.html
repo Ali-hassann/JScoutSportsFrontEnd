@@ -1,0 +1,128 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="BundleGroup" #BundleGroup="ngModelGroup">
+
+            <div class="flex flex-wrap">
+
+                <div class="col-12 md:col-4">
+                    <label htmlFor="BundleName" style="font-weight: bold;">Bundle Name</label>
+                    <input pInputText id="BundleName" type="text" name="BundleName"
+                        [(ngModel)]="bundleMasterRequest.BundleName" placeholder="Enter Bundle Name" required />
+                    <small class="p-error block" *ngIf="BundleGroup.control?.get('BundleName')?.invalid">Name
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-4">
+                    <label htmlFor="Description" style="font-weight: bold;">Description</label>
+                    <input pInputText id="Description" name="Description" [(ngModel)]="bundleMasterRequest.Description"
+                        type="text" placeholder="Enter Description" />
+                </div>
+            </div>
+            <hr>
+            <div class="flex flex-wrap">
+
+                <div class=" col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Item</label>
+                    <p-dropdown [options]="itemsList" [(ngModel)]="selectedItem" [ngModelOptions]="{standalone: true}"
+                        scrollHeight="130px" placeholder="Select Item" optionLabel="ItemName" [filter]="true"
+                        [showClear]="true" [required]="true">
+                    </p-dropdown>
+                </div>
+
+                <div class=" col-12 md:col-3">
+                    <label htmlFor="Quantity" style="font-weight: bold;">Quantity *</label>
+                    <input pInputText id="Quantity" name="Quantity" [(ngModel)]="selectedItem.Quantity" type="number"
+                        placeholder="Enter Quantity" />
+                </div>
+
+                <div class="mt-5">
+                    <button pButton pRipple icon="pi pi-plus-circle" (click)="addBundleDetail()"
+                        class="p-button-raised p-button-primary">
+                    </button>
+                </div>
+            </div>
+
+            <p-table [value]="bundleMasterRequest.Items" dataKey="VouchersDetailId" editMode="row"
+                responsiveLayout="scroll" scrollHeight="25vh" styleClass="p-datatable-gridlines p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 6rem; color: black;">#Sr</th>
+                        <th style="min-width: 20rem; color: black;">
+                            Name
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Category
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Unit
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Quantity
+                        </th>
+
+                        <th style="min-width: 8rem; color: black;">
+                            Actions
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-bundleDetail let-editing="editing" let-i="rowIndex">
+                    <tr [pEditableRow]="bundleDetail">
+
+                        <td style="min-width: 3rem;">
+                            <b>{{i + 1}}</b>
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ bundleDetail.ItemName}}
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ bundleDetail.ItemCategoryName}}
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ bundleDetail.UnitName}}
+                        </td>
+
+                        <td style="min-width: 10rem;">
+                            {{ bundleDetail.Quantity}}
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                                (click)="deleteBundleDetail(i,bundleDetail.ItemId)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td style="min-width: 3rem; color: black;"></td>
+                        <td style="min-width: 20rem; color: black;"></td>
+                        <td style="min-width: 20rem; color: black;"></td>
+                        <td style="min-width: 22rem; color: black; text-align: end;">Total Items: </td>
+                        <td BoldAmount style="min-width: 10rem; color: black;">{{bundleMasterRequest.Items.length}}
+                        </td>
+                        <td BoldAmount style="min-width: 6rem; color: black;"></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </form>
+</div>
+
+<hr>
+<div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+</div>
+<p-confirmDialog [key]="itemToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

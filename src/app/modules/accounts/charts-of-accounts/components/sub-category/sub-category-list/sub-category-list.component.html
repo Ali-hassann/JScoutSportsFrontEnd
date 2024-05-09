@@ -1,0 +1,71 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-0">
+            <!-- <p-toast></p-toast> -->
+
+            <p-table #dt [value]="subCategoryList" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['SubCategoriesName','HeadCategoriesName','MainHeadsName',]" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div *hasRight="COA.CanAddSubCategory">
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addSubCategory()" pTooltip="Add sub category"></button>
+                        </div>
+
+                        <h5 class="m-0">Manage Sub Category</h5>
+
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="SubCategoriesName">Sub Category<p-sortIcon
+                                field="SubCategoriesName"></p-sortIcon></th>
+                        <th pSortableColumn="HeadCategoriesName">Head Category<p-sortIcon
+                                field="HeadCategoriesName"></p-sortIcon></th>
+                        <th pSortableColumn="MainHeadsName">Main Head<p-sortIcon field="MainHeadsName"></p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-subCategory>
+                    <tr>
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">SubCategoriesName</span>
+                            {{subCategory.SubCategoriesName}}
+                        </td>
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">HeadCategoriesName</span>
+                            {{subCategory.HeadCategoriesName}}
+                        </td>
+                        <td style="width:30%; min-width:8rem;">
+                            <span class="p-column-title">Main Head</span>
+                            {{subCategory.MainHeadsName}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <span *hasRight="COA.CanEditSubCategory">
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addSubCategory(subCategory)"></i>
+                                </span>
+                                <span *hasRight="COA.CanDeleteSubCategory">
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteSelected(subCategory)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

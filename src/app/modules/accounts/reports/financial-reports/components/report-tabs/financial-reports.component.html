@@ -1,0 +1,215 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel *hasRight="Reports.CanViewLedgerReports" header="Accounts Ledger">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="posting">Posting Account</label><br>
+                    <p-dropdown id="posting" [options]="postingAccountList" optionLabel="PostingAccountsName"
+                        optionValue="PostingAccountsId" defaultLabel="Select a Posting Account "
+                        [(ngModel)]="financialReportRequest.PostingAccountsId" [filter]="true" scrollHeight="150px">
+                    </p-dropdown>
+
+                    <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities3" defaultLabel="Select a City"
+                        optionLabel="name" ></p-multiSelect> -->
+
+                </div>
+                <div class="col-3">
+                    <label htmlFor="fromdate">Form Date</label><br>
+                    <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.FromDate">
+                    </p-calendar>
+                </div>
+                <div class="col-3">
+                    <label htmlFor="todate">To Date</label><br>
+                    <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.ToDate">
+                    </p-calendar>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IncludeZeroValue" [binary]="true"
+                        label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+            </div>
+            <app-accounts-ledger [ledgerRequest]="financialReportRequest"></app-accounts-ledger>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="Reports.CanViewLedgerReports" header="Sub Accounts">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="posting">Account</label><br>
+                    <p-dropdown id="posting" [options]="subCategoryList" optionLabel="SubCategoriesName"
+                        optionValue="SubCategoriesId" defaultLabel="Select appendTo Account "
+                        [(ngModel)]="financialReportRequest.SubCategoriesId" [filter]="true">
+                    </p-dropdown>
+
+                    <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities3" defaultLabel="Select a City"
+                        optionLabel="name" ></p-multiSelect> -->
+
+                </div>
+                <div class="col-2">
+                    <label htmlFor="fromdate">Form Date</label><br>
+                    <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.FromDate">
+                    </p-calendar>
+                </div>
+                <div class="col-2">
+                    <label htmlFor="todate">To Date</label><br>
+                    <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.ToDate">
+                    </p-calendar>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IncludeZeroValue" [binary]="true"
+                        label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+            </div>
+            <app-sub-account [subCategoryReportRequest]="financialReportRequest"></app-sub-account>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="Reports.CanViewTrialBalance" header="Trial Balance">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="posting">Posting Accounts</label><br>
+                    <p-multiSelect id="posting" [options]="postingAccountList" optionLabel="PostingAccountsName"
+                        optionValue="PostingAccountsId" defaultLabel="Select a Posting Account "
+                        [(ngModel)]="financialReportRequest.PostingAccountsIds" [filter]="true" scrollHeight="150px">
+                    </p-multiSelect>
+
+                    <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities3" defaultLabel="Select a City"
+                        optionLabel="name" ></p-multiSelect> -->
+
+                </div>
+                <div class="col-3">
+                    <label htmlFor="fromdate">Form Date</label><br>
+                    <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.FromDate">
+                    </p-calendar>
+                </div>
+                <div class="col-3">
+                    <label htmlFor="todate">To Date</label><br>
+                    <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.ToDate">
+                    </p-calendar>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IncludeZeroValue" [binary]="true"
+                        label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+            </div>
+            <app-trial-balance [trialBalanceRequest]="financialReportRequest"></app-trial-balance>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="Reports.CanViewProfitLossReport" header="Profit & Loss">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="posting">Posting Accounts</label><br>
+                    <p-multiSelect id="posting" [options]="postingAccountList" optionLabel="PostingAccountsName"
+                        optionValue="PostingAccountsId" defaultLabel="Select a Posting Account "
+                        [(ngModel)]="financialReportRequest.PostingAccountsIds" [filter]="true" scrollHeight="150px">
+                    </p-multiSelect>
+
+                    <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities3" defaultLabel="Select a City"
+                        optionLabel="name" ></p-multiSelect> -->
+
+                </div>
+                <div class="col-3">
+                    <label htmlFor="fromdate">Form Date</label><br>
+                    <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.FromDate">
+                    </p-calendar>
+                </div>
+                <div class="col-3">
+                    <label htmlFor="todate">To Date</label><br>
+                    <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.ToDate">
+                    </p-calendar>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IncludeZeroValue" [binary]="true"
+                        label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+            </div>
+            <app-profit-loss [profitLossRequest]="financialReportRequest"></app-profit-loss>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="Reports.CanViewBalanceSheetReport" header="Balance Sheet">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="posting">Posting Accounts</label><br>
+                    <p-multiSelect id="posting" [options]="postingAccountList" optionLabel="PostingAccountsName"
+                        optionValue="PostingAccountsId" defaultLabel="Select a Posting Account "
+                        [(ngModel)]="financialReportRequest.PostingAccountsIds" [filter]="true" scrollHeight="150px">
+                    </p-multiSelect>
+
+                    <!-- <p-multiSelect [options]="cities" [(ngModel)]="selectedCities3" defaultLabel="Select a City"
+                        optionLabel="name" ></p-multiSelect> -->
+
+                </div>
+                <div class="col-3">
+                    <label htmlFor="fromdate">Form Date</label><br>
+                    <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.FromDate">
+                    </p-calendar>
+                </div>
+                <div class="col-3">
+                    <label htmlFor="todate">To Date</label><br>
+                    <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                        [(ngModel)]="financialReportRequest.ToDate">
+                    </p-calendar>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IncludeZeroValue" [binary]="true"
+                        label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox [(ngModel)]="financialReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+            </div>
+            <app-balance-sheet [balanceSheetRequest]="financialReportRequest"></app-balance-sheet>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

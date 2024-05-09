@@ -1,0 +1,62 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="itemCategoryList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['ItemTypeName','ItemCategoryName']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[5,10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div>
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addItemCategory()" pTooltip="Add Item Category"></button>
+                        </div>
+                        <h5 class="m-0">Item Categories</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="ItemCategoryName">Category<p-sortIcon field="ItemCategoryName"></p-sortIcon></th>
+                        <th pSortableColumn="ItemTypeName">Type<p-sortIcon field="ItemTypeName"></p-sortIcon></th>
+                        <th>Action </th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-itemCategory>
+                    <tr>                        
+                        <td><span class="p-column-title">ItemCategoryName</span>
+                            {{itemCategory.ItemCategoryName}}
+                        </td>
+                        
+                        <td><span class="p-column-title">ItemTypeName</span>
+                            {{itemCategory.ItemTypeName}}
+                        </td>
+                   
+                        <td>
+                            <div class="flex">
+                                <span>
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addItemCategory(itemCategory)"></i>
+                                </span>
+                                <span>
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteItemCategory(itemCategory)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog [key]="itemCategoryToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

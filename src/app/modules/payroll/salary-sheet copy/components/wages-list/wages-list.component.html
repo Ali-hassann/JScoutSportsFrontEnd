@@ -1,0 +1,207 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar>
+                <div class="p-toolbar-group-start">
+                    <div class="grid ml-3">
+                        <div class="mt ">
+                            <button pButton pRipple label="Generate Wages" icon="pi pi-print"
+                                (click)="generateWages()"></button>
+                        </div>
+                        <div class="mt ml-5">
+                            <button [disabled]="(wagesList?.length ?? 0)==0" pButton pRipple label="Save Wages"
+                                icon="pi pi-check" class="p-button-success" (click)="saveWages()"></button>
+                        </div>
+                    </div>
+                </div>
+            </p-toolbar>
+            <p-toast></p-toast>
+            <p-table #dt [value]="wagesList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['EmployeeName','DepartmentsName','Name','EmployeeId']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,30,50,100]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Wages</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <p-checkbox (onChange)="onSelectAllChange($event)" [(ngModel)]="selectAll"
+                                [binary]="true"></p-checkbox>
+                        </th>
+                        <th>Sr.# </th>
+                        <th pSortableColumn="EmployeeName">Name <p-sortIcon field="EmployeeName"></p-sortIcon></th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Wages Amount</th>
+                        <th>Installment</th>
+                        <th>Advance</th>
+                        <th>Net Pay</th>
+                        <th>Remarks</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee let-ri="rowIndex">
+                    <tr [class.posted-background-color]="employee.IsPosted" [pEditableRow]="employee">
+                        <td>
+                            <p-checkbox [disabled]="employee.IsPosted" [(ngModel)]="employee.Selected"
+                                (onChange)="onSingleSelectChange($event,employee)" [binary]="true"></p-checkbox>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Sr.#</span>
+                            {{ri+1}}
+                        </td>
+
+                        <td>
+                            <span class="p-column-title">Name</span>
+                            {{employee.EmployeeName}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">DepartmentsName</span>
+                            {{employee.DepartmentsName}}
+                        </td>
+
+                        <!-- <td>
+                            <span class="p-column-title">WagesAmount</span>
+                            {{employee.WagesAmount}}
+                        </td> -->
+
+                        <td style="min-width: 8rem;" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="employee.WagesDate" dateFormat="d-M-y"
+                                        name="FromDate" inputId="dateFormat">
+                                    </p-calendar>
+                                </ng-template>
+            
+                                <ng-template pTemplate="output">
+                                    <span BoldAmount>
+                                        {{employee.WagesDate | date}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.WagesAmount" (ngModelChange)="deductionChange(employee)">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.WagesAmount}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.Installment" (ngModelChange)="deductionChange(employee)">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.Installment}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            {{employee.Advance}}
+                        </td>
+                        <td style="background-color: wheat;">
+                            <b>{{employee.NetPay}}</b>
+                        </td>
+
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.Remarks">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.Remarks}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <!-- 
+                        
+                        <td *ngIf="departmentTypeId !=3" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.OthersDeduction"
+                                        (ngModelChange)="deductionChange(employee)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span>
+                                        {{employee.OthersDeduction}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="background-color: wheat;">
+                            <b>{{employee.NetPay}}</b>
+                        </td> -->
+
+                        <!-- <td style="width: 1%; text-align: center; font-weight: bold ;">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-v text-primary mr-2 cursor-pointer"
+                                    pTooltip="Click to view Actions" (click)="op.toggle($event)"></i>
+                                <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '300px'}">
+                                    <ng-template pTemplate>
+                                        <p-table [value]="LoanActions" selectionMode="single"
+                                            (onRowSelect)="onRowSelect($event,employee)" [paginator]="false" [rows]="5"
+                                            responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+
+                                            </ng-template>
+                                            <ng-template pTemplate="body">
+
+                    <tr [pSelectableRow]="'EmployeeDetail'">
+                        <td>Employee Details</td>
+                    </tr>
+                    <tr [pSelectableRow]="'Slip'">
+                        <td>View Salary Slip {{employee.EmployeeName}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </ng-template>
+            </p-overlayPanel>
+        </div>
+        </td> -->
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total : </td>
+                        <td>{{wagesFooter.TotalWagesAmount}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

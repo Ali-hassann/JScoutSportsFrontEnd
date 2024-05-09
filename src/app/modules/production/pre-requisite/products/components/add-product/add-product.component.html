@@ -1,0 +1,67 @@
+<form #f="ngForm">
+    <div ngModelGroup="productCategoryGroup" #productCategoryGroup="ngModelGroup" class="card p-fluid mt-0 grid">
+        <div class="field col-11 md:col-11 sm:col-12">
+        </div>
+        <div class="field col-1 md:col-1 sm:col-12">
+            <p-inputSwitch class="mt-3" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="product.IsActive"></p-inputSwitch>
+        </div>
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="head" class="font-bold">Article Category *
+                <span>
+                    <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Category"
+                        (click)="addCategory()"></i>
+                </span>
+            </label>
+            <p-dropdown name="ProductCategory" [(ngModel)]="product.ProductCategoryId" scrollHeight=" 130px"
+                [options]="productCategoryList" placeholder="Select Product Category" [filter]="true" [showClear]="true"
+                optionLabel="ProductCategoryName" optionValue="ProductCategoryId" [required]="true">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="productCategoryGroup.control?.get('ProductCategory')?.invalid">Select
+                Article
+                Category.
+            </small>
+        </div>
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name" class="font-bold">Name *</label>
+            <input pInputText name="ProductName" (keyup)="checkProductDuplication(product.ProductName)"
+                [(ngModel)]="product.ProductName" Category="text" placeholder="Enter Name" required />
+            <small class="p-error block" *ngIf="productCategoryGroup.control?.get('ProductName')?.invalid">Name
+                is empty or invalid.
+            </small>
+            <small class="p-error block" *ngIf="isProductAlreadyExist">Duplicate Article
+                Entered.
+            </small>
+        </div>
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="head" class="font-bold">Unit *</label>
+            <p-dropdown name="Unit" [(ngModel)]="product.UnitId" scrollHeight=" 130px" [options]="unitList"
+                placeholder="Select Article Unit" [filter]="true" [showClear]="true" optionLabel="UnitName"
+                optionValue="UnitId" [required]="true">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="productCategoryGroup.control?.get('Unit')?.invalid">Select Article
+                Unit.
+            </small>
+        </div>
+
+        <div class="field col-1 md:col-1 sm:col-2">
+            <label htmlFor="cp-hex" class="font-bold">Color</label><br>
+            <p-colorPicker format="hex" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="product.Color"></p-colorPicker>
+        </div>
+        <div class="field col-5 md:col-5 sm:col-10">
+            <label></label><br>
+            <input pInputText name="Color" [(ngModel)]="product.Color" Category="text" placeholder="Enter Color" />
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton Category="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton Category="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

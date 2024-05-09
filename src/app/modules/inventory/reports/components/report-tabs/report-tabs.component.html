@@ -1,0 +1,9 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Pre-Requsit">
+            <app-item-reports-tab></app-item-reports-tab>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

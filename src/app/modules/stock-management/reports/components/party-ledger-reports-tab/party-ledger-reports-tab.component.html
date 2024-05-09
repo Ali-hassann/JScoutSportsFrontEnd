@@ -1,0 +1,22 @@
+<div class="p-formgrid grid">
+    <div class="col-3">
+        <label htmlFor="type">Select Vender</label>
+        <br>
+        <p-dropdown id="posting" [options]="venderList" optionLabel="ParticularName" optionValue="ParticularId"
+            defaultLabel="Select vender" [(ngModel)]="selectedParty" [filter]="true">
+        </p-dropdown>
+    </div>
+    <div class="col-3">
+        <label htmlFor="fromdate">Form Date</label><br>
+        <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y" [(ngModel)]="partyLedger.FromDate">
+        </p-calendar>
+    </div>
+    <div class="col-3">
+        <label htmlFor="todate">To Date</label><br>
+        <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y" [(ngModel)]="partyLedger.ToDate">
+        </p-calendar>
+    </div>
+</div>
+<button pButton label="Vender Ledger" class="p-button-raised pr-3" icon="pi pi-print"
+    (click)="printItemLedgerReport()"></button>
+<iframe id="partyLedger" [src]="" class="col-12"></iframe>

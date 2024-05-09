@@ -1,0 +1,24 @@
+<ul class="layout-menu">
+    <ng-container *ngFor="let item of model; let i = index;">
+        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
+        <li *ngIf="item.separator" class="menu-separator"></li>
+    </ng-container>
+</ul>
+
+<p-dialog header="Verify you are a developer" [(visible)]="displayPasswordDialog" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+    <div class="p-grid p-fluid">
+        <div class="p-col-12 p-md-4">
+            <label for="password">Password:</label>
+        </div>
+        <div class="p-col-12 p-md-8">
+            <input (keyup.Enter)="checkValidaton()" pInputText id="password" [(ngModel)]="password" type="password"
+                pPassword placeholder="Enter your password" />
+        </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <p-button (click)="displayPasswordDialog=false" label="Cancel" styleClass="p-button-text"></p-button>
+        <p-button (click)="checkValidaton()" label="Submit" styleClass="p-button-text"></p-button>
+    </ng-template>
+</p-dialog>

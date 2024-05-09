@@ -1,0 +1,29 @@
+<div id="body" class="card p-fluid mt-0 grid">
+    <div class="field col-6 md:col-6 sm:col-12">
+        <label htmlFor="head" class="font-bold">From Article *</label>
+        <p-dropdown appendTo="body" name="Product" [(ngModel)]="fromProductId" scrollHeight=" 130px"
+            [options]="productList" [ngModelOptions]="{standalone: true}" placeholder="Select Article Product"
+            [filter]="true" [showClear]="true" optionLabel="ProductName" optionValue="ProductId" [required]="true">
+        </p-dropdown>
+        <small class="p-error block" *ngIf="fromProductId==0">Select From Article.
+        </small>
+    </div>
+
+    <div class="field col-6 md:col-6 sm:col-12">
+        <label htmlFor="head" class="font-bold">To Article *</label>
+        <p-multiSelect appendTo="body" id="posting" [options]="productList" optionLabel="ProductName"
+            optionValue="ProductId" defaultLabel="Select a Posting Account" [showClear]="true"
+            [(ngModel)]="toProductIds" [ngModelOptions]="{standalone: true}" [filter]="true" scrollHeight="150px">
+        </p-multiSelect>
+        <small class="p-error block" *ngIf="toProductIds.length==0">Select To Article.
+        </small>
+    </div>
+</div>
+<div class="flex justify-content-end">
+    <button pButton Category="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+    <button pButton Category="button" pRipple icon="pi pi-send" (click)="transferProcess()" label="Transfer"
+        class="p-button-raised p-button-success">
+    </button>
+</div>

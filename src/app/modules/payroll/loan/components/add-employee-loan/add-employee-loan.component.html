@@ -1,0 +1,56 @@
+<form #f="ngForm" id="body">
+    <div ngModelGroup="employeeLoan" #employeeLoanGroup="ngModelGroup" class="card p-fluid mt-0">
+        <div class="flex flex-wrap">
+            <div class="field col-12 md:col-6">
+                <label htmlFor="head">Type*</label>
+                <p-dropdown [disabled]="employeeLoan.IsApproved " name="LoanTypeId" [(ngModel)]="employeeLoan.LoanTypeId"
+                    (ngModelChange)="onLoanTypeChange($event)" scrollHeight=" 130px" [options]="employeeLoanTypes"
+                    placeholder="Select Type" [filter]="true" [showClear]="true" optionLabel="Name"
+                    optionValue="loanTypeId" [required]="true" minlength="1">
+                </p-dropdown>
+                <small class="p-error block" *ngIf="employeeLoanGroup.control?.get('LoanTypeId')?.invalid">Type
+                    is empty or invalid.
+                </small>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label htmlFor="name">Amount</label>
+                <input [readOnly]="employeeLoan.IsApproved " selectAll name="LoanAmount" pInputText
+                    [(ngModel)]="employeeLoan.LoanAmount" type="number" placeholder="Enter Loan Amount" required
+                    min="1" />
+                <small class="p-error block" *ngIf="employeeLoanGroup.control?.get('LoanAmount')?.invalid">Amount must
+                    be greater then zero.
+                </small>
+            </div>
+
+            <div *ngIf="!isAdvance" class="field col-12 md:col-6">
+                <label htmlFor="name">Installment</label>
+                <input selectAll pInputText name="Installment" [(ngModel)]="employeeLoan.Installment" type="number"
+                    placeholder="Enter Installment amount" [readOnly]="isAdvance" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="name">Remarks</label>
+                <input pInputText name="Remarks" [(ngModel)]="employeeLoan.Remarks" type="text"
+                    placeholder="Enter Remarks" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Loan Date</label>
+                <p-calendar [disabled]="employeeLoan.IsApproved " id="date" name="DeductionDate" placeholder="Loan Date" [(ngModel)]="employeeLoan.LoanDate"
+                    dateFormat="d-M-y" inputId="dateformat" [required]="true" minlength="1"
+                    appendTo="body"></p-calendar>
+                <small class="p-error block" *ngIf="employeeLoanGroup.control?.get('LoanDate')?.invalid">Name
+                    is empty or invalid.
+                </small>
+            </div>
+        </div>
+
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

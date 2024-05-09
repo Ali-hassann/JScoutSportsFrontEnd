@@ -1,0 +1,31 @@
+<form [formGroup]="departmentForm">
+    <div class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Type</label>
+            <p-dropdown [options]="departmentType" name="DepartmentTypeId" formControlName="DepartmentTypeId"
+                scrollHeight="130px" placeholder="Department Type" [required]="true" optionLabel="name"
+                optionValue="value">
+            </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Name *</label>
+            <input pInputText type="text" placeholder="Enter Name" formControlName="Name" />
+            <small class="p-error block"
+                *ngIf="departmentForm.controls['Name'].invalid && departmentForm.controls['Name'].touched">Name
+                is empty or invalid.
+            </small>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Description</label>
+            <input pInputText type="text" placeholder="Enter Description" formControlName="Description" />
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit()" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

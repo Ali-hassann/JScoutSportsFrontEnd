@@ -1,0 +1,38 @@
+<div class="p-2">
+    <div class="w-fit-content">
+        <button (click)="openAddImage()" pButton pRipple type="button" pTooltip="Add Category"
+            class="p-button-primary mr-2 mb-2"> <i class="pi pi-plus-circle mr-2"></i> Add Image</button>
+    </div>
+    <div *ngIf="!Gallery || Gallery.length===0">
+        <b>No Data Found</b>
+    </div>
+    <p-galleria [value]="Gallery" [(visible)]="displayCustom" [(activeIndex)]="activeIndex"
+        [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
+        [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false"
+        [baseZIndex]="100000">
+        <ng-template pTemplate="item" let-item>
+            <img [src]="item.Path" style="width: 100%; display: block;" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+            <div class="grid grid-nogutter justify-content-center">
+                <img [src]="item.Path" style="display: block;" />
+            </div>
+        </ng-template>
+    </p-galleria>
+    <div *ngIf="Gallery" class="flex flex-row flex-wrap" style=" display: block;">
+        <ng-container *ngFor="let image of Gallery; let index = index;" key="index">
+            <div *ngIf="!image.IsDeleted" class="relative"
+                style="height: 150px;margin: 5px;box-shadow: 0px 0px 10px 2px #e7e6e6;">
+
+                <div *ngIf="!image.IsDeleted"
+                    class="image-controls absolute h-full flex flex-column text-white">
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-raised p-button-rounded m-1"
+                        (click)="deleteImages(index)"></button>
+                    <!-- <button pButton type="button" icon="pi pi-download" class="p-button-raised p-button-rounded m-1"
+                        (click)="onDownloadClick(image.Path)"></button> -->
+                </div>
+                <img [src]="image.Path" style="cursor: pointer;height: 100%;width: auto;" (click)="imageClick(index)" />
+            </div>
+        </ng-container>
+    </div>
+</div>

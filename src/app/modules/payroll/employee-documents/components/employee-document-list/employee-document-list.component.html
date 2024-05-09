@@ -1,0 +1,7 @@
+<app-gallery [Gallery]="images" (EmitGallery)="onGalleryChange($event)"></app-gallery>
+<div>
+    <button pButton type=" button" pRipple icon="pi pi-check" (click)="addInEmployeeDocument()" label="Save Documents"
+        class="p-button-raised p-button-success">
+    </button>
+</div>
+<p-toast key="document"></p-toast>

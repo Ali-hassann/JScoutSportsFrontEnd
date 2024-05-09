@@ -1,0 +1,60 @@
+<div class="card">
+    <!-- <b class="flex justify-content-end">Unposted voucher {{unpostedVoucherCount$ | async}}</b> -->
+    <form [formGroup]="mainHeadReportRequestForm">
+
+        <div class="card p-fluid">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="branch">Main Head</label>
+                    <p-dropdown [options]="(mainHeadList)" optionLabel="Name" class="col-12" [filter]="true"
+                        optionValue="MainHeadsId" placeholder="Main Head" formControlName="MainHeadId">
+                    </p-dropdown>
+                    <small class="p-error block"
+                        *ngIf="mainHeadReportRequestForm.controls['MainHeadId'].invalid && mainHeadReportRequestForm.controls['MainHeadId'].touched">Please
+                        select.
+                    </small>
+                </div>
+                <div class="col-2">
+                    <label htmlFor="date">Form Date</label>
+                    <p-calendar formControlName="FromDate" [showIcon]="true" dateFormat="d-M-y">
+                    </p-calendar>
+                </div>
+                <div class="col-2">
+                    <label htmlFor="date">To Date</label>
+                    <p-calendar formControlName="ToDate" [showIcon]="true" dateFormat="d-M-y">
+                    </p-calendar>
+                    <small class="p-error block"
+                        *ngIf="mainHeadReportRequestForm.controls['ToDate'].invalid && mainHeadReportRequestForm.controls['ToDate'].touched ||
+                    mainHeadReportRequestForm.controls['ToDate'].invalid && mainHeadReportRequestForm.controls['FromDate'].touched">
+                        To Date Must Be Greater then Form Date
+                    </small>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox formControlName="IncludeDetail" [binary]="true" label="Detail"> </p-checkbox>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox formControlName="IncludeZeroValue" [binary]="true" label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox formControlName="IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <button pButton label="Print" class="p-button-raised mt-3" icon="pi pi-print"
+                        (click)="printVoucher()"></button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <iframe id="frame" [src]="" class="col-12"></iframe>
+</div>
+
+<p-toast></p-toast>

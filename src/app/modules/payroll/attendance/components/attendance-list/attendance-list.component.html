@@ -1,0 +1,137 @@
+<div>
+    <div class="mr-2" [formGroup]="attendanceForm">
+        <label htmlFor="fromdate">Attendance Date</label><br>
+        <p-calendar id="fromdate" (ngModelChange)="getAttendanceList()" [showIcon]="true" dateFormat="d-M-y"
+            formControlName="FromDate">
+        </p-calendar>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-table #dt [value]="attendanceResponseList" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['EmployeeName','DepartmentsName','StatusName']" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[10,30,50,100,200]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template class="p-datatable-header p-datatable" pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 *ngIf="!isToShowUpdateIcon; else updateStatus" class="m-0 col-6">Manage Attendance</h5>
+                        <ng-template #updateStatus>
+                            <i class="pi pi-pencil text-primary mr-2 cursor-pointer" (click)="op.toggle($event)"></i>
+
+                            <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '300px'}">
+                                <ng-template pTemplate>
+                                    <p-table [value]="attendanceStatus" selectionMode="single" [paginator]="false"
+                                        [rows]="5" (onRowSelect)="selectAllRowSelect($event)" responsiveLayout="scroll">
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th>Select Status</th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-product>
+                                            <tr [pSelectableRow]="rowData">
+                                                <td>{{product.Name}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </ng-template>
+                            </p-overlayPanel>
+                        </ng-template>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-checkbox (onChange)="onSelectAllChange($event)" [(ngModel)]="selectAll"
+                                [binary]="true"></p-checkbox>
+                        </th>
+                        <th pSortableColumn="EmployeeName">Employee<p-sortIcon field="EmployeeName"></p-sortIcon></th>
+                        <th pSortableColumn="DepartmentsName">Department<p-sortIcon
+                                field="DepartmentsName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="AttendanceDate">Date<p-sortIcon field="AttendanceDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="CheckIn">In<p-sortIcon field="CheckIn"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="CheckOut">Out<p-sortIcon field="CheckOut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="StatusName">Status<p-sortIcon field="StatusName"></p-sortIcon></th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-attendance>
+                    <tr>
+                        <td>
+                            <p-checkbox [(ngModel)]="attendance.Selected" (onChange)="onSingleSelectChange($event)"
+                                [binary]="true"></p-checkbox>
+                        </td>
+                        <td style="width:20%; min-width:10rem;">
+                            <span class="p-column-title">Employee</span>
+                            {{attendance.EmployeeName}} {{ attendance.FatherName}}
+                        </td>
+                        <td style="width:20%; min-width:8rem;">
+                            <span class="p-column-title">DepartmentsName</span>
+                            {{attendance.DepartmentsName}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">AttendanceDate</span>
+                            {{attendance.AttendanceDate | date}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">CheckIn</span>
+                            {{attendance.CheckIn}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">CheckOut</span>
+                            {{attendance.CheckOut}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">StatusName</span>
+                            {{attendance.StatusName}}
+                        </td>
+                        <td style="width:5%; min-width:8rem;">
+                            <div>
+                                <p-toast></p-toast>
+
+                                <i class="pi pi-pencil text-primary mr-2 cursor-pointer"
+                                    (click)="op.toggle($event)"></i>
+                                <i *ngIf="attendance?.AttendanceId ?? 0 > 0"
+                                    class="pi pi-clock text-primary mr-2 cursor-pointer"
+                                    (click)="addAttendanceDetailDialog(attendance)"></i>
+
+                                <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '300px'}">
+                                    <ng-template pTemplate>
+                                        <p-table [value]="attendanceStatus" selectionMode="single"
+                                            (onRowSelect)="onRowSelect($event,attendance)" [paginator]="false"
+                                            [rows]="5" responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                    <tr>
+                        <th>Select Status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-product>
+                    <tr [pSelectableRow]="rowData">
+                        <td>{{product.Name}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </ng-template>
+            </p-overlayPanel>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>
+<p-toast></p-toast>

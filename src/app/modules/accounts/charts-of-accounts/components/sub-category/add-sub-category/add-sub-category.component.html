@@ -1,0 +1,36 @@
+<form [formGroup]="addSubCategorytForm">
+    <div class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label htmlFor="head">Select Head Category *
+                <span>
+                    <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Head Category"
+                        (click)="addHeadCategory()"></i>
+                </span>
+            </label>
+            <p-dropdown formControlName="HeadCategoriesId" scrollHeight="130px" [options]="(headCategoryDropDownList)"
+                optionLabel="Name" optionValue="HeadCategoriesId" [showClear]="true" placeholder="Select a Category"
+                (onChange)="onChangeCategory($event)" [filter]="true">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="addSubCategorytForm.controls['HeadCategoriesId'].invalid && addSubCategorytForm.controls['HeadCategoriesId'].touched">Please
+                select a head category
+            </small>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">SubCategory*</label>
+            <input pInputText id="NameField" type="text" placeholder="Enter Name" formControlName="Name" />
+            <small class="p-error block"
+                *ngIf="addSubCategorytForm.controls['Name'].invalid && addSubCategorytForm.controls['Name'].touched">Name
+                is empty or invalid.
+            </small>
+        </div>
+    </div>
+
+</form>
+<div class="flex justify-content-end">
+    <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+    <button pButton pRipple icon="pi pi-check" (click)="submit()" label="Save" class="p-button-raised p-button-success">
+    </button>
+</div>

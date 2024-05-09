@@ -1,0 +1,142 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="addGroup" #addGroup="ngModelGroup">
+            <div id="body" class="flex flex-wrap">
+                <div class="col-12 md:col-2">
+                    <label style="font-weight: bold;" htmlFor="name">Order Name *</label>
+                    <input pInputText name="OrderName" [(ngModel)]="orderMasterRequest.OrderName" type="text"
+                        placeholder="Enter Order Name" required />
+                    <small class="p-error block" *ngIf="addGroup.control?.get('OrderName')?.invalid">Order Name
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date" style="font-weight: bold;">Order Date</label>
+                    <p-calendar appendTo="body" [showIcon]="true" name="OrderDate" dateFormat="d-M-y"
+                        [(ngModel)]="orderMasterRequest.OrderDate" [required]="true">
+                    </p-calendar>
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date" style="font-weight: bold;">Delivery Date</label>
+                    <p-calendar appendTo="body" [showIcon]="true" name="DeliveryDate" dateFormat="d-M-y"
+                        [(ngModel)]="orderMasterRequest.DeliveryDate" [required]="true">
+                    </p-calendar>
+                </div>
+
+                <div class=" col-12 md:col-3">
+                    <span>
+                        <label htmlFor="head" style="font-weight: bold;">Customer *
+                            <span>
+                                <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Customer"
+                                    (click)="addCustomer()"></i>
+                            </span>
+                        </label>
+                    </span>
+
+                    <p-dropdown appendTo="body" [options]="particularList" [(ngModel)]="orderMasterRequest.ParticularId"
+                        name="Particular" scrollHeight="130px" placeholder="Select Particular"
+                        optionLabel="ParticularName" optionValue="ParticularId" [filter]="true" [showClear]="true"
+                        [required]="true">
+                    </p-dropdown>
+                    <small class="p-error block" *ngIf="!orderMasterRequest.ParticularId">Customer
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
+                    <input pInputText name="Remarks" id="Remarks" [(ngModel)]="orderMasterRequest.Remarks" type="text"
+                        placeholder="Enter Remarks" />
+                </div>
+
+            </div>
+
+            <div class="card flex flex-wrap">
+
+                <div class=" col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Article
+                        <span>
+                            <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Article"
+                                (click)="addArticle()"></i>
+                        </span>
+                    </label>
+                    <p-multiSelect appendTo="body" [options]="productList" [(ngModel)]="productIds"
+                        [ngModelOptions]="{standalone: true}" (onChange)="onProductListChange()"
+                        placeholder="Select Article" optionLabel="ProductName" optionValue="ProductId" [filter]="true"
+                        [showClear]="true" [required]="true">
+                    </p-multiSelect>
+                </div>
+                <div class="col-12 md:col-3 mb-1"
+                    *ngIf="(productIds?.length ?? 0)>0 && orderMasterRequest.OrderMasterId>0">
+                    <button *ngIf="(productIds?.length ?? 0)>0 && orderMasterRequest.OrderMasterId>0" pButton pRipple
+                        icon="pi pi-cog" class="p-button-rounded p-button-success mt-5"
+                        pTooltip="Click to define process" (click)="defineProcess()"></button>
+                    <button *ngIf="(productIds?.length ?? 0)>0 && orderMasterRequest.OrderMasterId>0" pButton pRipple
+                        icon="pi pi-cog" class="p-button-rounded p-button-success ml-2 mt-5"
+                        pTooltip="Click to define planing" (click)="definePlaning()"></button>
+                    <span class="mb-5 mr-1 ml-2">
+                        <p-checkbox class="mr-1" [ngModelOptions]="{standalone: true}" [binary]="true"
+                            [(ngModel)]="isQuantitySelected" value=" Show InActive" inputId="ny"></p-checkbox>
+                        <label BoldAmount *ngIf="!isQuantitySelected" for="ny">Price</label>
+                        <label BoldAmount *ngIf="isQuantitySelected" for="ny">Quanity</label>
+                    </span>
+                </div>
+
+                <div class="col-12 md:col-3">
+                </div>
+                <div class="col-12 md:col-3">
+                    <label htmlFor="OtherCost" style="font-weight: bold;">Other Cost</label>
+                    <input pInputText name="OtherCost" id="OtherCost" [(ngModel)]="orderMasterRequest.OtherCost"
+                        type="number" placeholder="Enter Other Cost" />
+                </div>
+            </div>
+            <p-table [value]="bindingArray">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{isQuantitySelected===true ? "Quantity" : "Price"}}</th>
+                        <th *ngFor="let size of productSizeList">{{ size?.ProductSizeName }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{ row[0].ProductName }}</td>
+                        <td class="limited-width-input" (mouseenter)="toggleTooltip(true ,cell)"
+                            (mouseleave)="toggleTooltip(false,cell)" *ngFor="let cell of row; let i = index"
+                            pEditableColumn>
+                            <input *ngIf="isQuantitySelected" class="p-inputtext-sm" pInputText type="number"
+                                [(ngModel)]="cell.Quantity"
+                                (ngModelChange)="onDetailChange(cell,cell.Quantity,cell.Price)"
+                                [ngModelOptions]="{standalone: true}">
+                            <input *ngIf="!isQuantitySelected" class="p-inputtext-sm" pInputText type="number"
+                                [(ngModel)]="cell.Price" (ngModelChange)="onDetailChange(cell,cell.Quantity,cell.Price)"
+                                [ngModelOptions]="{standalone: true}">
+
+                            <span dr-cursor-pointer *ngIf="cell.isShowIcon ?? false">
+                                <i class="pi pi-info-circle mr-2" pTooltip="Click to define process"
+                                    (click)="defineProcess(cell)"></i>
+                                <i class="pi pi-info-circle" pTooltip="Click to define planing"
+                                    (click)="definePlaning(cell)"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </form>
+</div>
+
+<div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f,false)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+    &nbsp;
+    &nbsp;
+    <button (click)="submit(f,true)" pButton pRipple type="button" label="Save & Print" icon="pi pi-check-circle"
+        class="p-button-raised p-button-primary">
+    </button>
+</div>

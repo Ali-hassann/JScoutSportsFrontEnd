@@ -1,0 +1,78 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="/app/wellcome">
+        <!-- <img src="assets/images/athletify-logo1.png" alt="logo"> -->
+        <!-- <img src="assets/layout/images/{{layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo"> -->
+        <!-- <span>SAKAI</span> -->
+        <span>
+            <!-- <img src="{{baseUrl}}/ERPDocuments/Development/Images/1/Outlet/athletify-logo-text.png" alt="logo"> -->
+            <img src="{{baseUrl}}/ERPDocuments/Development/Images/1/Outlet/Logo.jpg" alt="logo">
+            <!-- <img src="assets/images/Logo.jpg" alt="logo"> -->
+        </span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu"
+        [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <!-- <button class="p-link layout-topbar-button">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button> -->
+        <button style="width: 10rem;" class="p-link" (click)="op.toggle($event)">
+            <i class="pi pi-user"></i>
+            &nbsp;
+            <b>
+                {{userProfile.FirstName+" "+userProfile.LastName}}
+            </b>
+        </button>
+
+
+        <p-overlayPanel [style]="{'width': '25rem'}" #op>
+            <div class="grid">
+                <div BoldAmount class="col-6">
+                    Name
+                </div>
+                <div class="col-6">
+                    {{userProfile.FirstName+" "+userProfile.LastName}}
+                </div>
+                <div BoldAmount class="col-6">
+                    User Name
+                </div>
+                <div class="col-6">
+                    {{userProfile.UserName}}
+                </div>
+                <div BoldAmount class="col-6">
+                    Email
+                </div>
+                <div class="col-6">
+                    {{userProfile.Email}}
+                </div>
+                <div BoldAmount class="col-6">
+                    Role Name
+                </div>
+                <div class="col-6">
+                    {{userProfile.RoleName}}
+                </div>
+                <div class="col-12">
+                    <button pButton pRipple label="Change Password" class="w-full" (click)="changePaswordPopUp()"></button>
+                </div>
+                <div class="col-12">
+                    <button pButton pRipple label="Logout" class="w-full p-button-danger" [routerLink]="['logout']"></button>
+                </div>
+
+            </div>
+        </p-overlayPanel>
+
+        <!-- <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
+            <i class="pi pi-cog"></i>
+            <span>Settings</span>
+        </button> -->
+    </div>
+</div>

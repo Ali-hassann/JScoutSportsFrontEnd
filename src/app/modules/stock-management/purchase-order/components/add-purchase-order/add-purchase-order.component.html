@@ -1,0 +1,196 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="addPurchaseGroup" #addPurchaseGroup="ngModelGroup">
+            <div class="flex flex-wrap">
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date" style="font-weight: bold;">Date</label>
+                    <p-calendar [showIcon]="true" name="PurchaseOrderDate" dateFormat="d-M-y"
+                        [(ngModel)]="purchaseOrderMasterRequest.PurchaseOrderDate" [required]="true">
+                    </p-calendar>
+                </div>
+
+                <div class=" col-12 md:col-3">
+                    <span>
+                        <label htmlFor="head" style="font-weight: bold;">Vendors *
+                            <span>
+                                <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add vender"
+                                    (click)="addVender()"></i>
+                            </span>
+                        </label>
+                    </span>
+
+                    <p-dropdown [options]="particularList" [(ngModel)]="purchaseOrderMasterRequest.ParticularId"
+                        name="Particular" scrollHeight="130px" placeholder="Select Particular"
+                        optionLabel="ParticularName" optionValue="ParticularId" [filter]="true" [showClear]="true"
+                        [required]="true">
+                    </p-dropdown>
+                    <small class="p-error block" *ngIf="!purchaseOrderMasterRequest.ParticularId">Particular
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
+                    <input pInputText name="ReferenceNo" id="RefNo" [(ngModel)]="purchaseOrderMasterRequest.ReferenceNo"
+                        type="text" placeholder="Enter RefNo" />
+                    <small class="p-error block"
+                        *ngIf="addPurchaseGroup.control?.get('ReferenceNo')?.invalid">ReferenceNo
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
+                    <input pInputText name="Remarks" id="Remarks" [(ngModel)]="purchaseOrderMasterRequest.Remarks"
+                        type="text" placeholder="Enter Remarks" />
+                </div>
+
+            </div>
+
+            <div class="flex flex-wrap">
+                <div class=" col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Item
+                        <span>
+                            <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add item"
+                                (click)="addItem()"></i>
+                        </span>
+                    </label>
+                    <p-dropdown [options]="itemsList" [(ngModel)]="selectedItem" [ngModelOptions]="{standalone: true}"
+                        (onChange)="onItemChange()" placeholder="Select Item" optionLabel="ItemName" [filter]="true"
+                        [showClear]="true" [required]="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label style="font-weight: bold;" htmlFor="quantity">Quantity</label>
+                    <input selectAll pInputText [(ngModel)]="addPurchaseOrderDetailObj.Quantity"
+                        [ngModelOptions]="{standalone: true}" type="number" id="quantity" />
+                </div>
+
+                <!-- <div class="col-12 md:col-2">
+                    <label style="font-weight: bold;" htmlFor="Price">Price</label>
+                    <input selectAll pInputText [(ngModel)]="addPurchaseOrderDetailObj.Price"
+                        [ngModelOptions]="{standalone: true}" id="Price" type="number" />
+                </div> -->
+
+                <div class="mt-5">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"
+                        (click)="addPurchaseOrderDetail()" pTooltip="Add Purchase"></button>
+                </div>
+            </div>
+
+            <p-table [value]="purchaseOrderMasterRequest.PurchaseOrderDetailRequest" dataKey="id" editMode="row"
+                responsiveLayout="scroll" scrollHeight="34vh" class="p-datatable-gridlines p-datatable-sm table-height">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 6rem; color: black;">#Sr</th>
+                        <th style="min-width: 20rem; color: black;">
+                            Item Name
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Units
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Quantity
+                        </th>
+
+                        <!-- <th style="min-width: 9rem; color: black;">
+                            Price
+                        </th>
+                        <th style="min-width: 9rem; color: black;">
+                            Amount
+                        </th> -->
+                        <th style="min-width: 8rem; color: black;">
+                            Actions
+                        </th>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-PurchaseDetail let-editing="editing" let-i="rowIndex">
+                    <tr [pEditableRow]="PurchaseDetail">
+
+                        <td style="min-width: 3rem;">
+                            <b>{{i + 1}}</b>
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ PurchaseDetail.ItemName}}
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ PurchaseDetail.UnitName}}
+                        </td>
+
+                        <td style="min-width: 8rem;" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="PurchaseDetail.Quantity"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="onDetailChange(PurchaseDetail)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span BoldAmount>
+                                        {{PurchaseDetail.Quantity}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <!-- <td style="min-width: 8rem;" pEditableColumn>
+
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="PurchaseDetail.Price"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="onDetailChange(PurchaseDetail)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span BoldAmount>
+                                        {{PurchaseDetail.Price}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td BoldAmount style="min-width: 8rem;">
+                            {{ PurchaseDetail.Amount}}
+                        </td> -->
+                        <td style="min-width: 8rem;">
+                            <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                                (click)="deletePurchanseOrderDetail(i)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <!-- <ng-template pTemplate="summary">
+                    <tr>
+                        <td BoldAmount style="min-width: 12rem; color: black;"> Total Amount :
+                            {{purchaseOrderMasterRequest.TotalAmount}}
+                        </td>
+                        <td style="min-width: 1rem; color: black;"></td>
+                    </tr>
+                </ng-template> -->
+            </p-table>
+        </div>
+    </form>
+</div>
+
+<div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f,false)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+    &nbsp;
+    &nbsp;
+    <button (click)="submit(f,true)" pButton pRipple type="button" label="Save & Print" icon="pi pi-check-circle"
+        class="p-button-raised p-button-primary">
+    </button>
+</div>

@@ -1,0 +1,12 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="ISSUANCE">
+            <app-production-process-list [mainProcessTypeId]="mainProcessTypeId"></app-production-process-list>
+        </p-tabPanel>
+        <p-tabPanel header="RECEIVE">
+            <app-receive-process-list [mainProcessTypeId]="mainProcessTypeId"></app-receive-process-list>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

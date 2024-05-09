@@ -1,0 +1,85 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="itemList" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['ItemName']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div>
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addItem()" pTooltip="Add Item"></button>
+                        </div>
+                        <h5 class="m-0">Items</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                        <span>
+                            <button pButton Category="button" pRipple icon="pi pi-print" (click)="printItemList()"
+                                label="Print" class="p-button-raised p-button-primary">
+                            </button>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="ItemName">Item<p-sortIcon field="ItemName"></p-sortIcon></th>
+                        <th pSortableColumn="ItemCategoryName">Category<p-sortIcon
+                                field="ItemCategoryName"></p-sortIcon></th>
+                        <th pSortableColumn="UnitName">Unit<p-sortIcon field="UnitName"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="PurchasePrice">Purchase<p-sortIcon field="PurchasePrice"></p-sortIcon></th>
+                        <th pSortableColumn="SalePrice">Sale<p-sortIcon field="SalePrice"></p-sortIcon></th> -->
+                        <th pSortableColumn="ReorderLevel">Reorder<p-sortIcon field="ReorderLevel"></p-sortIcon></th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td><span class="p-column-title">ItemName</span>
+                            {{item.ItemName}}
+                        </td>
+
+                        <td><span class="p-column-title">ItemCategoryName</span>
+                            {{item.ItemCategoryName}}
+                        </td>
+
+                        <td><span class="p-column-title">UnitName</span>
+                            {{item.UnitName}}
+                        </td>
+                        <!-- <td><span class="p-column-title">PurchasePrice</span>
+                            {{item.PurchasePrice}}
+                        </td>
+
+                        <td><span class="p-column-title">SalePrice</span>
+                            {{item.SalePrice}}
+                        </td> -->
+
+                        <td><span class="p-column-title">ReorderLevel</span>
+                            {{item.ReorderLevel}}
+                        </td>
+
+                        <td>
+                            <div class="flex">
+                                <span>
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addItem(item)"></i>
+                                </span>
+                                <span>
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteItem(item)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog [key]="itemToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -1,0 +1,44 @@
+<!-- <form #f="ngForm">
+    <div ngModelGroup="departmentRequest" #departmentGroup="ngModelGroup" class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Role Name *</label>
+            <input name="Name" pInputText [(ngModel)]="departmentRequest.DesignationName" type="text" placeholder="Enter Department Name"
+                minlength="2" required />
+            <small class="p-error block" *ngIf="departmentGroup.control.get('Name')?.invalid">Name
+                is empty or invalid.
+            </small>
+        </div>
+
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>
+<p-toast key="tst"></p-toast>
+ -->
+
+<form [formGroup]="designationForm">
+    <div class="card p-fluid mt-0">     
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Name *</label>
+            <input pInputText type="text"  placeholder="Enter Name" formControlName="DesignationName" />
+            <small class="p-error block"
+                *ngIf="designationForm.controls['DesignationName'].invalid && designationForm.controls['DesignationName'].touched">Name
+                is empty or invalid.
+            </small>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit()" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

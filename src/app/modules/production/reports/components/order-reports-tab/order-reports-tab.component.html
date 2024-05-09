@@ -1,0 +1,22 @@
+<div class="p-formgrid grid">
+    <span class="col-3">
+
+        <label htmlFor="head" style="font-weight: bold;">Order</label><br>
+        <p-dropdown [options]="orderList" [(ngModel)]="productionParameterRequest.OrderMasterId"
+            [ngModelOptions]="{standalone: true}" optionValue="OrderMasterId" placeholder="Select Order"
+            optionLabel="OrderName" [filter]="true" [showClear]="true" [required]="true">
+        </p-dropdown>
+        <small class="p-error block" *ngIf="(productionParameterRequest?.OrderMasterId ?? 0)==0">Please select
+            Order.
+        </small>
+    </span>
+    <div class="col-2">
+        <button pButton label="Order Status" class="p-button-raised pr-3 mt-3 ml-2" icon="pi pi-print"
+            (click)="printOrderStatusReport()"></button>
+    </div>
+    <div class="col-2">
+        <button pButton label="Article Balance" class="p-button-raised pr-3 mt-3 ml-2" icon="pi pi-print"
+            (click)="printArticleBalanceEmployeeWise()"></button>
+    </div>
+</div>
+<iframe id="OrderStatus" [src]="" class="col-12"></iframe>

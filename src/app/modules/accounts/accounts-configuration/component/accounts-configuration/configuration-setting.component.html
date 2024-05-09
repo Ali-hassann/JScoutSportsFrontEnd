@@ -1,0 +1,56 @@
+<div>
+    <div class="grid card">
+        <div class="col-6">
+            <label htmlFor="head">Sub Category</label><br>
+            <p-dropdown scrollHeight="130px" [options]="subCategoryList" optionLabel="SubCategoriesName"
+                optionValue="SubCategoriesId" (onChange)="getAccountValue($event)" [filter]="true" [showClear]="true"
+                placeholder="SubCategory">
+            </p-dropdown>
+        </div>
+
+        <div class="col-6">
+            <label htmlFor="head">Posting Account</label><br>
+            <p-dropdown scrollHeight="130px" [options]="postingAccountsList" optionLabel="PostingAccountsName"
+                optionValue="PostingAccountsId" (onChange)="getAccountValue($event)" [filter]="true" [showClear]="true"
+                placeholder="Posting Account">
+            </p-dropdown>
+        </div>
+
+        <div class="col-3">
+            <label for="minmax">Selected Account Id</label>
+            <p-inputNumber [readonly]="true" [(ngModel)]="selectedNumber"> </p-inputNumber>
+        </div>
+
+        <div class="col-3">
+            <p-button label="Save" (onClick)="saveConfigurationSetting()"></p-button>
+        </div>
+    </div>
+
+    <p-table #dt [value]="configurationSettingList" responsiveLayout="scroll" [rows]="10"
+        [globalFilterFields]="['EmployeeName','DepartmentsName','Name','EmployeeId']" [rows]="10" [paginator]="false"
+        [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="false"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name </th>
+                <th>Value </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-configuration>
+            <tr>
+                <td>
+                    <span class="p-column-title">Name</span>
+                    {{configuration.AccountName}}
+                </td>
+
+                <td>
+                    <input type="number" pInputText [(ngModel)]="configuration.AccountValue" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+<p-toast></p-toast>

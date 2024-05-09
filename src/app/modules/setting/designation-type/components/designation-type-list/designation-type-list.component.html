@@ -1,0 +1,57 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="benefitTypeList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['DesignationName']" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div *hasRight="Payroll.CanAddDesignation">
+                            <button pButton pRipple pTooltip="Add Designation" icon="pi pi-plus" class="p-button-rounded p-button-success"
+                                (click)="addDesignationDialog()"></button>
+                        </div>
+
+                        <h5 class="m-0">Manage Designation Type</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="DesignationName">Name <p-sortIcon field="DesignationName"></p-sortIcon></th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-department>
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Name</span>
+                            {{department.DesignationName}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <span *hasRight="Payroll.CanEditDesignation">
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addDesignationDialog(department)"></i>
+                                </span>
+                                <span *hasRight="Payroll.CanDeleteDesignation">
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteDesignation(department)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

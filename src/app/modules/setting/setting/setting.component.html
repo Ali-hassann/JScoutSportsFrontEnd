@@ -1,0 +1,17 @@
+<div class="col-12 flex flex-wrap">
+    <p-card class="col-12 md:col-4" *ngFor="let type of allTypes">
+        <h5>{{type}} Settings</h5>
+        <div class="flex-column">
+            <ol>
+                <ng-container *ngFor="let reports of reportsMenues">
+                    <li class=" cursor-pointer" *ngIf="reports.Type === type"
+                        [routerLink]="reports.Url">
+                        <b>
+                            <i class="pi {{reports.Icon}} mr-2"></i> {{reports.Name}}
+                        </b>
+                    </li>
+                </ng-container>
+            </ol>         
+        </div>
+    </p-card>
+</div>

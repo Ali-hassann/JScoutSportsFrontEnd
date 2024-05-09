@@ -1,0 +1,104 @@
+<div class="card">
+    <h5>Add User</h5>
+    <p-tabView>
+        <p-tabPanel header="Personal Info *">
+            <div class="col-12 md:col-12">
+                <form [formGroup]="userProfileForm" class="card p-fluid mt-0">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <h5>Personal</h5>
+                        <p-inputSwitch formControlName="IsActive"></p-inputSwitch>
+                    </div>
+
+                    <div class="flex flex-wrap">
+                        <div class="col-12 md:col-6">
+
+                            <label htmlFor="name">First Name *</label>
+                            <input pInputText type="text" placeholder="Enter First Name" formControlName="FirstName" />
+                            <small class="p-error block"
+                                *ngIf="userProfileForm.controls['FirstName'].invalid && userProfileForm.controls['FirstName'].touched">Please
+                                enter valid Contact No with min 10 and max 11 Digits
+                            </small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <label htmlFor="name1">Last Name *</label>
+                            <input pInputText type="text" placeholder="Enter Last Name" formControlName="LastName" />
+                            <small class="p-error block"
+                                *ngIf="userProfileForm.controls['LastName'].invalid && userProfileForm.controls['LastName'].touched">Please
+                                enter valid Contact No with min 10 and max 11 Digits
+                            </small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <label htmlFor="contact">Contact *</label>
+                            <input pInputText type="text" placeholder="Enter Contact Number"
+                                formControlName="PhoneNumber" />
+                            <small class="p-error block"
+                                *ngIf="userProfileForm.controls['PhoneNumber'].invalid && userProfileForm.controls['PhoneNumber'].touched">Please
+                                enter valid Contact No with min 10 and max 11 Digits
+                            </small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <label htmlFor="email1">Email *</label>
+                            <input pInputText type="text" placeholder="Enter Email" formControlName="Email"
+                                [readonly]="isUpdated" />
+                            <small class="p-error block"
+                                *ngIf="userProfileForm.controls['Email'].invalid && userProfileForm.controls['Email'].touched">Please
+                                enter valid Contact No with min 10 and max 11 Digits
+                            </small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Account Info *">
+            <div class="col-12 md:col-12">
+                <div class="card p-fluid mt-0">
+                    <h5>Account</h5>
+                    <div [formGroup]="userLoginForm" class="flex flex-wrap">
+                        <div class="col-12 md:col-6">
+                            <label htmlFor="role">User Role *</label>
+                            <p-dropdown [options]="userRoleList" optionLabel="RoleName" optionValue="OrganizationRoleId"
+                                placeholder="User Role" formControlName="OrganizationRoleId"></p-dropdown>
+                            <small class="p-error block"
+                                *ngIf="userLoginForm.controls['OrganizationRoleId'].invalid && userLoginForm.controls['OrganizationRoleId'].touched">Please
+                                select role
+                            </small>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <label htmlFor="User Name">User Name *</label>
+                            <input pInputText id="User Name" formControlName="UserName" type="text"
+                                [readonly]="isUpdated" placeholder="User Name" />
+                            <small class="p-error block"
+                                *ngIf="userLoginForm.controls['UserName'].invalid && userLoginForm.controls['UserName'].touched">Please
+                                select role
+                            </small>
+                        </div>
+                        <div class="col-12 md:col-6" *ngIf="!(isUpdated)">
+                            <label htmlFor="pass">Password *</label>
+                            <input pInputText id="pass" formControlName="Password" type="password"
+                                placeholder="Password" />
+                        </div>
+                        <div class="col-12 md:col-6" *ngIf="!(isUpdated)">
+                            <label htmlFor="confirm">Confirm Password *</label>
+                            <input pInputText id="confirm" formControlName="ConfirmPassword" type="password"
+                                placeholder="Confirm Password" />
+                            <small class="p-error block"
+                                *ngIf="userLoginForm.controls['ConfirmPassword'].invalid && userLoginForm.controls['ConfirmPassword'].touched">
+                                Must include one capital letter number and special character.
+                            </small>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+
+</div>
+<div class="flex justify-content-end">
+    <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+    <button pButton pRipple icon="pi pi-check" (click)="addUser()" label="Save"
+        class="p-button-raised p-button-success">
+    </button>
+</div>

@@ -1,0 +1,18 @@
+.card {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.padding-0px {
+    padding: 0px !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-header {
+    padding: 0px !important;
+}
+
+
+:host ::ng-deep .p-dropdown {
+    width: 100%;
+
+}

@@ -1,0 +1,86 @@
+<form #f="ngForm">
+    <div ngModelGroup="processGroup" #processGroup="ngModelGroup" class="card p-fluid mt-0 grid">
+        <div class="field col-3 md:col-3 sm:col-12">
+            <label htmlFor="head" class="font-bold">Order *</label>
+            <p-dropdown name="Order" [readonly]="true" [(ngModel)]="orderMasterId" [options]="orderList"
+                [ngModelOptions]="{standalone: true}" optionLabel="OrderName" optionValue="OrderMasterId">
+            </p-dropdown>
+        </div>
+
+        <div class="field col-3 md:col-3 sm:col-12">
+            <label htmlFor="head" class="font-bold">Article *</label>
+            <p-multiSelect [readonly]="isReadOnly" name="Product" [(ngModel)]="productIds" [options]="productList"
+                [ngModelOptions]="{standalone: true}" optionLabel="ProductName" optionValue="ProductId">
+            </p-multiSelect>
+        </div>
+
+        <div class="field col-3 md:col-3 sm:col-12">
+            <label htmlFor="head" class="font-bold">Size *</label>
+            <p-multiSelect [readonly]="isReadOnly" name="Product" [(ngModel)]="sizeIds" [options]="productSizeList"
+                [ngModelOptions]="{standalone: true}" optionLabel="ProductSizeName" optionValue="ProductSizeId">
+            </p-multiSelect>
+        </div>
+    </div>
+
+    <p-table #dt [value]="processList" scrollHeight="230px" [scrollable]="true" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="max-width: 5rem;">
+                    <p-checkbox [ngModelOptions]="{standalone: true}" (onChange)="onSelectAllChange($event)"
+                        [(ngModel)]="selectAll" [binary]="true"></p-checkbox>
+                </th>
+                <th pSortableColumn="ProcessTypeName">Process Type<p-sortIcon field="ProcessTypeName"></p-sortIcon></th>
+                <th pSortableColumn="ProcessRate">Process Rate<p-sortIcon field="ProcessRate"></p-sortIcon></th>
+                <th pSortableColumn="Description">Description<p-sortIcon field="Description"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-process let-editing="editing">
+            <tr [pEditableRow]="process">
+                <td style="max-width: 5rem;">
+                    <p-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="process.Selected"
+                        (onChange)="onSingleSelectChange($event,process)" [binary]="true"></p-checkbox>
+                </td>
+                <td><span class="p-column-title">ProcessTypeName</span>
+                    {{process.ProcessTypeName}}
+                </td>
+
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="number" [(ngModel)]="process.ProcessRate"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="onProcessChange(process)">
+                        </ng-template>
+
+                        <ng-template pTemplate="output">
+                            <span BoldAmount>
+                                {{process.ProcessRate}}</span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                
+                <td pEditableColumn>
+                    <p-cellEditor>
+                        <ng-template pTemplate="input">
+                            <input pInputText type="text" [(ngModel)]="process.Description"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="onProcessChange(process)">
+                        </ng-template>
+
+                        <ng-template pTemplate="output">
+                            <span>
+                                {{process.Description}}</span>
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</form>
+<hr>
+<div *ngIf="processList.length>0" class="flex justify-content-end">
+    <button pButton Category="button" pRipple icon="pi pi-times" (click)="Close(false)" label="Close"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+    <button pButton Category="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+        class="p-button-raised p-button-success">
+    </button>
+</div>
