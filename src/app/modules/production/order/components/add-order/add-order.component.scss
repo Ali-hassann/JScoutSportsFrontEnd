@@ -1,0 +1,6 @@
+ .limited-width-input {
+//     // width: 1em; /* Adjust this width as needed */
+     max-width: 5ch; /* The width equivalent of 5 characters */
+     overflow: hidden; /* Hide any overflow beyond the specified width */
+//     white-space: nowrap; /* Prevent text from wrapping to the next line */
+   }

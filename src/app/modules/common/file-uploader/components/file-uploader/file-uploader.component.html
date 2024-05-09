@@ -1,0 +1,10 @@
+<div class="min-h-300px">
+    <p-fileUpload [customUpload]="true" (uploadHandler)="myupload($event)" (onClear)="onClear($event)" uploadLabel="Done"
+    [multiple]="true" accept="image/*" [showCancelButton]="false">
+    <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{file.name}}</li>
+        </ul>
+    </ng-template>
+</p-fileUpload>
+</div>

@@ -1,0 +1,338 @@
+<form #f="ngForm" id="body">
+    <div ngModelGroup="employeeRequest" #organizationRoleGroup="ngModelGroup" class="card p-fluid mt-0">
+        <div class="flex flex-wrap">
+            <div class="field col-12 md:col-3" style="text-align: center; align-items: center;">
+
+                <div style="height: 18rem !important; width: 18rem !important; ">
+
+
+                    <p-image [src]="imageUrl" alt="Image" height="100%" width="100%" [preview]="true"></p-image>
+
+                    <br>
+                    <input placeholder="Select an image" accept="image/*" *ngIf="imageUrl =='assets/profile9.png'"
+                        type="file" (change)="onSelectFile($event)">
+                </div>
+                <br>
+                <button pButton *ngIf="imageUrl !='assets/profile9.png'" (click)="resetImage()">Remove</button>
+
+            </div>
+            <div class="field col-12 md:col-9 flex flex-wrap mt-3">
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <input name="EmployeeName" id="float-input" type="text" pInputText
+                            [(ngModel)]="employeeRequest.Employee.EmployeeName" required minlength="3">
+                        <label for="float-input">Name</label>
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('EmployeeName')?.invalid">Name
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <input name="FatherName" id="float-input" type="text" pInputText
+                            [(ngModel)]="employeeRequest.Employee.FatherName" minlength="3">
+                        <label for="float-input">Father Name</label>
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('FatherName')?.invalid">Father Name
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <span class="p-float-label">
+                        <p-dropdown name="Gender" [options]="genderList" placeholder="Gender"
+                            [(ngModel)]="employeeRequest.Employee.Gender" [required]="true" minlength="1"></p-dropdown>
+                        <label>Gender</label>
+                    </span>
+                    <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('Gender')?.invalid">Select
+                        Gender
+                    </small>
+                </div>
+
+                <div class="field col-12 md:col-2">
+                    <span class="flex flex-wrap mt-3 ml-1">
+
+                        <div>
+                            <p-inputSwitch name="active" id="active"
+                                [(ngModel)]="employeeRequest.Employee.IsActive"></p-inputSwitch>
+
+                        </div>
+                        &nbsp;
+                        &nbsp;
+                        <div>
+                            <p for="active">Active</p>
+                        </div>
+
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <p-calendar id="date" name="DOB" placeholder="Date of birth"
+                            [(ngModel)]="employeeRequest.EmployeeDetail.DOB" dateFormat="{{datePickerFormat}}"
+                            inputId="dateformat" appendTo="body"></p-calendar>
+                        <label>Date of Birth</label>
+                    </span>
+
+                    <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('DOB')?.invalid">Date of
+                        birth
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <p-dropdown name="MaritalStatus" [options]="maritalStatus" placeholder="MaritalStatus"
+                            [(ngModel)]="employeeRequest.Employee.MaritalStatus" [required]="true"
+                            minlength="1"></p-dropdown>
+                        <label>MaritalStatus</label>
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('MaritalStatus')?.invalid">Select
+                        MaritalStatus
+                    </small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <input name="HusbandName" id="float-input" type="text" pInputText
+                            [(ngModel)]="employeeRequest.Employee.HusbandName">
+                        <label for="float-input">Husband Name</label>
+                    </span>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <p-calendar id="date" name="JoiningDate" placeholder="Joining Date"
+                            [(ngModel)]="employeeRequest.Employee.JoiningDate" dateFormat="{{datePickerFormat}}"
+                            inputId="dateformat" [required]="true"></p-calendar>
+                        <label for="float-input" appendTo="body">Joining Date</label>
+                    </span>
+
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('JoiningDate')?.invalid">Joining Date
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <!-- <span class="p-float-label"> -->
+                    <label>Select Department*
+                        <span>
+                            <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Department"
+                                (click)="addDepartment()"></i>
+                        </span>
+                    </label>
+                    <p-dropdown name="Departments" [options]="departmentList" placeholder="Department"
+                        optionValue="DepartmentsId" optionLabel="Name"
+                        [(ngModel)]="employeeRequest.Employee.DepartmentsId" [required]="true" [minlength]="1"
+                        [filter]="true" [showClear]="true"></p-dropdown>
+                    <!-- </span> -->
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('Departments')?.invalid">Select Department
+                    </small>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label>Select Designation*
+                        <span>
+                            <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Designation"
+                                (click)="addDesignation()"></i>
+                        </span>
+                    </label>
+                    <p-dropdown name="Designation" [options]="designationList"
+                        [(ngModel)]="employeeRequest.Employee.DesignationId" placeholder="Designation"
+                        optionValue="DesignationId" optionLabel="DesignationName" [required]="true" minlength="1"
+                        [filter]="true" [showClear]="true"></p-dropdown>
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('Designation')?.invalid">Select Designation
+                    </small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <input name="ContactNumber" id="float-input" type="text" pInputText
+                            [(ngModel)]="employeeRequest.Employee.ContactNumber" minlength="11">
+                        <label for="float-input">Contact Number</label>
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="organizationRoleGroup.control?.get('ContactNumber')?.invalid">Contact Number
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <input name="CNIC" id="float-input" type="text" pInputText
+                            [(ngModel)]="employeeRequest.Employee.CNIC" minlength="13">
+                        <label for="float-input">CNIC</label>
+                    </span>
+                    <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('CNIC')?.invalid">CNIC
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <span class="p-float-label">
+                        <p-calendar id="leftdate" name="LeftDate" placeholder="Left Date"
+                            [(ngModel)]="employeeRequest.Employee.LeftDate" dateFormat="{{datePickerFormat}}"
+                            inputId="dateformat"></p-calendar>
+                        <label for="float-input" appendTo="body">Left Date</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <p-accordion>
+            <p-accordionTab *ngIf="employeeRequest.Employee.SalaryType !== 2" header="Payroll">
+                <div class="flex flex-wrap">
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input selectAll name="SalaryAmount" id="float-input" type="number" pInputText
+                                [(ngModel)]="employeeRequest.Employee.SalaryAmount" required min="1">
+                            <label for="float-input">Salary*</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('SalaryAmount')?.invalid">Salary
+                            is empty or invalid.
+                        </small>
+                    </div>
+
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown name="WorkingHours" [options]="workingHoursList" optionLabel="Name"
+                                optionValue="Id" placeholder="Working Hours"
+                                [(ngModel)]="employeeRequest.Employee.WorkingHours" [attr.required]="true"></p-dropdown>
+                            <label>Working Hours</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('WorkingHours')?.invalid">Working Hours
+                            is empty or invalid.
+                        </small>
+                    </div>
+
+                    <div *ngIf="employeeRequest.Employee.SalaryType !== 2" class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <p-dropdown name="salaryType" [options]="salaryType" optionLabel="Name" optionValue="value"
+                                placeholder="Salary Type" [(ngModel)]="employeeRequest.Employee.SalaryType"
+                                [required]="true"></p-dropdown>
+                            <label>Salary Type</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('SalaryType')?.invalid">Working Model
+                            is empty or invalid.
+                        </small>
+                    </div>
+
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="OvertimeHourlyWageAmount" id="float-input" type="number" pInputText
+                                [(ngModel)]="employeeRequest.Employee.OvertimeHourlyWageAmount">
+                            <label for="float-input">Overtime Per hour Amount</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('OvertimeHourlyWageAmount')?.invalid">Amount
+                            is empty or invalid.
+                        </small>
+                    </div>
+
+                </div>
+            </p-accordionTab>
+            <p-accordionTab header="Other Information">
+                <div class="flex flex-wrap">
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="MOIName" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.MOIName">
+                            <label for="float-input">Mark of Indentification</label>
+                        </span>
+                        <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('MOIName')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="ReligionName" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.ReligionName">
+                            <label for="float-input">Religion</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('ReligionName')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="CasteName" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.CasteName">
+                            <label for="float-input">Caste</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('CasteName')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="Address" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.Address">
+                            <label for="float-input">Address</label>
+                        </span>
+                        <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('Address')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="ContactNumber1" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.ContactNumber1">
+                            <label for="float-input">Contact Number 1</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('ContactNumber1')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="ContactNumber2" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.ContactNumber2">
+                            <label for="float-input">Contact Number 2</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('ContactNumber2')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="ContactNumber3" id="float-input" type="text" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.ContactNumber3">
+                            <label for="float-input">Contact Number 3</label>
+                        </span>
+                        <small class="p-error block"
+                            *ngIf="organizationRoleGroup.control?.get('ContactNumber3')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <span class="p-float-label">
+                            <input name="Email" id="float-input" type="email" pInputText
+                                [(ngModel)]="employeeRequest.EmployeeDetail.Email">
+                            <label for="float-input">Email</label>
+                        </span>
+                        <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('Email')?.invalid">Name
+                            is empty or invalid.
+                        </small>
+                    </div>
+                </div>
+            </p-accordionTab>
+
+        </p-accordion>
+
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

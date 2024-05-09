@@ -1,0 +1,66 @@
+<p-card>
+    <ng-template pTemplate="header">
+        <div>
+            <div class="flex flex-row-reverse flex-wrap">
+                <button pButton class="p-button-danger" icon="pi pi-times" (click)="close()" iconPos="left"></button>
+                <button pButton class="p-button-success mr-2" label="Save" (click)="saveRoleRights()" icon="pi pi-check"
+                    iconPos="left"></button>
+            </div>
+        </div>
+    </ng-template>
+    <p-accordion>
+        <p-accordionTab *ngFor="let parentRight of roleRightsResponseList"
+            header="Click to manage {{parentRight.MenuRightsArea}} rights">
+            <div *ngIf="parentRight.MenuRight">
+                <b>
+                    <p-checkbox class="mr-2" [binary]="true" [(ngModel)]="parentRight.MenuRight.HasAccess"
+                        (onChange)="selectAllRightsByParent(parentRight,$event)"></p-checkbox>
+                    {{parentRight.MenuRight.Description}} {{parentRight.MenuRightsArea}}
+                </b>
+            </div>
+            <div class="card mt-2 ml-5">
+                <div class=" grid">
+                    <div class="col-4" *ngFor="let childRight of parentRight?.MenuRightsList">
+
+                        <div *ngIf="childRight.SubMenuRight; else elseBlock">
+                            <b>
+                                <p-checkbox class="mr-2"
+                                    [readonly]="orgRole.IsDefault && childRight.SubMenuRight.HasAccess" [binary]="true"
+                                    [(ngModel)]="childRight.SubMenuRight.HasAccess"
+                                    (onChange)="selectAllRightsByChild(childRight.SubMenuRightsList,parentRight,$event)">
+                                </p-checkbox>
+                                {{childRight.SubMenuRight.Description}}
+                            </b>
+                        </div>
+
+                        <ng-template #elseBlock>
+
+                            <p-checkbox [binary]="true" [readonly]="orgRole.IsDefault && childRight.SubMenuSelectAll"
+                                (onChange)="selectAllRightsByChild(childRight.SubMenuRightsList,parentRight,$event)"
+                                [(ngModel)]="childRight.SubMenuSelectAll"></p-checkbox>
+                            &nbsp;
+
+                            <b>All</b>
+                        </ng-template>
+
+                        <div style="text-align: center;" class="mt-2 mb-2">
+                            <b class="primary-color"> {{childRight.SubMenuRightsArea}}</b>
+                        </div>
+                        <div class="ml-5">
+                            <div *ngFor="let right of childRight?.SubMenuRightsList">
+                                <p-checkbox class="mr-2 m-1" [readonly]="orgRole.IsDefault && right.HasAccess"
+                                    [binary]="true" [(ngModel)]="right.HasAccess"
+                                    (onChange)="onSectionChildChange(childRight,parentRight)">
+                                </p-checkbox>
+                                <span> {{right.Description}}</span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </p-accordionTab>
+    </p-accordion>
+</p-card>
+<p-toast> </p-toast>

@@ -1,0 +1,175 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="ProductionMasterGroup" #ProductionMasterGroup="ngModelGroup">
+            <div id="mainbody" class="flex flex-wrap">
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Order</label>
+                    <p-dropdown [options]="orderList" [(ngModel)]="orderMasterId" [ngModelOptions]="{standalone: true}"
+                        optionValue="OrderMasterId" (onChange)="masterChange()" placeholder="Select Order"
+                        optionLabel="OrderName" [filter]="true" [showClear]="true" [required]="true">
+                    </p-dropdown>
+                    <small class="p-error block" *ngIf="orderMasterId==0">Please select
+                        Order.
+                    </small>
+                </div>
+                <!-- <div class="col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Employee</label>
+                    <p-dropdown [options]="employeeList" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}"
+                        optionValue="EmployeeId" placeholder="Select Employee" optionLabel="EmployeeName"
+                        [filter]="true" (onChange)="masterChange()" [showClear]="true" [required]="true">
+                    </p-dropdown>
+                    <small class="p-error block" *ngIf="employeeId==0">Please select
+                        Person.
+                    </small>
+                </div> -->
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Employee</label><br>
+                    <p-dropdown [options]="employeeList" [(ngModel)]="selectedEmployee" optionLabel="EmployeeName"
+                        [filter]="true" filterBy="EmployeeName" (onChange)="masterChange()" [showClear]="true"
+                        [ngModelOptions]="{standalone: true}" placeholder="Select an Employee">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="flex align-items-center gap-2" *ngIf="selectedEmployee">
+                                <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedEmployee.code.toLowerCase()" style="width: 18px"/> -->
+                                <div>{{ selectedEmployee.EmployeeName }}</div>
+                                <div>{{ selectedEmployee.DesignationName }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-employee pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/> -->
+                                <div>{{ employee.EmployeeName }}</div>
+                                <div>{{ employee.DesignationName }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="col-12 md:col-3 lg:col-3">
+                    <label BoldAmount htmlFor="FromDate">Receive Date</label>
+                    <br>
+                    <p-calendar (ngModelChange)="masterChange()" appendTo="body" [showIcon]="true" [(ngModel)]="receiveDate"
+                        dateFormat="d-M-y" name="FromDate" inputId="dateFormat">
+                    </p-calendar>
+                    <small class="p-error block" *ngIf="receiveDate=='' || receiveDate == null">Please select
+                        Receive Date.
+                    </small>
+                </div>
+            </div>
+            <hr>
+            <p-table [value]="productionProcessList" dataKey="VouchersDetailId" editMode="row" responsiveLayout="scroll"
+                scrollHeight="45vh" styleClass="p-datatable-gridlines p-datatable-sm">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 3rem;color: black;">#Sr</th>
+
+                        <th style="min-width: 20rem;color: black;">
+                            Article
+                        </th>
+
+                        <th style="min-width: 8rem;color: black;">
+                            Category
+                        </th>
+
+                        <th style="min-width: 8rem;color: black;">
+                            Unit
+                        </th>
+                        <th style="min-width: 8rem;color: black;">
+                            Process
+                        </th>
+                        <th style="min-width: 8rem;color: black;">
+                            Quantity
+                        </th>
+                        <th style="min-width: 8rem;color: black;">
+                            Receive Date
+                        </th>
+                        <th style="min-width: 5rem;color: black;">
+                            Actions
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-item let-editing="editing" let-i="rowIndex">
+                    <tr [pEditableRow]="item">
+                        <td style="min-width: 2rem;">
+                            <b>{{i + 1}}</b>
+                        </td>
+                        <td style="min-width: 8rem;">
+                            {{ item.ProductName}}
+                        </td>
+                        <td style="min-width: 3rem;">
+                            {{ item.ProductCategoryName}}
+                        </td>
+                        <td style="min-width: 3rem;">
+                            {{ item.UnitName}}
+                        </td>
+                        <td style="min-width: 3rem;">
+                            {{ item.ProcessTypeName}}
+                        </td>
+                        <td style="min-width: 8rem;" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="item.ReceiveQuantity"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="onQuantityChange(item)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span BoldAmount>
+                                        {{item.ReceiveQuantity}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="min-width: 8rem;" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar (ngModelChange)="onQuantityChange(item)" appendTo="body" [showIcon]="true" [(ngModel)]="item.ReceiveDate" dateFormat="d-M-y"
+                                        name="FromDate" inputId="dateFormat">
+                                    </p-calendar>
+                                </ng-template>
+            
+                                <ng-template pTemplate="output">
+                                    <span BoldAmount>
+                                        {{item.ReceiveDate | date}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="min-width: 8rem;">
+                            <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                                (click)="deleteProcess(i,item)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td style="min-width: 2rem;color: black;"></td>
+                        <td style="min-width: 20rem;color: black;"></td>
+                        <td style="min-width: 20rem;color: black;"></td>
+                        <td style="min-width: 10rem;color: black; text-align: end;"></td>
+                        <td style="min-width: 10rem;color: black; text-align: end;"></td>
+                        <td style="min-width: 10rem;color: black; text-align: end;"></td>
+                        <td style="min-width: 10rem;color: black; text-align: end;">Total Article(s): </td>
+                        <td BoldAmount style="min-width: 6rem;color: black;">{{productionProcessList.length}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </form>
+</div>
+
+<hr>
+<div class="flex justify-content-end">
+
+    <button (click)="close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+
+</div>
+<p-confirmDialog [key]="productToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

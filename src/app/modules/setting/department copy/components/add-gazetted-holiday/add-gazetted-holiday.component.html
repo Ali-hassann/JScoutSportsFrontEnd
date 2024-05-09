@@ -1,0 +1,38 @@
+<form #f="ngForm">
+    <div ngModelGroup="gazettedHolidayGroup" #gazettedHolidayGroup="ngModelGroup" class="card grid p-fluid mt-0">
+        <div class="field col-9 md:col-9">
+            <label htmlFor="date" class="font-bold">Holiday Date *</label>
+            <p-calendar appendTo="body" id="date" name="GazettedHolidayDate" placeholder="Gazetted Holiday Date"
+                [(ngModel)]="gazettedHolidayRequest.GazettedHolidayDate" dateFormat="d-M-y" inputId="dateformat"
+                [required]="true"></p-calendar>
+
+            <small class="p-error block"
+                *ngIf="gazettedHolidayGroup.control?.get('GazettedHolidayDate')?.invalid">Gazetted Holiday Date
+                is empty or invalid.
+            </small>
+        </div>
+        <div class="field col-2 md:col-2 mt-5 ml-5">
+            <label htmlFor="date" class="mt-3" class="font-bold"><br></label>
+            <p-inputSwitch class="pt-3" name="active" id="active" [(ngModel)]="gazettedHolidayRequest.IsPaid"></p-inputSwitch>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name" class="font-bold">Holiday Name *</label>
+            <input pInputText name="GazettedHolidayName" [(ngModel)]="gazettedHolidayRequest.GazettedHolidayName"
+                Category="text" placeholder="Enter Holiday Name" required />
+            <small class="p-error block" *ngIf="gazettedHolidayGroup.control?.get('GazettedHolidayName')?.invalid">Name
+                is empty or invalid.
+            </small>
+            <!-- <small class="p-error block" *ngIf="isItemAlreadyExist">Duplicate Item
+                Entered.
+            </small> -->
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

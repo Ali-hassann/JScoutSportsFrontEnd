@@ -1,0 +1,26 @@
+<div class="p-formgrid grid">
+    <span class="col-3">
+
+        <label htmlFor="head" style="font-weight: bold;">Order</label><br>
+        <p-dropdown [options]="orderList" [(ngModel)]="productionParameterRequest.OrderMasterId"
+            [ngModelOptions]="{standalone: true}" optionValue="OrderMasterId" placeholder="Select Order"
+            optionLabel="OrderName" [filter]="true" [showClear]="true" [required]="true">
+        </p-dropdown>
+        <small class="p-error block" *ngIf="(productionParameterRequest?.OrderMasterId ?? 0)==0">Please select
+            Order.
+        </small>
+    </span>
+
+    <div class="col-3">
+        <label htmlFor="todate">To Date</label><br>
+        <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y" [(ngModel)]="productionParameterRequest.ToDate">
+        </p-calendar>
+    </div>
+
+    <div class="col-2">
+        <button pButton label="Print" class="p-button-raised pr-3 mt-3 ml-2" icon="pi pi-print"
+            (click)="printOrderConsumptionReport()"></button>
+    </div>
+
+</div>
+<iframe id="OrderStatus1" [src]="" class="col-12"></iframe>

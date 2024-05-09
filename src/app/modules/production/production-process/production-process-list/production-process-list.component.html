@@ -1,0 +1,133 @@
+<p-toast></p-toast>
+<p-table #dt [value]="productionProcessList" responsiveLayout="scroll" [rows]="10"
+    [globalFilterFields]="['ProductionProcessName']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,30,50]"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowHover]="true" dataKey="id">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <span>
+                <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                    (click)="addProductionProcess()" pTooltip="Add Article Issuance"></button>
+            </span>
+
+            <span>
+                <label htmlFor="head" style="font-weight: bold;">Order</label><br>
+                <p-dropdown [options]="orderList" [(ngModel)]="productionParameterRequest.OrderMasterId"
+                    [ngModelOptions]="{standalone: true}" optionValue="OrderMasterId" (onChange)="parameterChange()"
+                    placeholder="Select Order" optionLabel="OrderName" [filter]="true" [showClear]="true"
+                    [required]="true">
+                </p-dropdown>
+                <small class="p-error block" *ngIf="productionParameterRequest.OrderMasterId==0">Please select
+                    Order.
+                </small>
+            </span>
+            <!-- <span>
+                <label htmlFor="head" style="font-weight: bold;">Employee</label><br>
+                <p-dropdown [options]="employeeList" [(ngModel)]="productionParameterRequest.EmployeeId"
+                    [ngModelOptions]="{standalone: true}" optionValue="EmployeeId" placeholder="Select Employee"
+                    optionLabel="EmployeeName" [filter]="true" (onChange)="parameterChange()" [showClear]="true"
+                    [required]="true">
+                </p-dropdown>
+                <small class="p-error block" *ngIf="productionParameterRequest.EmployeeId==0">Please select
+                    Person.
+                </small>
+            </span> -->
+
+            <div class="col-12 md:col-3">
+                <label htmlFor="head" style="font-weight: bold;">Employee</label><br>
+                <p-dropdown [options]="employeeList" [(ngModel)]="selectedEmployee" optionLabel="EmployeeName"
+                    [filter]="true" filterBy="EmployeeName" (onChange)="parameterChange()" [showClear]="true"
+                    [ngModelOptions]="{standalone: true}" placeholder="Select an Employee">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="selectedEmployee">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedEmployee.code.toLowerCase()" style="width: 18px"/> -->
+                            <div>{{ selectedEmployee.EmployeeName }}</div>
+                            <div>{{ selectedEmployee.DesignationName }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-employee pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/> -->
+                            <div>{{ employee.EmployeeName }}</div>
+                            <div>{{ employee.DesignationName }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+
+
+            <span>
+                <label BoldAmount htmlFor="FromDate">From Date</label>
+                <br>
+                <p-calendar (ngModelChange)="parameterChange()" appendTo="body" [showIcon]="true"
+                    [(ngModel)]="productionParameterRequest.FromDate" dateFormat="d-M-y" name="FromDate"
+                    inputId="dateFormat">
+                </p-calendar>
+                <small class="p-error block"
+                    *ngIf="productionParameterRequest.FromDate=='' || productionParameterRequest.FromDate == null">Please
+                    select from date.
+                </small>
+            </span>
+
+            <span>
+                <label BoldAmount htmlFor="FromDate">To Date</label>
+                <br>
+                <p-calendar (ngModelChange)="parameterChange()" appendTo="body" [showIcon]="true"
+                    [(ngModel)]="productionParameterRequest.ToDate" dateFormat="d-M-y" name="ToDate"
+                    inputId="dateFormat">
+                </p-calendar>
+                <small class="p-error block"
+                    *ngIf="productionParameterRequest.ToDate=='' || productionParameterRequest.ToDate == null">Please
+                    select from date.
+                </small>
+            </span>
+
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                    class="w-full sm:w-auto" />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="IssuanceNo">Issue #<p-sortIcon field="IssuanceNo"></p-sortIcon></th>
+            <th pSortableColumn="EmployeeName">Employee<p-sortIcon field="EmployeeName"></p-sortIcon></th>
+            <th pSortableColumn="OrderName">Order<p-sortIcon field="OrderName"></p-sortIcon></th>
+            <th pSortableColumn="IssueDate">Issue Date<p-sortIcon field="IssueDate"></p-sortIcon></th>
+            <th>Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td><span class="p-column-title">Issue #</span>
+                {{item.IssuanceNo}}
+            </td>
+            <td><span class="p-column-title">EmployeeName</span>
+                {{item.EmployeeName}}
+            </td>
+
+            <td><span class="p-column-title">OrderName</span>
+                {{item.OrderName}}
+            </td>
+
+            <td><span class="p-column-title">IssueDate</span>
+                {{item.IssueDate | date}}
+            </td>
+            <td>
+                <div class="flex">
+                    <span>
+                        <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                            (click)="addProductionProcess(item)"></i>
+                    </span>
+                    <span>
+                        <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                            (click)="deleteProductionProcess(item)"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog [key]="itemToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

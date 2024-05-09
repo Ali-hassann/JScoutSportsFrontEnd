@@ -1,0 +1,66 @@
+<form #f="ngForm">
+    <div ngModelGroup="itemCategoryGroup" #itemCategoryGroup="ngModelGroup" class="card p-fluid mt-0 grid">
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Name *</label>
+            <input pInputText name="ParticularName" [(ngModel)]="particular.ParticularName" Category="text"
+                placeholder="Enter Name" required />
+            <small class="p-error block" *ngIf="itemCategoryGroup.control?.get('ParticularName')?.invalid">Name
+                is empty or invalid.
+            </small>
+        </div>
+
+        <div *ngIf="partciclarType!='Others'" class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Representative</label>
+            <input pInputText name="RepresentativeName" [(ngModel)]="particular.RepresentativeName" Category="text"
+                placeholder="Enter Representative Name" />
+        </div>
+
+        <div *ngIf="partciclarType!='Others'" class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Main Product Name</label>
+            <input pInputText name="MainProductName" [(ngModel)]="particular.MainProductName" Category="text"
+                placeholder="Enter MainProduct Name" />
+        </div>
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Contact No</label>
+            <input pInputText name="ContactNo" [(ngModel)]="particular.ContactNo" Category="text"
+                placeholder="Enter Contact No" />
+        </div>
+
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Address </label>
+            <input pInputText name="Address" [(ngModel)]="particular.Address" Category="text"
+                placeholder="Enter Address" />
+        </div>
+        <div class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="name">Email </label>
+            <input pInputText name="Email" [(ngModel)]="particular.Email" Category="text" placeholder="Enter Email" />
+        </div>
+        <div *ngIf="partciclarType === 'Vendor' || partciclarType === 'Customer'"
+            class="field col-12 md:col-12 sm:col-12">
+            <label class="pr-2 pb-2" for="switch1">Add Opening </label>
+            <p-inputSwitch inputId="switch1" name="active" id="active" [(ngModel)]="isToAddOpening"></p-inputSwitch>
+        </div>
+        <div *ngIf="(partciclarType === 'Vendor' || partciclarType === 'Customer') && isToAddOpening"
+            class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="DebitAmount">Debit Amount</label>
+            <input selectAll type="number" pInputText name="DebitAmount" [(ngModel)]="particular.DebitAmount"
+                (ngModelChange)="onDebitAmountChange($event)" placeholder="Enter Debit Amount" />
+        </div>
+        <div *ngIf="(partciclarType === 'Vendor' || partciclarType === 'Customer') && isToAddOpening"
+            class="field col-6 md:col-6 sm:col-12">
+            <label htmlFor="CreditAmount">Credit Amount</label>
+            <input selectAll type="number" pInputText name="CreditAmount" [(ngModel)]="particular.CreditAmount"
+                (ngModelChange)="onCreditAmountChange($event)" placeholder="Enter Credit Amount" />
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton Category="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton Category="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

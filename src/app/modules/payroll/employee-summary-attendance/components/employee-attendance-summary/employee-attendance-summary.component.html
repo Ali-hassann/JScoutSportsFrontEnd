@@ -1,0 +1,86 @@
+<p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <div>
+            <label>Form Date</label>
+            <br>
+            <p-calendar id="date" placeholder="Start Date" [(ngModel)]="employeePayrollRequest.FromDate"
+                dateFormat="d-M-y" inputId="dateformat"></p-calendar>
+        </div>
+        &nbsp;
+        <div>
+            <label>To Date</label>
+            <br>
+            <p-calendar id="date" placeholder="To Date" [(ngModel)]="employeePayrollRequest.ToDate"
+                dateFormat="d-M-y" inputId="dateformat"></p-calendar>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit()" label="Search"
+            class="p-button-raised p-button-primary">
+        </button>
+    </ng-template>
+</p-toolbar>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="employeeAttendanceList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['AttendanceDate','CheckOut','CheckIn','StatusName']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+
+                        <h5 class="m-0"> Attendance</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th pSortableColumn="AttendanceDate">Date <p-sortIcon field="AttendanceDate"></p-sortIcon></th>
+                        <th pSortableColumn="CheckIn">CheckIn <p-sortIcon field="CheckIn"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="CheckOut">CheckOut <p-sortIcon field="CheckOut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="StatusName">Status <p-sortIcon field="StatusName"></p-sortIcon>
+                        </th>
+
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-attendance>
+                    <tr>
+
+                        <td><span class="p-column-title">AttendanceDate</span>
+                            {{attendance.AttendanceDate}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">CheckIn</span>
+                            {{attendance.CheckIn}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">CheckOut</span>
+                            {{attendance.CheckOut}}
+                        </td>
+                        <td><span class="p-column-title">StatusName</span>
+                            {{attendance.StatusName}}
+                        </td>
+
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

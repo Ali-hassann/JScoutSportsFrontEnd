@@ -1,0 +1,32 @@
+<form #f="ngForm">
+    <div ngModelGroup="employeeAllowance" #organizationRoleGroup="ngModelGroup" class="card p-fluid mt-0">
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="head">Allowance Type *</label>
+            <p-dropdown name="AllowanceType" [(ngModel)]="employeeAllowance.AllowanceTypeId" scrollHeight=" 130px"
+                [options]="allowanceTypeList" placeholder="Select Allowance Type" [filter]="true" [showClear]="true"
+                optionLabel="Name" optionValue="AllowanceTypeId" [required]="true">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('AllowanceType')?.invalid">Name
+                is empty or invalid.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Amount *</label>
+            <input selectAll pInputText name="Amount" [(ngModel)]="employeeAllowance.Amount" type="number"
+                placeholder="Enter Amount " min="1" required />
+            <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('Amount')?.invalid">Amount
+                is empty or invalid.
+            </small>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

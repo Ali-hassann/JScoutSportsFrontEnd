@@ -1,0 +1,156 @@
+<form [formGroup]="receiptVoucherForm">
+
+    <div class="flex flex-row">
+
+        <div class="col-12 md:col-3 pt-0">
+            <label>Received From</label>
+            <p-dropdown [options]="(postingAccountsList)" optionLabel="PostingAccountsName"
+                placeholder="Posting Account" optionValue="PostingAccountsId" formControlName="PostingAccountsId"
+                [filter]="true" [showClear]="true">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="receiptVoucherForm.controls['PostingAccountsId'].invalid && receiptVoucherForm.controls['PostingAccountsId'].touched">
+                Please select a posting account.
+            </small>
+        </div>
+
+        &nbsp;
+        &nbsp;
+
+        <div class="flex justify-content-start flex-wrap card-container">
+            <p-checkbox name="cash" value="{{voucherTransactionType.Cash}}" label="Cash"
+                (onChange)="onVoucherTypeCheckBoxChange($event,0,voucherTransactionType.Cash)"
+                [(ngModel)]="transactionTypes" [ngModelOptions]="{standalone: true}" [disabled]="isToDisableCash">
+            </p-checkbox>
+
+            &nbsp;
+            &nbsp;
+
+            <p-checkbox name="bank" value="{{voucherTransactionType.Bank}}" label="Bank"
+                (onChange)="onVoucherTypeCheckBoxChange($event,1,voucherTransactionType.Bank)"
+                [(ngModel)]="transactionTypes" [ngModelOptions]="{standalone: true}" [disabled]="isToDisableBank">
+            </p-checkbox>
+
+            &nbsp;
+            &nbsp;
+
+            <p-checkbox name="creditCard" value="{{voucherTransactionType.CreditCard}}" label="Credit Card"
+                (onChange)="onVoucherTypeCheckBoxChange($event,2,voucherTransactionType.CreditCard)"
+                [(ngModel)]="transactionTypes" [ngModelOptions]="{standalone: true}" [disabled]="isToDisableCreditCard">
+            </p-checkbox>
+        </div>
+
+    </div>
+
+    <p-tabView class="pt-0" [(activeIndex)]="tabViewIndex">
+
+        <p-tabPanel header="Cash" *ngIf="transactionTypes?.includes(voucherTransactionType.Cash)"
+            formGroupName="cashForm" class="pt-0">
+            <div>
+                <div class="flex flex-row justify-content-between">
+                    <div class="col-12 md:col-3">
+                        <label>Amount</label>
+                        <input id="float-input" formControlName="CreditAmount" type="number" pInputText
+                            placeholder="Amount" />
+                        <small class="p-error block" *ngIf="frmGrpCashForm.controls['CreditAmount'].value == 0 
+                                && frmGrpCashForm.controls['CreditAmount'].touched">
+                            Enter Valid Amount.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Bank" *ngIf="transactionTypes?.includes(voucherTransactionType.Bank)"
+            formGroupName="bankForm" class="pt-0">
+            <div>
+                <div class="flex flex-wrap">
+
+                    <div class="col-12 md:col-6">
+                        <label>Bank Account</label>
+                        <p-dropdown [options]="bankAccountsList" optionValue="PostingAccountsId"
+                            optionLabel="PostingAccountsName" [filter]="true" [showClear]="true" scrollHeight="130px"
+                            placeholder="Select Bank Account" [required]="true" formControlName="BankAccountId">
+                        </p-dropdown>
+                        <small class="p-error block"
+                            *ngIf="frmGrpBankForm.controls['BankAccountId'].invalid && frmGrpBankForm.controls['BankAccountId'].touched">
+                            Please select a bank account.
+                        </small>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <label>Amount</label>
+                        <input id="float-input" type="number" formControlName="CreditAmount" pInputText
+                            placeholder="Amount" />
+                        <small class="p-error block" *ngIf="frmGrpBankForm.controls['CreditAmount'].value == 0
+                            && frmGrpBankForm.controls['CreditAmount'].touched">
+                            Enter Valid Amount.
+                        </small>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <label>Cheque No</label>
+                        <input id="float-input" type="text" formControlName="ChequeNo" pInputText
+                            placeholder="ChequeNo" />
+                        <small class="p-error block" *ngIf="frmGrpBankForm.controls['ChequeNo'].invalid 
+                            && frmGrpBankForm.controls['ChequeNo'].touched">
+                            Enter Valid Cheque No.
+                        </small>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <label>Status</label>
+                        <p-dropdown [options]="status" optionLabel="name" optionValue="code" placeholder="Status"
+                            formControlName="ChequeStatus" [filter]="true" [showClear]="true"></p-dropdown>
+                        <small class="p-error block" *ngIf="frmGrpBankForm.controls['ChequeStatus'].invalid 
+                            && frmGrpBankForm.controls['ChequeStatus'].touched">
+                            Please Select Cheque Status
+                        </small>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <label>Due Date</label>
+                        <p-calendar [showIcon]="true" dateFormat="{{datePickerFormat}}" placeholder="Voucher Date"
+                            formControlName="ChequeDate"></p-calendar>
+                        <small class="p-error block" *ngIf="frmGrpBankForm.controls['ChequeDate'].invalid 
+                            && frmGrpBankForm.controls['ChequeDate'].touched">
+                            Please Select Valid Date.
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Credit Card" *ngIf="transactionTypes?.includes(voucherTransactionType.CreditCard)"
+            formGroupName="creditCardForm" class="pt-0">
+            <div class="flex flex-wrap">
+
+                <div class="col-12 md:col-6">
+                    <label>Bank Account</label>
+                    <p-dropdown [options]="bankAccountsList" optionValue="PostingAccountsId"
+                        optionLabel="PostingAccountsName" [filter]="true" [showClear]="true" scrollHeight="130px"
+                        placeholder="Select Bank Account" [required]="true" formControlName="BankAccountId">
+                    </p-dropdown>
+                    <small class="p-error block"
+                        *ngIf="frmGrpCreditCardForm.controls['BankAccountId'].invalid && frmGrpCreditCardForm.controls['BankAccountId'].touched">
+                        Please select a bank account.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-6">
+                    <label>Amount</label>
+                    <input id="float-input" type="number" formControlName="CreditAmount" pInputText
+                        placeholder="Amount" />
+                    <small class="p-error block" *ngIf="frmGrpCreditCardForm.controls['CreditAmount'].value == 0
+                            && frmGrpCreditCardForm.controls['CreditAmount'].touched">
+                        Enter Valid Amount.
+                    </small>
+                </div>
+
+            </div>
+
+        </p-tabPanel>
+
+    </p-tabView>
+</form>

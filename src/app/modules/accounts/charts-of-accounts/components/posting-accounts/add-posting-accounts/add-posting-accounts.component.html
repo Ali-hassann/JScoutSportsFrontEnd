@@ -1,0 +1,71 @@
+<form [formGroup]="addPostingAccountForm">
+    <div class="card p-fluid mt-0 flex flex-wrap">
+
+        <div class="flex justify-content-end col-12">
+            <p-checkbox formControlName="IsActive" [binary]="true"></p-checkbox> &nbsp; <b>Active</b>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label htmlFor="head">Select SubCategory *
+                <span>
+                    <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Sub Category"
+                        (click)="addSubCategory()"></i>
+                </span>
+            </label>
+            <p-dropdown formControlName="SubCategoriesId" scrollHeight="130px" [options]="(subCategoryDropDownList)"
+                optionLabel="SubCategoriesName" optionValue="SubCategoriesId" (onChange)="onSubCategoryChange($event)"
+                [filter]="true" [showClear]="true" placeholder="Select SubCategory" [required]="true">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="addPostingAccountForm.controls['SubCategoriesId'].invalid && addPostingAccountForm.controls['SubCategoriesId'].touched">Please
+                choose a main head.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+            <label htmlFor="name">Accounts Name *</label>
+            <input pInputText id="NameField" type="text" placeholder="Enter Name" formControlName="Name" />
+            <small class="p-error block"
+                *ngIf="addPostingAccountForm.controls['Name'].invalid && addPostingAccountForm.controls['Name'].touched">Name
+                is empty or invalid.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <p-radioButton [value]="false" formControlName="IsCredit" inputId="opt2" label="Debit"></p-radioButton>
+            <div class="field col-12">
+                <label htmlFor="name">Opening Debit Amount</label>
+                <input pInputText selectAll id="name" type="number" placeholder="Enter Amount"
+                    formControlName="OpeningDebit" />
+                <small class="p-error block"
+                    *ngIf="addPostingAccountForm.controls['OpeningDebit'].invalid && addPostingAccountForm.controls['OpeningDebit'].touched">Please
+                    choose a opening debit amount.
+                </small>
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <p-radioButton [value]="true" formControlName="IsCredit" inputId="opt1" label="Credit"></p-radioButton>
+            <div class="field col-12">
+                <label htmlFor="name">Opening Credit Amount</label>
+                <input selectAll pInputText id="name" type="number" placeholder="Enter Amount"
+                    formControlName="OpeningCredit" />
+                <small class="p-error block"
+                    *ngIf="addPostingAccountForm.controls['OpeningCredit'].invalid && addPostingAccountForm.controls['OpeningCredit'].touched">Please
+                    choose a opening credit amount.
+                </small>
+            </div>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label htmlFor="Opening Date">Opening Date*</label>
+            <p-calendar formControlName="OpeningDate" dateFormat="{{datePickerFormat}}"></p-calendar>
+        </div>
+    </div>
+</form>
+
+<div class="flex justify-content-end">
+    <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+    <button pButton pRipple icon="pi pi-check" label="Save" class="p-button-raised p-button-success" (click)="submit()">
+    </button>
+</div>

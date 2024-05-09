@@ -1,0 +1,31 @@
+<form [formGroup]="addHeadCategoryForm">
+    <div class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label htmlFor="head">Main Head *</label>
+            <p-dropdown formControlName="MainHeadsId" scrollHeight="130px" [options]="(mainHeadList)" placeholder="Select Head"
+                optionLabel="Name" optionValue="MainHeadsId" [filter]="true" [showClear]="true">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="addHeadCategoryForm.controls['MainHeadsId'].invalid && addHeadCategoryForm.controls['MainHeadsId'].touched">Please
+                choose a main head.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Head Category *</label>
+            <input pInputText type="text" id="NameField" placeholder="Enter Name" formControlName="Name" />
+            <small class="p-error block"
+                *ngIf="addHeadCategoryForm.controls['Name'].invalid && addHeadCategoryForm.controls['Name'].touched">Name
+                is empty or invalid.
+            </small>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit()" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

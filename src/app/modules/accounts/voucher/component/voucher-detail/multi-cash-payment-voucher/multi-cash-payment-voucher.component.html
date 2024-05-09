@@ -1,0 +1,82 @@
+<div>
+    <div class="flex flex-wrap">
+        <div class=" col-12 md:col-3">
+            <label style="font-weight: bold;" htmlFor="PostingAccount">Select Posting Account</label>
+            <p-dropdown [options]="postingAccountsList" id="PostingAccount" optionLabel="PostingAccountsName"
+                [filter]="true" [showClear]="true" scrollHeight="150px" placeholder="Select Posting Account"
+                [required]="true" [(ngModel)]="postingAccountsRequest" (ngModelChange)="setPostingAccount()">
+            </p-dropdown>
+            <small class="p-error block" *ngIf="bankReceiptVoucherDetailRequest.PostingAccountsId === 0">
+                Please select other posting account.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-2">
+            <label style="font-weight: bold;" htmlFor="Debit">Amount</label>
+            <input pInputText id="Debit" type="number" [(ngModel)]="bankReceiptVoucherDetailRequest.DebitAmount"
+                (keyup)="onDebitAmountChange($event)" />
+            <!-- 
+            <small class="p-error block"
+                *ngIf="frmCtrlIsDebitAmountValid.value == false && !frmCtrlIsDebitAmountValid.touched">
+                Enter atleast (Debit or Credit) Amount.
+            </small> -->
+        </div>
+
+        <div class="col-12 md:col-4">
+            <label style="font-weight: bold;" htmlFor="Remarks">Remarks</label>
+            <input pInputText id="Remarks" type="text" [(ngModel)]="bankReceiptVoucherDetailRequest.Narration"
+                placeholder="Enter Narration" />
+        </div>
+
+        <div class="mt-apprx-3">
+            <button pButton pRipple icon="pi pi-plus-circle" (click)="addBankReceiptVoucherDetail()"
+                class="p-button-raised p-button-primary">
+            </button>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <p-table [value]="multiPaymentVoucherDetailList" dataKey="id" editMode="row" responsiveLayout="scroll"
+        scrollHeight="25vh" styleClass="p-datatable-gridlines p-datatable-sm">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="min-width: 20rem; color: black;">
+                    Posting Account
+                </th>
+
+                <th style="min-width: 22rem; color: black;">
+                    Remarks
+                </th>
+
+                <th style="min-width: 10rem; color: black;">
+                    Amount
+                </th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-voucherDetail let-editing="editing" let-i="rowIndex">
+            <tr *ngIf="voucherDetail.DebitAmount>0" [pEditableRow]="voucherDetail">
+                <td style="min-width: 20rem;">
+                    {{ voucherDetail | showSpecificProperty: 'PostingAccountsId': 'PostingAccountsName'}}
+                </td>
+
+                <td style="min-width: 22rem;">
+                    {{voucherDetail.Narration}}
+                </td>
+
+                <td style="min-width: 10rem;">
+                    {{voucherDetail.DebitAmount}}
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td style="min-width: 20rem; color: black;"></td>
+                <td style="min-width: 22rem; color: black; text-align: end;">Total : </td>
+                <!-- <td BoldAmount style="min-width: 22rem; color: black;"> Total Amount : {{total}}</td> -->
+                <td BoldAmount style="min-width: 10rem; color: black;">Amount : {{totalDebitAmount}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

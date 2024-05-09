@@ -1,0 +1,252 @@
+<form [formGroup]="voucherListForm">
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <div class="grid">
+                    <div class="col-6" *hasRight="Voucher.CanAddVoucher">
+                        <p-tieredMenu #menu [model]="voucherTypes" [popup]="true"></p-tieredMenu>
+                        <!-- <button type="button" pButton icon="pi pi-plus-circle" label="Add New"
+                            (click)="menu.toggle($event)"></button> -->
+                        <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mt-3 ml-2"
+                            (click)="menu.toggle($event)" pTooltip="Add Voucher"></button>
+                        <!-- <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mt-3 ml-2"
+                            pTooltip="Add Voucher" (click)="addVoucher()"></button> -->
+                    </div>
+
+                    <div class="col-3 mt-3">
+                        <span class="p-input-icon-left pr-2 ">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Voucher/Ref/Type" formControlName="SearchQuery"
+                                (keyup.enter)="searchVoucherList()" />
+                        </span>
+                    </div>
+
+                    <div class="col-1 mt-3">
+                        <button type="button" pButton label="Search" (click)="searchVoucherList()"></button>
+
+                    </div>
+
+                    <div class="col-1 mt-3" *ngIf="voucherMasterList.length>0 && IsToshowPrintBtn">
+                        <div *hasRight="Voucher.CanPrintVoucher">
+                            <button pButton label="Print" class="p-button-raised" icon="pi pi-print"
+                                (click)="printDailyVouchers()"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" *ngIf="!(isAnySelected$ | async)">
+                    <div class="p-formgrid grid">
+                        <div class="col-3">
+                            <label> From Date</label><br>
+                            <p-calendar formControlName="FromDate" [showIcon]="true" dateFormat="{{datePickerFormat}}">
+                            </p-calendar>
+                        </div>
+                        <div class="col-3">
+                            <label htmlFor="Todate">To Date</label>
+                            <br>
+                            <p-calendar id="Todate" [showIcon]="true" dateFormat="{{datePickerFormat}}"
+                                formControlName="ToDate">
+                            </p-calendar>
+                            <small class="p-error block" *ngIf="voucherListForm.controls['ToDate'].invalid &&
+                                     voucherListForm.controls['ToDate'].touched ||
+                            voucherListForm.controls['ToDate'].invalid &&
+                             voucherListForm.controls['FromDate'].touched">
+                                To Date Must Be Greater then Form Date
+                            </small>
+                        </div>
+                        <div class="col-2">
+                            <label htmlFor="type">Type</label><br>
+                            <p-dropdown [options]="voucherTypeList" optionLabel="name" placeholder="Select Voucher Type"
+                                optionValue="value" formControlName="VoucherTypeId">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-2">
+                            <label htmlFor="type">Status</label><br>
+                            <p-dropdown [options]="voucherStatus" optionLabel="name" placeholder="Select Voucher Status"
+                                optionValue="value" formControlName="PostingStatus">
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="(hasAdminRights$ | async)" class="col-2">
+                            <label htmlFor="CreatedBy">By</label><br>
+                            <p-dropdown [options]="(userList)" optionLabel="UserName" placeholder="Created By"
+                                optionValue="UserName" formControlName="CreatedBy" [showClear]="true"
+                                (onClear)="onUserClear()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<p-table #dt [value]="voucherMasterList" styleClass="p-datatable-gridlines" responsiveLayout="scroll" [rows]="100"
+    [rowHover]="true"
+    [globalFilterFields]="['ReferenceNo','VouchersMasterId','VoucherTypeName','VoucherDate','Remarks','TotalAmount']"
+    [loading]="isDataLoading">
+
+    <ng-template pTemplate="caption">
+        <div *ngIf="(isAnySelected$ | async)" class="field mr-2 mt-5">
+            <span *hasRight="Voucher.CanPostVoucher">
+                <button type="button" pButton label="Post Selected vouchers" (click)="postSelectedVouchers(2)"></button>
+            </span>
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr class="header-footer">
+            <th>
+                <!-- <p-checkbox type="checkbox" (change)="sellectAll($event)" />&nbsp;
+                                -->
+                <p-checkbox (onChange)="sellectAll($event)" [binary]="true"></p-checkbox>
+                <span>&nbsp;Sr #</span>
+            </th>
+
+            <th pSortableColumn="VouchersMasterId">
+                Voucher #
+            </th>
+
+            <th pSortableColumn="ReferenceNo">
+                Reference #
+            </th>
+
+            <th pSortableColumn="VoucherDate">
+                Date <p-sortIcon field="VoucherDate"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="Remarks">
+                Remarks <p-sortIcon field="Remarks"></p-sortIcon>
+            </th>
+
+            <th pSortableColumn="TotalAmount">
+                Amt <p-sortIcon field="TotalAmount"></p-sortIcon>
+            </th>
+
+            <th>
+                Status
+            </th>
+
+            <th pSortableColumn="VoucherTypeName">
+                Type <p-sortIcon field="VoucherTypeName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="CreatedBy">
+                By <p-sortIcon field="CreatedBy"></p-sortIcon>
+            </th>
+
+            <th>
+                <div class="flex align-items-center justify-content-center">
+                    Actions
+                </div>
+            </th>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-voucherMaster let-i="rowIndex">
+        <tr>
+            <td style="width: 6%; text-align: center; font-weight: bold ;">
+                <!-- <input [checked]="voucherMaster.Selected"
+                                    (change)="sellectSingle($event,voucherMaster.VouchersMasterId)" name="single"
+                                    type="checkbox" /> -->
+                <p-checkbox [(ngModel)]="voucherMaster.Selected"
+                    (onChange)="sellectSingle($event,voucherMaster.VouchersMasterId)" [binary]="true"></p-checkbox>
+                <span>&nbsp; {{i + 1}}</span>
+            </td>
+
+            <td style="width: 9%; text-align: center; font-weight: bold ;">
+                {{voucherMaster.SerialNumber}}
+            </td>
+
+            <td style="width: 7%; text-align: center;">
+                {{voucherMaster.ReferenceNo}}
+            </td>
+
+            <td style="width: 8%; text-align: center;">
+                {{voucherMaster.VoucherDate | date: 'MMM-dd-yyyy'}}
+            </td>
+
+            <td style="width: 15%;">
+                {{voucherMaster.Remarks}}
+            </td>
+
+            <td style="width: 8%; text-align: center;">
+                <span BoldAmount>{{voucherMaster.TotalAmount}}</span>
+
+            </td>
+
+            <td style="width: 5%; text-align: center;">
+                {{voucherMaster.VoucherStatus == 2 ? "Posted" : "UnPosted"}}
+            </td>
+
+            <td style="width: 8%; text-align: center;">
+                {{voucherMaster.VoucherTypeName}}
+            </td>
+            <td style="width: 8%; text-align: center;">
+                {{voucherMaster.CreatedBy}}
+            </td>
+
+            <td style="width: 10%; text-align: center;">
+                <span *hasRight="Voucher.CanPostVoucher">
+                    <i *ngIf="voucherMaster.VoucherStatus == 0"
+                        class="pi pi-check text-green-600 text-xl cursor-pointer" pTooltip="post"
+                        (click)="postVoucher(voucherMaster.VouchersMasterId,2)">
+                    </i>
+                </span>
+
+                &nbsp;
+                <span *hasRight="Voucher.CanEditVoucher">
+                    <span *ngIf="voucherMaster.VoucherStatus == 0">
+                        <i class="pi pi-pencil text-primary cursor-pointer" pTooltip="edit"
+                            (click)="addVoucher(voucherMaster)">
+                        </i>
+                    </span>
+                </span>
+
+                &nbsp;
+                <span *hasRight="Voucher.CanDeleteVoucher">
+                    <span *ngIf="voucherMaster.VoucherStatus == 0">
+                        <i class="pi pi-trash text-orange-700 cursor-pointer" pTooltip="delete"
+                            (click)="removeVoucher(voucherMaster)">
+                        </i>
+                    </span>
+                </span>
+
+                &nbsp;
+                <span *hasRight="Voucher.CanPrintVoucher">
+                    <i class="pi pi-print text-purple-700 cursor-pointer" pTooltip="print"
+                        (click)="printVoucher(voucherMaster.VouchersMasterId)">
+                    </i>
+                </span>
+            </td>
+        </tr>
+
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+        <span *ngIf="(voucherMasterList?.length ?? 0) > 0">
+            <div>
+                <b>
+                    Total Records: {{voucherListPaginationRequest.TotalRecords}}
+                    | Total Pages: {{voucherListPaginationRequest.TotalPages}}
+                    | Records Per Page: {{voucherListPaginationRequest.RecordsPerPage}}
+                    | Page Number: {{voucherListPaginationRequest.PageNumber}}
+                </b>
+                <hr style="width:100%" />
+            </div>
+            <tr class="flex justify-content-around">
+                <p-paginator [rows]="voucherListPaginationRequest.RecordsPerPage"
+                    [totalRecords]="voucherListPaginationRequest.TotalRecords"
+                    [rowsPerPageOptions]="[5,10,30,50,100,200]" [pageLinkSize]="3"
+                    (onPageChange)="changePagination($event)">
+                </p-paginator>
+            </tr>
+        </span>
+    </ng-template>
+
+</p-table>
+
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-toast></p-toast>

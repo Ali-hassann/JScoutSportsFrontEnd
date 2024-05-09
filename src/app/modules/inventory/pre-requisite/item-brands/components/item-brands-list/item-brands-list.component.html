@@ -1,0 +1,57 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="itemBrandList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['BrandName']" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[5,10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div>
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addItemBrand()" pTooltip="Add Item Type"></button>
+                        </div>
+                        <h5 class="m-0">Item Brands</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="BrandName">Name <p-sortIcon field="BrandName"></p-sortIcon></th>
+                        <th>Action </th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-brand>
+                    <tr>
+                        <td><span class="p-column-title">BrandName</span>
+                            {{brand.BrandName}}
+                        </td>
+
+                        <td>
+                            <div class="flex">
+                                <span>
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addItemBrand(brand)"></i>
+                                </span>
+                                <span>
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteItemBrand(brand)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog [key]="itemBrandToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

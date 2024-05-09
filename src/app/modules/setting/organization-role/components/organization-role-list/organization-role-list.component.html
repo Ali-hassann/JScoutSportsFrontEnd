@@ -1,0 +1,64 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-table #dt [value]="organizationRoleList" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['name']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div *hasRight="Can_View_Role.CanAddRole">
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addRoleDialog()" pTooltip="Add organization role"></button>
+                        </div>
+                        <h5 class="m-0">Organization Role</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="RoleName">Role Name <p-sortIcon field="RoleName"></p-sortIcon></th>
+                        <th pSortableColumn="NormalizedName">Normalized Name<p-sortIcon
+                                field="NormalizedName"></p-sortIcon></th>
+                        <th>Total Rights</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-role>
+                    <tr>
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">Name</span>
+                            {{role.RoleName}}
+                        </td>
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">Normalized Name</span>
+                            {{role.NormalizedName}}
+                        </td>
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">Total Rights</span>
+                            {{role.RightsCount}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <span *hasRight="Can_View_Role.CanEditRole">
+                                    <i *ngIf="!role.IsDefault" class="pi pi-pencil text-primary mr-2 cursor-pointer"
+                                        pTooltip="Click to edit" (click)="addRoleDialog(role)"></i>
+                                </span>
+                                <span *hasRight="Can_View_Role.CanManageRoleRights">
+                                    <i class="pi pi-lock text-orange-700  cursor-pointer"
+                                        pTooltip="Manage {{role.RoleName}} Rights" (click)="manageRights(role)"></i>
+                                </span>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

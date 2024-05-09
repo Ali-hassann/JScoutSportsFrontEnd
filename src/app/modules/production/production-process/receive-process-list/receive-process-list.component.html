@@ -1,0 +1,132 @@
+<p-toast></p-toast>
+<p-table #dt [value]="productionProcessList" responsiveLayout="scroll" [rows]="10"
+    [globalFilterFields]="['ProductionProcessName']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,30,50]"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowHover]="true" dataKey="id">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-primary mr-2"
+                    (click)="editProductionProcess()" pTooltip="Edit Production Receive"></button>
+            </div>
+            <span>
+                <label htmlFor="head" style="font-weight: bold;">Order</label><br>
+                <p-dropdown [options]="orderList" [(ngModel)]="productionParameterRequest.OrderMasterId"
+                    [ngModelOptions]="{standalone: true}" optionValue="OrderMasterId" (onChange)="parameterChange()"
+                    placeholder="Select Order" optionLabel="OrderName" [filter]="true" [showClear]="true"
+                    [required]="true">
+                </p-dropdown>
+                <small class="p-error block" *ngIf="(productionParameterRequest?.OrderMasterId ?? 0)==0">Please select
+                    Order.
+                </small>
+            </span>
+
+            <div class="col-12 md:col-3">
+                <label htmlFor="head" style="font-weight: bold;">Employee</label><br>
+                <p-dropdown [options]="employeeList" [(ngModel)]="selectedEmployee" optionLabel="EmployeeName"
+                    [filter]="true" filterBy="EmployeeName" (onChange)="parameterChange()" [showClear]="true"
+                    [ngModelOptions]="{standalone: true}" placeholder="Select an Employee">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="selectedEmployee">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedEmployee.code.toLowerCase()" style="width: 18px"/> -->
+                            <div>{{ selectedEmployee.EmployeeName }}</div>
+                            <div>{{ selectedEmployee.DesignationName }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-employee pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/> -->
+                            <div>{{ employee.EmployeeName }}</div>
+                            <div>{{ employee.DesignationName }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
+
+            <button (click)="submit()" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+                class="p-button-raised p-button-success">
+            </button>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                    class="w-full sm:w-auto" />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="EmployeeName">Employee<p-sortIcon field="EmployeeName"></p-sortIcon></th>
+            <th pSortableColumn="OrderName">Order<p-sortIcon field="OrderName"></p-sortIcon></th>
+            <th pSortableColumn="ProductName">Article<p-sortIcon field="ProductName"></p-sortIcon></th>
+            <th pSortableColumn="ProductSizeName">Size<p-sortIcon field="ProductSizeName"></p-sortIcon></th>
+            <th pSortableColumn="ProductCategoryName">Category<p-sortIcon field="ProductCategoryName"></p-sortIcon></th>
+            <th pSortableColumn="UnitName">Unit<p-sortIcon field="UnitName"></p-sortIcon></th>
+            <th pSortableColumn="ProcessTypeName">Process<p-sortIcon field="ProcessTypeName"></p-sortIcon></th>
+            <th pSortableColumn="IssueQuantity">Issued<p-sortIcon field="IssueQuantity"></p-sortIcon></th>
+            <th pSortableColumn="AlreadyReceived">Received<p-sortIcon field="AlreadyReceived"></p-sortIcon></th>
+            <th pSortableColumn="ReceiveQuantity">Receiving<p-sortIcon field="ReceiveQuantity"></p-sortIcon></th>
+            <th>Receive Date</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item let-editing="editing">
+        <tr [pEditableRow]="item">
+            <td><span class="p-column-title">EmployeeName</span>
+                {{item.EmployeeName}}
+            </td>
+
+            <td><span class="p-column-title">OrderName</span>
+                {{item.OrderName}}
+            </td>
+            <td><span class="p-column-title">ProductName</span>
+                {{item.ProductName}}
+            </td>
+            <td><span class="p-column-title">ProductSizeName</span>
+                {{item.ProductSizeName}}
+            </td>
+            <td><span class="p-column-title">ProductCategoryName</span>
+                {{item.ProductCategoryName}}
+            </td>
+            <td><span class="p-column-title">UnitName</span>
+                {{item.UnitName}}
+            </td>
+            <td><span class="p-column-title">ProcessTypeName</span>
+                {{item.ProcessTypeName}}
+            </td>
+            <td><span class="p-column-title">IssueQuantity</span>
+                {{item.IssueQuantity}}
+            </td>
+            <td><span class="p-column-title">AlreadyReceived</span>
+                {{item.AlreadyReceiveQuantity}}
+            </td>
+            <td style="min-width: 8rem;" pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText selectAll type="number" [(ngModel)]="item.ReceiveQuantity"
+                            [ngModelOptions]="{standalone: true}" (ngModelChange)="onQuantityChange(item)">
+                    </ng-template>
+
+                    <ng-template pTemplate="output">
+                        <span BoldAmount>
+                            {{item.ReceiveQuantity}}</span>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td style="min-width: 8rem;" pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="item.ReceiveDate" dateFormat="d-M-y"
+                            name="FromDate" inputId="dateFormat">
+                        </p-calendar>
+                    </ng-template>
+
+                    <ng-template pTemplate="output">
+                        <span BoldAmount>
+                            {{item.ReceiveDate | date}}</span>
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog [key]="itemToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

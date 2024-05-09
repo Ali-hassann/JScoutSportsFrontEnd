@@ -1,0 +1,82 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-0">
+            <!-- <p-toast></p-toast> -->
+            <p-table #dt [value]="postingAccountList" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['PostingAccountsName','SubCategoriesName','HeadCategoriesName','MainHeadsName','Status']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div *hasRight="COA.CanAddPostingAccount">
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addPostingAccounts()" pTooltip="Add Posting Account"></button>
+                        </div>
+
+                        <h5 class="m-0">Manage Posting Account</h5>
+
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="PostingAccountsName">Account<p-sortIcon
+                                field="PostingAccountsName"></p-sortIcon></th>
+                        <th pSortableColumn="SubCategoriesName">Sub Category<p-sortIcon
+                                field="SubCategoriesName"></p-sortIcon></th>
+                        <th pSortableColumn="HeadCategoriesName">Head Category<p-sortIcon
+                                field="HeadCategoriesName"></p-sortIcon></th>
+                        <th pSortableColumn="MainHeadsName">Main Head<p-sortIcon field="MainHeadsName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="IsActive">Status<p-sortIcon field="IsActive"></p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-postingAccount>
+                    <tr>
+                        <td style="width:20%; min-width:10rem;">
+                            <span class="p-column-title">PostingAccountsName</span>
+                            {{postingAccount.PostingAccountsName}} ({{postingAccount.PostingAccountsId}})
+                        </td>
+                        <td style="width:20%; min-width:10rem;">
+                            <span class="p-column-title">SubCategoriesName</span>
+                            {{postingAccount.SubCategoriesName}}
+                        </td>
+                        <td style="width:20%; min-width:10rem;">
+                            <span class="p-column-title">HeadCategoriesName</span>
+                            {{postingAccount.HeadCategoriesName}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">Main Head</span>
+                            {{postingAccount.MainHeadsName}}
+                        </td>
+                        <td style="width:15%; min-width:8rem;">
+                            <span class="p-column-title">Status</span>
+                            {{(postingAccount.IsActive)?'Active':'Inactive'}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <span *hasRight="COA.CanEditPostingAccount">
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addPostingAccounts(postingAccount)"></i>
+                                </span>
+                                <span *hasRight="COA.CanDeletePostingAccount">
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteSelected(postingAccount)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

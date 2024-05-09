@@ -1,0 +1,105 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div ngModelGroup="VoucherGroup" #VoucherGroup="ngModelGroup">
+
+            <div class="flex flex-wrap">
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="date" style="font-weight: bold;">Date</label>
+                    <p-calendar [showIcon]="true" name="VoucherDate" dateFormat="d-M-y"
+                        [(ngModel)]="voucherMasterRequest.VoucherDate">
+                    </p-calendar>
+                </div>
+
+
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
+                    <input pInputText id="RefNo" type="text" name="ReferenceNo"
+                        [(ngModel)]="voucherMasterRequest.ReferenceNo" placeholder="Enter RefNo" />
+                </div>
+
+
+                <div class="col-12 md:col-6">
+                    <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
+                    <input pInputText id="Remarks" name="Remarks" [(ngModel)]="voucherMasterRequest.Remarks" type="text"
+                        placeholder="Enter Remarks" />
+                </div>
+
+            </div>
+
+            <hr>
+
+            <p-tabView>
+                <p-tabPanel header="Voucher Details" leftIcon="pi pi-book">
+                    <ng-template pTemplate="body">
+                        <div class="flex flex-wrap">
+
+                            <div class="col-12 md:col-6">
+                                <label style="font-weight: bold;" htmlFor="Posting Account">Account Title
+                                    <span>
+                                        <i class="pi pi-plus-circle" dr-cursor-pointer
+                                            pTooltip="Click to add Posting Account" (click)="addPostingAccount()"></i>
+                                    </span>
+                                </label>
+                                <p-dropdown [options]="postingAccountsList" optionLabel="PostingAccountsName"
+                                    [filter]="true" [showClear]="true" scrollHeight="150px"
+                                    placeholder="Select Posting Account" [required]="true" appendTo="body"
+                                    [(ngModel)]="addPostingJvDetail" [ngModelOptions]="{standalone: true}"
+                                    [autofocus]="true" (onSelect)="focusInputField()" #postingAccountField>
+                                </p-dropdown>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <label style="font-weight: bold;" htmlFor="Debit">Debit</label>
+                                <input pInputText selectAll id="Debit" [(ngModel)]="cash"
+                                    [ngModelOptions]="{standalone: true}" type="number" #debitInputField />
+                            </div>
+                            <div class="col-12 md:col-12">
+                                <label style="font-weight: bold;" htmlFor="Narration">Narration</label>
+                                <input pInputText id="Narration" [(ngModel)]="narration"
+                                    [ngModelOptions]="{standalone: true}" placeholder="Enter Narration for detail"
+                                    type="text" #narrationInputField />
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-tabPanel>
+                <!-- <p-tabPanel header="Documents" leftIcon="pi pi-paperclip">
+                    <ng-template pTemplate="content">
+                        <app-gallery [Gallery]="images" (EmitGallery)="onGalleryChange($event)"></app-gallery>
+                    </ng-template>
+                </p-tabPanel> -->
+            </p-tabView>
+        </div>
+    </form>
+
+</div>
+
+<!-- <div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+</div> -->
+
+<hr>
+<div class="flex justify-content-end">
+    <span class="mr-3" *ngIf="isToShowAddNew" BoldAmount>{{voucherMasterRequest.SerialNumber}}</span>
+    <button *ngIf="isToShowAddNew" (click)="initialStage()" pButton pRipple type="button" label="Add New"
+        icon="pi pi-add-circle" class="p-button-raised p-button-primary mr-3">
+    </button>
+    <button *ngIf="isToShowAddNew" (click)="printVoucher()" pButton pRipple type="button" label="Print"
+        icon="pi pi-add-circle" class="p-button-raised p-button-primary mr-3">
+    </button>
+    <button (click)="close(true)" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+
+</div>

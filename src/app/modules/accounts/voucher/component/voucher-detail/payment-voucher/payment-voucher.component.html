@@ -1,0 +1,107 @@
+<form id="body" [formGroup]="paymentVoucherForm">
+    <!-- <div class="col-12 flex justify-content-between flex-row pt-0">
+        <div>
+
+            <p-radioButton
+                [disabled]="selectedTransactionType == VOUCHER_TRANSACTION_TYPE.Bank && paymentVoucherDetailList.length > 0"
+                name="voucherTransactionType" value="Cash" [(ngModel)]="selectedTransactionType"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onVoucherTransactionTypeChange($event)"
+                inputId="cash">
+            </p-radioButton>
+            &nbsp;
+            <b for="cash">Cash</b>
+            &nbsp;
+            <p-radioButton
+                [disabled]="selectedTransactionType == VOUCHER_TRANSACTION_TYPE.Cash && paymentVoucherDetailList.length > 0"
+                name="voucherTransactionType" value="Bank" [(ngModel)]="selectedTransactionType"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onVoucherTransactionTypeChange($event)"
+                inputId="bank">
+            </p-radioButton>
+            &nbsp;
+            <b for="bank">Bank</b>
+        </div>
+    </div> -->
+
+    <div class="flex flex-wrap" *ngIf="selectedTransactionType == VOUCHER_TRANSACTION_TYPE.Cash"
+        formGroupName="childForm">
+        <div class="col-12 md:col-6">
+            <label>Paid to</label>
+            <p-dropdown appendTo="body" [options]="(postingAccountsList)" optionValue="PostingAccountsId"
+                optionLabel="PostingAccountsName" [filter]="true" [showClear]="true" scrollHeight="130px"
+                placeholder="Select Posting Account" [required]="true" formControlName="PostingAccountsId">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['PostingAccountsId'].invalid && frmGrpChildForm.controls['PostingAccountsId'].touched">
+                Please select a posting account.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <label>Amount</label>
+            <input selectAll id="float-input" formControlName="DebitAmount" type="number" pInputText />
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['DebitAmount'].value == false && frmGrpChildForm.controls['DebitAmount'].touched">
+                Enter Valid Amount.
+            </small>
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap" *ngIf="selectedTransactionType == VOUCHER_TRANSACTION_TYPE.Bank"
+        formGroupName="childForm">
+        <div class="col-12 md:col-6">
+            <label>Paid to</label>
+            <p-dropdown appendTo="body" [options]="(postingAccountsList)" optionValue="PostingAccountsId"
+                optionLabel="PostingAccountsName" [filter]="true" [showClear]="true" scrollHeight="130px"
+                placeholder="Select Posting Account" [required]="true" formControlName="PostingAccountsId">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['PostingAccountsId'].invalid && frmGrpChildForm.controls['PostingAccountsId'].touched">
+                Please select a posting account.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <label>Amount</label>
+            <input id="float-input" formControlName="DebitAmount" type="number" pInputText />
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['DebitAmount'].value == false && frmGrpChildForm.controls['DebitAmount'].touched">
+                Enter Valid Amount .
+            </small>
+        </div>
+
+
+        <div class="col-12 md:col-6">
+            <label>Bank Account</label>
+            <p-dropdown appendTo="body" [options]="bankAccountsList" optionValue="PostingAccountsId" optionLabel="PostingAccountsName"
+                [filter]="true" [showClear]="true" scrollHeight="130px" placeholder="Select Bank Account" [required]="true"
+                formControlName="BankAccountId">
+            </p-dropdown>
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['BankAccountId'].invalid && frmGrpChildForm.controls['BankAccountId'].touched">
+                Please select a bank account.
+            </small>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <label>Cheque No</label>
+            <input id="float-input" formControlName="ChequeNo" type="text" pInputText />
+        </div>
+
+        <div class="col-12 md:col-6 pt-0">
+            <label>Status</label>
+            <p-dropdown appendTo="body" formControlName="ChequeStatus" optionValue="value" [options]="statusList" optionLabel="name">
+            </p-dropdown>
+        </div>
+
+        <div class="col-12 md:col-6 pt-0">
+            <label>Due Date</label>
+            <p-calendar appendTo="body" [showIcon]="true" formControlName="ChequeDate" dateFormat="{{datePickerFormat}}">
+            </p-calendar>
+            <small class="p-error block"
+                *ngIf="frmGrpChildForm.controls['ChequeDate'].invalid && frmGrpChildForm.controls['ChequeDate'].touched">
+                Please Select Valid Date .
+            </small>
+        </div>
+    </div>
+</form>

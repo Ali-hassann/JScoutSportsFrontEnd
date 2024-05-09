@@ -1,0 +1,12 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Order">
+            <app-order-reports-tab></app-order-reports-tab>
+        </p-tabPanel>
+        <p-tabPanel header="Order Comsumption">
+            <app-order-consumtion-report-tab></app-order-consumtion-report-tab>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

@@ -1,0 +1,89 @@
+<div>
+    <div class="mr-2" [formGroup]="attendanceForm">
+        <label htmlFor="fromdate">Overtime Date</label><br>
+        <p-calendar id="fromdate" (ngModelChange)="getOvertimeList()" [showIcon]="true" dateFormat="d-M-y"
+            formControlName="FromDate">
+        </p-calendar>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-table #dt [value]="attendanceResponseList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['EmployeeName','DepartmentsName','OvertimeDate','CheckIn','CheckOut']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,30,50,100,200]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template class="p-datatable-header p-datatable" pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div>
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addOvertime()" pTooltip="Add Item"></button>
+                        </div>
+                        <h5 class="m-0 col-6">Manage Overtime</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="EmployeeName">Employee<p-sortIcon field="EmployeeName"></p-sortIcon></th>
+                        <th pSortableColumn="DepartmentsName">Department<p-sortIcon
+                                field="DepartmentsName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="OvertimeDate">Date<p-sortIcon field="OvertimeDate"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="CheckIn">In<p-sortIcon field="CheckIn"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="CheckOut">Out<p-sortIcon field="CheckOut"></p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-attendance>
+                    <tr *ngIf="(isShowAll || attendance.OvertimeId>0)">
+                        <td style="width:30%; min-width:10rem;">
+                            <span class="p-column-title">EmployeeName</span>
+                            {{attendance.EmployeeName}} {{attendance.FatherName}}
+                        </td>
+                        <td style="width:25%; min-width:8rem;">
+                            <span class="p-column-title">DepartmentsName</span>
+                            {{attendance.DepartmentsName}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">OvertimeDate</span>
+                            {{attendance.OvertimeDate | date}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">CheckIn</span>
+                            {{attendance.CheckIn}}
+                        </td>
+                        <td style="width:10%; min-width:8rem;">
+                            <span class="p-column-title">CheckOut</span>
+                            {{attendance.CheckOut}}
+                        </td>
+                        <td style="width:5%; min-width:8rem;">
+                            <div>
+                                <p-toast></p-toast>
+
+                                <i *ngIf="attendance?.OvertimeId ==0"
+                                    class="pi pi-check text-primary mr-2 cursor-pointer"
+                                    (click)="saveOvertimeList([attendance])"></i>
+                                <i *ngIf="attendance?.OvertimeId ?? 0 > 0"
+                                    class="pi pi-clock text-primary mr-2 cursor-pointer"
+                                    (click)="addOvertimeDetailDialog(attendance)"></i>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

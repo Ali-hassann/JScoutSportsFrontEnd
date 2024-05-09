@@ -1,0 +1,331 @@
+<div class="grid">
+    <div class="col-12">
+
+        <div class="card">
+            <p-toolbar>
+                <div class="p-toolbar-group-start">
+
+                    <div class="grid">
+                        <div class="col">
+                            <label htmlFor="fromdate">Select Month</label>
+                            <br>
+                            <p-calendar id="fromdate" [showIcon]="true" view="month" dateFormat="M-y"
+                                [(ngModel)]="monthYear" (ngModelChange)="generateSalarySheet()">
+                            </p-calendar>
+                        </div>
+                        <div class="col">
+                            <label htmlFor="name">Type</label>
+                            <br>
+                            <p-dropdown [options]="departmentType" name="departmentTypeId"
+                                [(ngModel)]="departmentTypeId" scrollHeight="130px" placeholder="Department Type"
+                                [required]="true" (ngModelChange)="generateSalarySheet()" optionLabel="name"
+                                optionValue="value">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt" *hasRight="Payroll.GenerateSalarySheet">
+                            <button pButton pRipple label="Generate Salary" icon="pi pi-print"
+                                (click)="generateSalarySheet()"></button>
+                        </div>
+                        <div class="mt ml-5" *hasRight="Payroll.SaveSalarySheet">
+                            <button [disabled]="isAlreadyPosted" pButton pRipple label="Save Salary" icon="pi pi-check"
+                                class="p-button-success" (click)="saveSalarySheet()"></button>
+                        </div>
+                        <div class=" mt ml-4 gap-1" *hasRight="Payroll.SaveSalarySheet">
+                            <p-checkbox (ngModelChange)="postSalarySheet($event)" [disabled]="isAlreadyPosted"
+                                [binary]="true" [(ngModel)]="isPosted" value=" Post Salary Sheet"
+                                inputId="ny"></p-checkbox>
+                            <label for="ny"> Post Salary Sheet</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-toolbar-group-end" *hasRight="Payroll.PrintSalarySheet">
+                    <p-button label="Print" icon="pi pi-print" (click)="printSalarySheet()"
+                        class="p-button-raised"></p-button>
+                </div>
+            </p-toolbar>
+            <p-toast></p-toast>
+            <p-table #dt [value]="salarySheetList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['EmployeeName','DepartmentsName','Name','EmployeeId']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,30,50,100]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Salary Sheet</h5>
+                        <span *ngIf="departmentTypeId !=1">
+                            Gross
+                            {{salarySheetFooter.TotalGrossPay - (salarySheetFooter.TotalOthersDeduction +
+                            salarySheetFooter.TotalIncomeTax)}} &nbsp; &nbsp;
+                            ( Cash: {{salarySheetFooter.TotalCashNetPay}} &nbsp;&nbsp;Bank:&nbsp;
+                            {{salarySheetFooter.TotalBankNetPay}} &nbsp;&nbsp;
+                            Total Pay: {{salarySheetFooter.TotalNetPay}} )</span>
+                        <span *ngIf="departmentTypeId == 1">
+                            Overtime: {{paidOvertimeAmount}} &nbsp; &nbsp;
+                            Gross
+                            {{salarySheetFooter.TotalGrossPay - (paidOvertimeAmount
+                            +salarySheetFooter.TotalOthersDeduction + salarySheetFooter.TotalIncomeTax)}} &nbsp; &nbsp;
+                            ( Total Net Pay: {{salarySheetFooter.TotalNetPay}} )</span>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <p-checkbox (onChange)="onSelectAllChange($event)" [(ngModel)]="selectAll"
+                                [binary]="true"></p-checkbox>
+                        </th>
+                        <th>Sr# </th>
+                        <th pSortableColumn="EmployeeName">Name <p-sortIcon field="EmployeeName"></p-sortIcon></th>
+                        <th *ngIf="false">DepartmentsName</th>
+                        <th>Salary</th>
+                        <th *ngIf="departmentTypeId != 3">Late Hours</th>
+                        <th *ngIf="departmentTypeId == 1">Overtime Hours</th>
+                        <th *ngIf="departmentTypeId == 1">Net Hours</th>
+                        <th *ngIf="departmentTypeId != 3">Net Amount</th>
+                        <th *ngIf="departmentTypeId != 3">Absent Deduct</th>
+                        <th>Allo wance</th>
+                        <th>Others Addition</th>
+                        <th>GrossPay</th>
+                        <th>L.Bal</th>
+                        <th>Installment</th>
+                        <th>Adva nce</th>
+                        <th>Income Tax</th>
+                        <th *ngIf="departmentTypeId != 3">Other Deduction</th>
+                        <th>Net Pay</th>
+                        <th *ngIf="departmentTypeId !=1">Bank</th>
+                        <th>Remarks</th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee let-ri="rowIndex">
+                    <tr [class.posted-background-color]="employee.IsPosted" [pEditableRow]="employee">
+                        <td>
+                            <p-checkbox [disabled]="employee.IsPosted" [(ngModel)]="employee.Selected"
+                                (onChange)="onSingleSelectChange($event,employee)" [binary]="true"></p-checkbox>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Sr#</span>
+                            {{ri+1}}
+                        </td>
+
+                        <td dr-cursor-pointer pTooltip="Click to view payslip" (click)="printSlip(employee)">
+                            <span class="p-column-title">Name</span>
+                            {{employee.EmployeeName}}
+                        </td>
+                        <td *ngIf="false">
+                            <span class="p-column-title">DepartmentsName</span>
+                            {{employee.DepartmentsName}}
+                        </td>
+
+                        <td>
+                            <span class="p-column-title">SalaryAmount</span>
+                            {{employee.SalaryAmount}}
+                        </td>
+                        <td dr-cursor-pointer *ngIf="employee.TotalLateHours>0 && departmentTypeId !=3"
+                            pTooltip="Click to view late attendance"
+                            (click)="printAttendanceOvertime(true,employee.EmployeeId)">
+                            <span class="p-column-title"></span>
+                            {{employee.TotalLateHours}}
+                        </td>
+                        <td *ngIf="employee.TotalLateHours==0 && departmentTypeId !=3">
+                            <span class="p-column-title"></span>
+                            {{employee.TotalLateHours}}
+                        </td>
+                        <td *ngIf="employee.TotalOverTimeHours==0 && departmentTypeId == 1">
+                            <span class="p-column-title"></span>
+                            {{employee.TotalOverTimeHours}}
+                        </td>
+                        <td *ngIf="employee.TotalOverTimeHours>0 && departmentTypeId == 1" dr-cursor-pointer
+                            pTooltip="Click to view overtime hours"
+                            (click)="printAttendanceOvertime(false,employee.EmployeeId)">
+                            <span class="p-column-title"></span>
+                            {{employee.TotalOverTimeHours}}
+                        </td>
+                        <td *ngIf="departmentTypeId == 1">
+                            {{(employee.TotalOverTimeHours - employee.TotalLateHours) |
+                            number:'1.1-2'}}
+                        </td>
+                        <td *ngIf="departmentTypeId !=3">
+                            {{(employee.OvertimeAmount) |
+                            number:'1.0-2'}}
+                        </td>
+
+                        <td *ngIf="departmentTypeId !=3" dr-cursor-pointer pTooltip="Click to view attendance register"
+                            (click)="printAttendanceRegister(employee.EmployeeId)">{{(employee.AbsentDeductedAmount) |
+                            number:'1.0-2'}}
+                        </td>
+
+                        <td>
+                            <span class="p-column-title">Allowance</span>
+                            {{employee.Allowance }}
+                        </td>
+
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.OthersAddition"
+                                        (ngModelChange)="additionChange(employee)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.OthersAddition}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td style="background-color: gainsboro;">
+                            <b> {{employee.GrossPay}}</b>
+                        </td>
+                        <td>
+                            <b> {{employee.LoanBalance}}</b>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.Installment" (ngModelChange)="deductionChange(employee)">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.Installment}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.Advance" (ngModelChange)="deductionChange(employee)">
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+                                    <span>
+                                        {{employee.Advance}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.IncomeTax" (ngModelChange)="deductionChange(employee)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span>
+                                        {{employee.IncomeTax}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td *ngIf="departmentTypeId !=3" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="number"
+                                        [(ngModel)]="employee.OthersDeduction"
+                                        (ngModelChange)="deductionChange(employee)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span>
+                                        {{employee.OthersDeduction}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="background-color: wheat;">
+                            <b>{{employee.NetPay}}</b>
+                        </td>
+                        <td *ngIf="departmentTypeId !=1">
+                            <p-dropdown appendTo="body" scrollHeight="130px" [options]="backsList"
+                                optionLabel="PostingAccountsName" optionValue="PostingAccountsId"
+                                [(ngModel)]="employee.BankAccountId" [filter]="true" [showClear]="true"
+                                (onChange)="changeBank()" (onClear)="clearBank(employee)" placeholder="Select Bank">
+                            </p-dropdown>
+                        </td>
+                        <td pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input [readOnly]="employee.IsPosted" pInputText type="text"
+                                        [(ngModel)]="employee.Remarks">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span>
+                                        {{employee.Remarks}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td style="width: 1%; text-align: center; font-weight: bold ;">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-v text-primary mr-2 cursor-pointer"
+                                    pTooltip="Click to view Actions" (click)="op.toggle($event)"></i>
+                                <p-overlayPanel #op [showCloseIcon]="false" [style]="{width: '300px'}">
+                                    <ng-template pTemplate>
+                                        <p-table [value]="LoanActions" selectionMode="single"
+                                            (onRowSelect)="onRowSelect($event,employee)" [paginator]="false" [rows]="5"
+                                            responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+
+                                            </ng-template>
+                                            <ng-template pTemplate="body">
+
+                    <tr [pSelectableRow]="'EmployeeDetail'">
+                        <td>Employee Details</td>
+                    </tr>
+                    <tr [pSelectableRow]="'Slip'">
+                        <td>View Salary Slip {{employee.EmployeeName}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </ng-template>
+            </p-overlayPanel>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Total : </td>
+                <td>{{salarySheetFooter.TotalSalaryAmount}}</td>
+                <td *ngIf="departmentTypeId != 3"></td>
+                <td *ngIf="departmentTypeId == 1"></td>
+                <td *ngIf="departmentTypeId == 1"></td>
+                <td *ngIf="departmentTypeId != 3">{{salarySheetFooter.TotalOverTimeAmount}}</td>
+                <td *ngIf="departmentTypeId != 3"></td>
+                <td>{{salarySheetFooter.TotalAllowance}}</td>
+                <td>{{salarySheetFooter.TotalOthersAddition}}</td>
+                <td style="background-color: gainsboro;">{{salarySheetFooter.TotalGrossPay}}</td>
+                <td></td>
+                <td>{{salarySheetFooter.TotalInstallment}}</td>
+                <td>{{salarySheetFooter.TotalAdvance}}</td>
+                <td>{{salarySheetFooter.TotalIncomeTax}}</td>
+                <td *ngIf="departmentTypeId != 3" BoldAmount>{{salarySheetFooter.TotalOthersDeduction}}</td>
+                <td style="background-color: wheat;" BoldAmount>{{salarySheetFooter.TotalNetPay}}</td>
+                <td></td>
+                <td *ngIf="departmentTypeId !=1"></td>
+                <td></td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

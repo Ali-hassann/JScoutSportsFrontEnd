@@ -1,0 +1,66 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table #dt [value]="bundleList" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['BundleName']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[5,10,30,50]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div>
+                            <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addBundle()" pTooltip="Add Bundle"></button>
+                        </div>
+                        <h5 class="m-0">Bundle</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="BundleName">Name<p-sortIcon field="BundleName"></p-sortIcon></th>
+                        <th pSortableColumn="Description">Description<p-sortIcon field="Description"></p-sortIcon></th>
+                        <th pSortableColumn="ItemCount">Items Count<p-sortIcon field="ItemCount"></p-sortIcon></th>
+                        <th>Action</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td><span class="p-column-title">BundleName</span>
+                            {{item.BundleName}}
+                        </td>
+
+                        <td><span class="p-column-title">Description</span>
+                            {{item.Description}}
+                        </td>
+
+                        <td><span class="p-column-title">ItemCount</span>
+                            {{item.ItemCount}}
+                        </td>
+
+                        <td>
+                            <div class="flex">
+                                <span>
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addBundle(item)"></i>
+                                </span>
+                                <span>
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="Click to delete"
+                                        (click)="deleteBundle(item)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog [key]="itemToastIdKey" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

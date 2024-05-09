@@ -1,0 +1,131 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar>
+                <div class="p-toolbar-group-start">
+                    <div class="grid">
+                        <div class="col">
+                            <label htmlFor="department">Select Department</label><br>
+                            <p-multiSelect id="department" [options]="departmentList" optionValue="DepartmentsId"
+                                optionLabel="Name" defaultLabel="Select department " [(ngModel)]="departmentsId"
+                                [filter]="true" scrollHeight="150px">
+                            </p-multiSelect>
+                        </div>
+                        <div class="col" class="mt-5">
+                            <p-button label="Search" icon="pi pi-search" (click)="getEmployeeOfSelectedDepartment()"
+                                styleClass="p-button-success"></p-button>
+                        </div>
+                    </div>
+
+                    <!-- <i class="pi pi-bars"></i> -->
+
+                    <!-- <p-splitButton label="Save" icon="pi pi-check" [model]="items"
+                        styleClass="p-button-warning"></p-splitButton> -->
+                </div>
+
+                <div class="p-toolbar-group-end">
+                    <button pButton label="Print" icon="pi pi-print" class="p-button-raised"
+                        (click)="printEMployeeReport()"></button>
+                </div>
+            </p-toolbar>
+            <p-toast></p-toast>
+            <p-table #dt [value]="employeeList" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['EmployeeName','DepartmentsName','Name','EmployeeId']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,30,50,100]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true"
+                dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <div *hasRight="Payroll.CanAddEmployee">
+
+                            <button pButton pRipple pTooltip="Add {{salaryType === 2 ? 'Contractor' : 'Employee'}}"
+                                icon="pi pi-plus" class="p-button-rounded p-button-success mr-2"
+                                (click)="addEmployeeDialog()"></button>
+                        </div>
+
+                        <h5 class="m-0">Manage {{salaryType === 2 ? 'Contractor' : 'Employee'}}</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Code</th>
+                        <th>Image</th>
+                        <th pSortableColumn="EmployeeId">Reg# <p-sortIcon field="EmployeeId"></p-sortIcon></th>
+                        <th pSortableColumn="EmployeeName">Name <p-sortIcon field="EmployeeName"></p-sortIcon></th>
+                        <th pSortableColumn="DepartmentsName">Department <p-sortIcon
+                                field="DepartmentsName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="DesignationName">Designation<p-sortIcon
+                                field="DesignationName"></p-sortIcon></th>
+                        <th pSortableColumn="IsActive">Status<p-sortIcon field="IsActive"></p-sortIcon></th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee let-ri="rowIndex">
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Sr#</span>
+                            {{employee.EmployeeCode}}
+                        </td>
+                        <td>
+                            <div style="height: 2rem !important; width: 2rem !important;">
+                                <p-image [src]="employee.ImagePath ? (employee.ImagePath): this.defaultImage"
+                                    alt="Image" height="100%" width="100%" [preview]="true"></p-image>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Reg#</span>
+                            {{employee.EmployeeId}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Name</span>
+                            {{employee.EmployeeName}}
+                        </td>
+
+                        <td>
+                            <span class="p-column-title">Department Name</span>
+                            {{employee.DepartmentsName}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Designation</span>
+                            {{employee.DesignationName}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Status</span>
+                            <p-inputSwitch [disabled]="true" id="active"
+                                [(ngModel)]="employee.IsActive"></p-inputSwitch>
+                        </td>
+
+                        <td>
+                            <div class="flex">
+                                <span *hasRight="Payroll.CanEditEmployee">
+                                    <i class="pi pi-pencil text-primary mr-2 cursor-pointer" pTooltip="Click to edit"
+                                        (click)="addEmployeeDialog(employee)"></i>
+                                </span>
+                                &nbsp;
+
+                                <!-- <span *hasRight="Payroll.CanDeleteEmployee">
+                                    <i class="pi pi-trash text-orange-700  cursor-pointer" pTooltip="delete employee"
+                                        (click)="deleteEmployee(employee)"></i>
+                                </span> -->
+                                <!-- &nbsp; -->
+                                <span *hasRight="Payroll.CanManagePayroll">
+                                    <i class="pi pi-arrow-circle-right text-orange-700  cursor-pointer"
+                                        pTooltip="View {{salaryType === 2 ? 'Contractor' : 'Employee'}}"
+                                        (click)="viewEmployee(employee)"></i>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" key="employeeList" icon="pi pi-exclamation-triangle"></p-confirmDialog>

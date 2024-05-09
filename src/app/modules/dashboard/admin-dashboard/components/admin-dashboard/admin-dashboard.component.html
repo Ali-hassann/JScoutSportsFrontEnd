@@ -1,0 +1,19 @@
+<div class="flex flex-row flex-wrap">
+    <div class="col-12 flex justify-content-between">
+        <b>Unposted voucher {{unpostedVoucherCount$ | async}}</b>
+        <div class="col-6 md:col-3">
+            <p-dropdown [options]="recordDuration" optionLabel="duration" optionValue="code"
+                placeholder="Select duration" scrollHeight="150px" [formControl]="selectedDuration">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="col-12">
+        <app-dashboard-detail [FromDate]="this.selectedDuration.value"></app-dashboard-detail>
+    </div>
+    <div class="col-12  md:col-8">
+        <app-monthly-wise-profit-loss [FromDate]="this.selectedDuration.value"></app-monthly-wise-profit-loss>
+    </div>
+    <div class="col-6  md:col-4">
+        <app-transaction-history [FromDate]="this.selectedDuration.value"></app-transaction-history>
+    </div>
+</div>

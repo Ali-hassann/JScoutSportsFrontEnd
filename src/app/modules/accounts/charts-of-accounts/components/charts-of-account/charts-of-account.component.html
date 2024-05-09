@@ -1,0 +1,29 @@
+
+<p-toast></p-toast>
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel  *hasRight="COA.CanViewMainHead" header="Main Heads*">
+            <app-main-head-list></app-main-head-list>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="COA.CanViewHeadCategory" header="Head Categories*">
+            <app-head-category-list></app-head-category-list>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="COA.CanViewSubCategory"  header="Sub Categories*">
+            <app-sub-category-list></app-sub-category-list>
+        </p-tabPanel>
+        
+
+        <p-tabPanel *hasRight="COA.CanViewPostingAccount" header="Posting Accounts*">
+            <app-posting-accounts-list></app-posting-accounts-list>
+        </p-tabPanel>
+
+        <p-tabPanel *hasRight="COA.CanViewCOATree" header="Accounts Structure View*">
+            <app-tree-structure></app-tree-structure>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

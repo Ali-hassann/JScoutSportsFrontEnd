@@ -1,0 +1,20 @@
+<div class="card">
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <p-tabPanel header="Employee"  *hasRight="PayrollReports.CanViewEmployeeReport">
+            <app-pre-requisits-tab></app-pre-requisits-tab>
+        </p-tabPanel>
+
+        <p-tabPanel header="Attendance"  *hasRight="PayrollReports.CanViewAttendanceReport">
+            <app-attendance-reports-tab></app-attendance-reports-tab>
+        </p-tabPanel>
+        <p-tabPanel header="Overtime"  *hasRight="PayrollReports.CanViewOvertimeReport">
+            <app-overtime-reports-tab></app-overtime-reports-tab>
+        </p-tabPanel>
+        <p-tabPanel header="Payroll"  *hasRight="PayrollReports.CanViewAttendanceRegisterReport">
+            <!-- <app-payroll-report-tab>
+            </app-payroll-report-tab> -->
+        </p-tabPanel>
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

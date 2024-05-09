@@ -1,0 +1,54 @@
+<div class="card">
+    <form [formGroup]="subCategoryReportsForm">
+
+        <div class="card p-fluid">
+            <div class="p-formgrid grid">
+                <div class="col-3">
+                    <label htmlFor="subcategory">Sub Category</label><br>
+                    <p-dropdown [options]="subCategoriesList" optionLabel="SubCategoriesName" [filter]="true"
+                        optionValue="SubCategoriesId" placeholder="Select Sub category"
+                        formControlName="SubCategoriesId">
+                    </p-dropdown>
+                    <small class="p-error block"
+                        *ngIf="subCategoryReportsForm.controls['SubCategoriesId'].invalid && subCategoryReportsForm.controls['SubCategoriesId'].touched">Please
+                        select.
+                    </small>
+                </div>
+                <div class="col-2">
+                    <label htmlFor="date">Form Date</label>
+                    <p-calendar formControlName="FromDate" [showIcon]="true" dateFormat="d-M-y">
+                    </p-calendar>
+                </div>
+                <div class="col-2">
+                    <label htmlFor="date">To Date</label>
+                    <p-calendar formControlName="ToDate" [showIcon]="true" dateFormat="d-M-y">
+                    </p-calendar>
+                    <small class="p-error block"
+                        *ngIf="subCategoryReportsForm.controls['ToDate'].invalid && subCategoryReportsForm.controls['ToDate'].touched ||
+                    subCategoryReportsForm.controls['ToDate'].invalid && subCategoryReportsForm.controls['FromDate'].touched">
+                        To Date Must Be Greater then Form Date
+                    </small>
+                </div>
+                <div class="col-1">
+                    <b>Include</b>
+                    <p-checkbox formControlName="IncludeZeroValue" [binary]="true" label="Zero Value">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <b>Include</b>
+                    <br>
+                    <p-checkbox formControlName="IsActive" [binary]="true" label="Inactive Accounts">
+                    </p-checkbox>
+                </div>
+                <div class="col-2">
+                    <button pButton label="Print" class="p-button-raised mt-3" icon="pi pi-print"
+                        (click)="printVoucher()">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <iframe id="frame" [src]="" class="col-12"></iframe>
+</div>
+<p-toast></p-toast>

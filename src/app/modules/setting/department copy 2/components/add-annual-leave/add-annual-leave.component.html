@@ -1,0 +1,31 @@
+<form #f="ngForm">
+    <div ngModelGroup="annualLeavesGroup" #annualLeavesGroup="ngModelGroup" class="card p-fluid mt-0">
+        <div class="field col-12 md:col-12">
+            <label class="font-bold" htmlFor="leaveDate">Select Year *</label><br>
+            <p-calendar id="leaveDate" [showIcon]="true" view="year" dateFormat="yy"
+                [ngModelOptions]="{standalone: true}" (onSelect)="yearChanged()" stand [(ngModel)]="leaveDate">
+            </p-calendar>
+            <small class="p-error block"
+                *ngIf="annualLeavesRequest.AnnualLeaveYear == 0 || (leaveDate?.getFullYear() ?? 0) == 0">Please
+                Select Year.
+            </small>
+        </div>
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name" class="font-bold">Annual Leaves *</label>
+            <input pInputText name="TotalAnnualLeaves" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="annualLeavesRequest.TotalAnnualLeaves" type="number" placeholder="Enter Annual Leaves"
+                required />
+            <small class="p-error block" *ngIf="annualLeavesRequest.TotalAnnualLeaves < 1">Enter
+                Leaves
+            </small>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>

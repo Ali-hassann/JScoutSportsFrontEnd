@@ -1,0 +1,41 @@
+<div class="card">
+    <!-- <div class="card p-fluid"> -->
+    <div class="p-formgrid grid">
+        <div class="col-4">
+            <label htmlFor="fromdate">Form Date</label>
+            <br>
+            <p-calendar id="fromdate" [showIcon]="true" dateFormat="d-M-y"
+                [(ngModel)]="transactionReportRequest.FromDate">
+            </p-calendar>
+        </div>
+        <div class="col-4">
+            <label htmlFor="todate">To Date</label>
+            <br>
+            <p-calendar id="todate" [showIcon]="true" dateFormat="d-M-y"
+                [(ngModel)]="transactionReportRequest.ToDate">
+            </p-calendar>
+        </div>
+        <div class="col-4">
+            <label>Include</label>
+            <br>
+            <p-checkbox class="mt-3" [(ngModel)]="transactionReportRequest.IsActive" [binary]="true" label="Inactive Accounts">
+            </p-checkbox>
+        </div>
+    </div>
+    <!-- </div> -->
+    <p-tabView class="p-0" [(activeIndex)]="activeTabindex" (onChange)="onTabChange($event)">
+        <!-- <p-tabPanel *hasRight="Reports.CanViewPaymentReceipt" header="Daily Transaction">
+            <app-daily-payment-receipt [dailyPaymentRequest]="transactionReportRequest"></app-daily-payment-receipt>
+        </p-tabPanel> -->
+
+        <p-tabPanel *hasRight="Reports.CanViewDailyTransaction" header="Daily Transaction">
+            <app-daily-transaction-report [dailyTransactionRequest]="transactionReportRequest">
+            </app-daily-transaction-report>
+        </p-tabPanel>
+
+        <!-- <p-tabPanel header="Chart Of Accounts">
+        </p-tabPanel> -->
+    </p-tabView>
+</div>
+
+<p-toast></p-toast>

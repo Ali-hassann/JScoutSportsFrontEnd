@@ -1,0 +1,296 @@
+<div class="col-12 card p-fluid max-h-90vh">
+    <form form #f="ngForm">
+        <div id="table" ngModelGroup="addInvoiceGroup" #addInvoiceGroup="ngModelGroup">
+            <div class="flex flex-wrap">
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date" style="font-weight: bold;">Date</label>
+                    <p-calendar [showIcon]="true" name="InvoiceDate" dateFormat="d-M-y"
+                        [(ngModel)]="invoiceMasterRequest.InvoiceDate" [required]="true">
+                    </p-calendar>
+                </div>
+
+                <div class=" col-12 md:col-3">
+                    <span
+                        *ngIf="documentTypeId==inventoryDocumentType.Purchase||documentTypeId==inventoryDocumentType.PurchaseReturn">
+                        <label htmlFor="head" style="font-weight: bold;">Vendors *
+                            <span>
+                                <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Vendors"
+                                    (click)="addParticular()"></i>
+                            </span>
+                        </label>
+                    </span>
+
+                    <span
+                        *ngIf="documentTypeId==inventoryDocumentType.Issuance|| documentTypeId==inventoryDocumentType.IssuanceReturn || documentTypeId==inventoryDocumentType.Adjustment">
+                        <label htmlFor="head" style="font-weight: bold;">Others *
+                            <span>
+                                <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Others"
+                                    (click)="addParticular()"></i>
+                            </span>
+                        </label>
+                    </span>
+
+                    <p-dropdown [options]="particularList" [(ngModel)]="invoiceMasterRequest.ParticularId"
+                        name="Particular" scrollHeight="130px" placeholder="Select Particular"
+                        optionLabel="ParticularName" optionValue="ParticularId" [filter]="true" [showClear]="true"
+                        [required]="true">
+                    </p-dropdown>
+                    <small class="p-error block" *ngIf="!invoiceMasterRequest.ParticularId">Particular
+                        is empty or invalid.
+                    </small>
+                </div>
+                <div *ngIf="documentTypeId==inventoryDocumentType.Purchase||documentTypeId==inventoryDocumentType.PurchaseReturn"
+                    class=" col-12 md:col-2">
+
+                    <label htmlFor="head" style="font-weight: bold;">Payment Mode</label>
+
+                    <p-dropdown [options]="paymentMode" name="PaymentMode"
+                        [(ngModel)]="invoiceMasterRequest.PaymentMode" scrollHeight="130px" placeholder="Select Mode"
+                        optionLabel="name" optionValue="value" [required]="true">
+                    </p-dropdown>
+                </div>
+
+                <div class=" col-12 md:col-2">
+
+                    <label htmlFor="head" style="font-weight: bold;">Order</label>
+
+                    <p-dropdown [options]="orderList" name="OrderMasterId"
+                        [(ngModel)]="invoiceMasterRequest.OrderMasterId" scrollHeight="130px" placeholder="Select Mode"
+                        optionLabel="OrderName" optionValue="OrderMasterId">
+                    </p-dropdown>
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
+                    <input pInputText name="ReferenceNo" id="RefNo" [(ngModel)]="invoiceMasterRequest.ReferenceNo"
+                        type="text" placeholder="Enter RefNo" />
+                    <small class="p-error block"
+                        *ngIf="addInvoiceGroup.control?.get('ReferenceNo')?.invalid">ReferenceNo
+                        is empty or invalid.
+                    </small>
+                </div>
+
+                <div class="col-12 md:col-3">
+                    <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
+                    <input pInputText name="Remarks" id="Remarks" [(ngModel)]="invoiceMasterRequest.Remarks" type="text"
+                        placeholder="Enter Remarks" />
+                </div>
+
+            </div>
+
+            <div class="flex flex-wrap">
+
+                <div class=" col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Item</label>
+                    <p-dropdown [options]="itemsList" [(ngModel)]="selectedItem" [ngModelOptions]="{standalone: true}"
+                        (onChange)="onItemChange()" scrollHeight="130px" placeholder="Select Item"
+                        optionLabel="ItemName" [filter]="true" [showClear]="true" [required]="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label style="font-weight: bold;" htmlFor="quantity">Quantity</label>
+                    <input selectAll pInputText [(ngModel)]="addInvoiceDetailObj.Quantity"
+                        [ngModelOptions]="{standalone: true}" type="number" id="quantity" />
+                </div>
+
+                <div *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice" class="col-12 md:col-2">
+                    <span
+                        *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn">
+                        <label style="font-weight: bold;" htmlFor="Price">Price</label>
+                        <input selectAll pInputText [(ngModel)]="addInvoiceDetailObj.Price"
+                            [ngModelOptions]="{standalone: true}" id="Price" type="number" />
+                    </span>
+                </div>
+
+                <div *ngIf="documentTypeId==inventoryDocumentType.Adjustment" class=" col-12 md:col-3">
+                    <label htmlFor="head" style="font-weight: bold;">Transaction Type</label>
+                    <p-dropdown [options]="transactionTypeList" [(ngModel)]=" this.addInvoiceDetailObj.TransactionType"
+                        [ngModelOptions]="{standalone: true}" (onChange)="onItemChange()" scrollHeight="130px"
+                        placeholder="Select Transaction" optionLabel="name" optionValue="value">
+                    </p-dropdown>
+                </div>
+
+                <div class="mt-5">
+                    <button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success"
+                        (click)="addInvoiceDetail()" pTooltip="Add Invoice"></button>
+                </div>
+            </div>
+
+            <p-table [value]="invoiceMasterRequest.InvoiceDetailsRequest" dataKey="id" editMode="row"
+                responsiveLayout="scroll" scrollHeight="34vh" class="p-datatable-gridlines p-datatable-sm table-height">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 6rem; color: black;">#Sr</th>
+                        <th style="min-width: 20rem; color: black;">
+                            Item Name
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Units
+                        </th>
+
+                        <th style="min-width: 10rem; color: black;">
+                            Quantity
+                        </th>
+
+                        <th *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn"
+                            style="min-width: 9rem; color: black;">
+                            <span *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice">Price</span>
+                        </th>
+
+                        <th *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn"
+                            style="min-width: 9rem; color: black;">
+                            <span *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice">Amount</span>
+                        </th>
+
+                        <th *ngIf="documentTypeId==inventoryDocumentType.Adjustment"
+                            style="min-width: 9rem; color: black;">
+                            Tran-Type
+                        </th>
+
+                        <th style="min-width: 8rem; color: black;">
+                            Actions
+                        </th>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-invoiceDetail let-editing="editing" let-i="rowIndex">
+                    <tr [pEditableRow]="invoiceDetail">
+
+                        <td style="min-width: 3rem;">
+                            <b>{{i + 1}}</b>
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ invoiceDetail.ItemName}}
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            {{ invoiceDetail.UnitName}}
+                        </td>
+
+                        <td style="min-width: 8rem;" pEditableColumn>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="number" [(ngModel)]="invoiceDetail.Quantity"
+                                        [ngModelOptions]="{standalone: true}"
+                                        (ngModelChange)="onDetailChange(invoiceDetail)">
+
+                                </ng-template>
+
+                                <ng-template pTemplate="output">
+
+                                    <span BoldAmount>
+                                        {{invoiceDetail.Quantity}}</span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn"
+                            style="min-width: 8rem;" pEditableColumn>
+                            <span *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input pInputText type="number" [(ngModel)]="invoiceDetail.Price"
+                                            [ngModelOptions]="{standalone: true}"
+                                            (ngModelChange)="onDetailChange(invoiceDetail)">
+
+                                    </ng-template>
+
+                                    <ng-template pTemplate="output">
+
+                                        <span BoldAmount>
+                                            {{invoiceDetail.Price}}</span>
+                                    </ng-template>
+                                </p-cellEditor>
+                            </span>
+                        </td>
+
+
+                        <td *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn"
+                            style="min-width: 6rem;">
+
+                            <span BoldAmount *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice">
+                                {{invoiceDetail.Amount}}</span>
+                        </td>
+
+                        <td *ngIf="documentTypeId==inventoryDocumentType.Adjustment" style="min-width: 6rem;">
+                            <div
+                                *ngIf="invoiceDetail.TransactionType==TransactionTypeInvoiceENUM.StockIn ; else elseBlock">
+                                Increase
+                            </div>
+
+                            <ng-template #elseBlock>
+                                Deccrease
+                            </ng-template>
+
+                        </td>
+
+                        <td style="min-width: 8rem;">
+                            <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
+                                (click)="deleteinvoiceDetail(i)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice" pTemplate="summary">
+                    <span
+                        *ngIf="documentTypeId === inventoryDocumentType.Purchase || documentTypeId === inventoryDocumentType.PurchaseReturn">
+                        <tr>
+                            <td BoldAmount style="min-width: 12rem; color: black;"> Total Amount :
+                                {{invoiceMasterRequest.TotalAmount}}
+                            </td>
+
+                            <td BoldAmount style="min-width: 12rem; color: black;">
+                                <div class="flex align-items-center">
+                                    Discount :
+                                    <input selectAll pInputText name="Discount"
+                                        [(ngModel)]="invoiceMasterRequest.Discount"
+                                        (ngModelChange)="invoiceMasterSummaryUpdate()" style="max-width: 9rem; "
+                                        type="number" />
+                                </div>
+                            </td>
+                            <td BoldAmount style="min-width: 12rem; color: black;">
+                                Net Amount :
+                                {{invoiceMasterRequest.NetAmount}}
+                            </td>
+
+                            <td BoldAmount style="min-width: 15rem; color: black;" class="flex flex-column">
+
+                                <div class="flex align-items-center">
+                                    Paid Amount:
+                                    <input selectAll pInputText name="ReceivedAmount"
+                                        [(ngModel)]="invoiceMasterRequest.PaidReceivedAmount" style="max-width: 8rem; "
+                                        (ngModelChange)="invoiceMasterSummaryUpdate()" type="number" />
+                                </div>
+                            </td>
+
+                            <td BoldAmount style="min-width: 10rem; color: black;">
+                                Balance:
+                                {{invoiceMasterRequest.BalanceAmount}}
+                            </td>
+
+                            <td style="min-width: 1rem; color: black;"></td>
+                        </tr>
+                    </span>
+                </ng-template>
+            </p-table>
+        </div>
+    </form>
+</div>
+
+<div class="flex justify-content-end">
+    <button (click)="Close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+        class="p-button-raised p-button-danger mr-3">
+    </button>
+
+    <button (click)="submit(f,false)" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+        class="p-button-raised p-button-success">
+    </button>
+    &nbsp;
+    &nbsp;
+    <button *hasRight="StockManagementRights.CanShowPurchaseInvoicePrice" (click)="submit(f,true)" pButton pRipple
+        type="button" label="Save & Print" icon="pi pi-check-circle" class="p-button-raised p-button-primary">
+    </button>
+</div>

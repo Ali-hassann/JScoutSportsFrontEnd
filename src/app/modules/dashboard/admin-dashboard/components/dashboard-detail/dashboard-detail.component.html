@@ -1,0 +1,68 @@
+<div class="grid">
+    <div class="col-12 lg:col-4">
+        <div class="card widget-overview-box widget-overview-box-2">
+            <h3>
+                Income
+            </h3>
+            <div class="flex justify-content-between">
+                <div class="overview-detail flex justify-content-between">
+                    <div class="overview-badge flex justify-content-center align-items-center" style="color: white;">
+                        <i class="pi pi-arrow-up"></i>
+                        <span>{{(totalIncome/(totalIncome+totalExpense)*100)| number : '1.2-2'}}%</span>
+                    </div>
+                    <div class="overview-text">
+                        {{totalIncome}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-8 pt-5">
+            <p-chart type="pie" [data]="IncomePieChartList" [style]="{'width': '100%'}">
+            </p-chart>
+        </div>
+    </div>
+    <div class="col-12 lg:col-4">
+        <div class="card widget-overview-box widget-overview-box-1">
+            <h3>
+                Expense
+            </h3>
+            <div class="flex justify-content-between">
+                <div class="overview-detail flex justify-content-between">
+                    <div class="overview-badge flex justify-content-center align-items-center" style="color: white;">
+                        <i class="pi pi-arrow-down"></i>
+                        <span>{{(totalExpense/(totalIncome+totalExpense)*100)| number : '1.2-2'}}%</span>
+                    </div>
+                    <div class="overview-text">
+                        {{totalExpense}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-8 pt-5">
+            <p-chart type="pie" [data]="ExpensePieChartList" [style]="{'width': '100%'}">
+            </p-chart>
+        </div>
+    </div>
+    <div class="col-12 lg:col-4">
+        <div class="card widget-overview-box widget-overview-box-3">
+            <h3>
+                Profit / Loss
+            </h3>
+            <div class="flex justify-content-between">
+                <div class="overview-detail flex justify-content-between">
+                    <div class="overview-badge flex justify-content-center align-items-center" style="color: white;">
+                        <i class="pi {{(totalIncome-totalExpense)>0?'pi-arrow-up':'pi-arrow-down'}}"></i>
+                        <span>{{((totalIncome-totalExpense)/(totalIncome+totalExpense)*100)| number : '1.2-2'}}%</span>
+                    </div>
+                    <div class="overview-text">
+                        {{totalIncome-totalExpense}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 lg:col-8 pt-5">
+            <p-chart type="doughnut" [data]="chartList" [style]="{'width': '100%'}">
+            </p-chart>
+        </div>
+    </div>
+</div>

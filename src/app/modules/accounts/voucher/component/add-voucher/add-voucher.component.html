@@ -1,0 +1,128 @@
+<form [formGroup]="addVoucherForm">
+    <div class="col-12 md:col-12 pt-0">
+        <div class="card p-fluid max-h-80vh">
+
+            <div class="flex flex-wrap">
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="RefNo">Ref No</label>
+                    <input pInputText formControlName="ReferenceNo" id="RefNo" type="text" placeholder="Enter RefNo" />
+                </div>
+
+                <div class="col-12 md:col-2">
+                    <label htmlFor="date">Date</label>
+                    <p-calendar formControlName="VoucherDate" [showIcon]="true" dateFormat="{{datePickerFormat}}">
+                    </p-calendar>
+                </div>
+
+                <div class="col-12 md:col-6">
+                    <label htmlFor="Remarks">Remarks</label>
+                    <input pInputText formControlName="Remarks" id="Remarks" type="text" placeholder="Enter Remarks" />
+                </div>
+
+                <!-- <div class="col-12 md:col-2 mt-5">
+                    <b>Total Amount ({{addVoucherForm.controls['TotalAmount'].value}})</b>
+                </div> -->
+
+            </div>
+
+            <hr>
+            <p-tabView>
+                <p-tabPanel header="Voucher Details" leftIcon="pi pi-book">
+
+                    <div class="col-12 md:col-11 flex justify-content-start align-items-center justify-content-start"
+                        *ngIf="childVoucherTransactionType != VOUCHER_TRANSACTION_TYPE.None">
+
+                        <div class="col-12 md:col-10 bg-yellow-100 flex justify-content-between align-items-center justify-content-center"
+                            *ngIf="isToShowMessage">
+
+                            <span class="font-bold">
+                                {{childVoucherTransactionType}} Voucher cannot be saved without accounts
+                                configuration. Please Contact With AMN Systems.
+                            </span>
+
+                            <!-- <i class="pi pi-times cursor-pointer text-xl text-orange-600 font-bold"
+                                pTooltip="close message" (click)="closeAccountsConfigurationWarning()">
+                            </i> -->
+
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <!-- <p-button (click)="openAccountsConfigurationDialog()" type="button"
+                                label="Configure Accounts">
+                            </p-button> -->
+                        </div>
+                    </div>
+
+                    <div [ngSwitch]="voucherType">
+
+                        <div *ngSwitchCase="VOUCHER_TYPE.Journal">
+                            <app-journal-voucher [isSaveButtonClicked]="isSaveButtonClicked"
+                                [journalVoucherDetailList]="journalVoucherDetailList" [isUpdateCase]="isUpdateCase"
+                                (voucherChildRequest)="receiveChildVoucherData($event)"
+                                (totalAmount)="receiveChildTotalDebitAmount($event)" [isDataSaved]="isDataSaved"
+                                (warningTransactionTypes)="showWarningForAccountsConfiguration($event)">
+                            </app-journal-voucher>
+                        </div>
+
+                        <div *ngSwitchCase="VOUCHER_TYPE.CashPayment">
+                            <app-payment-voucher [isSaveButtonClicked]="isSaveButtonClicked"
+                                [paymentVoucherDetailList]="paymentVoucherDetailList" [isDataSaved]="isDataSaved"
+                                (voucherChildRequest)="receiveChildVoucherData($event)"
+                                (totalAmount)="receiveChildTotalDebitAmount($event)"
+                                (warningTransactionTypes)="showWarningForAccountsConfiguration($event)">
+                            </app-payment-voucher>
+                        </div>
+
+                        <div *ngSwitchCase="VOUCHER_TYPE.CashReceipt">
+                            <app-receipt-voucher [isSaveButtonClicked]="isSaveButtonClicked"
+                                [receiptVoucherDetailList]="receiptVoucherDetailList" [isDataSaved]="isDataSaved"
+                                (voucherChildRequest)="receiveChildVoucherData($event)"
+                                (totalAmount)="receiveChildTotalDebitAmount($event)"
+                                (warningTransactionTypes)="showWarningForAccountsConfiguration($event)">
+                            </app-receipt-voucher>
+                        </div>
+
+                        <div *ngSwitchCase="VOUCHER_TYPE.BankReceipt">
+                            <app-bank-receipt-voucher [isSaveButtonClicked]="isSaveButtonClicked"
+                                [bankReceiptVoucherDetailList]="bankReceiptVoucherDetailList" [isDataSaved]="isDataSaved"
+                                (voucherChildRequest)="receiveChildVoucherData($event)"
+                                (totalAmount)="receiveChildTotalDebitAmount($event)"
+                                (warningTransactionTypes)="showWarningForAccountsConfiguration($event)">
+                            </app-bank-receipt-voucher>
+                        </div>
+
+                        <div *ngSwitchCase="VOUCHER_TYPE.BankPayment">
+                            <app-multi-cash-payment-voucher [isSaveButtonClicked]="isSaveButtonClicked"
+                                [multiPaymentVoucherDetailList]="multiPaymentVoucherDetailList" [isDataSaved]="isDataSaved"
+                                (voucherChildRequest)="receiveChildVoucherData($event)"
+                                (totalAmount)="receiveChildTotalDebitAmount($event)"
+                                (warningTransactionTypes)="showWarningForAccountsConfiguration($event)">
+                            </app-multi-cash-payment-voucher>
+                        </div>
+
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Documents" leftIcon="pi pi-paperclip">
+                    <ng-template pTemplate="content">
+                        <app-gallery [Gallery]="images" (EmitGallery)="onGalleryChange($event)"></app-gallery>
+                    </ng-template>
+                </p-tabPanel>
+            </p-tabView>
+
+        </div>
+
+        <hr>
+        <div class="flex justify-content-end">
+
+            <button (click)="close()" pButton pRipple type="button" label="Close" icon="pi pi-times"
+                class="p-button-raised p-button-danger mr-3">
+            </button>
+
+            <button (click)="saveVoucher()" pButton pRipple type="button" label="Save" icon="pi pi-check-circle"
+                class="p-button-raised p-button-success">
+            </button>
+
+        </div>
+    </div>
+</form>

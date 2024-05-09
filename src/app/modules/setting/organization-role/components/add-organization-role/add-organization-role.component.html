@@ -1,0 +1,31 @@
+<form #f="ngForm">
+    <div ngModelGroup="organizationRole" #organizationRoleGroup="ngModelGroup" class="card p-fluid mt-0">
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Role Name *</label>
+            <input name="RoleName" pInputText [(ngModel)]="organizationRole.RoleName" type="text"
+                placeholder="Enter Role Name" minlength="2" required />
+            <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('RoleName')?.invalid">Name
+                is empty or invalid.
+            </small>
+        </div>
+
+        <div class="field col-12 md:col-12">
+            <label htmlFor="name">Normalized Name *</label>
+            <input pInputText name="NormalizedName" [(ngModel)]="organizationRole.NormalizedName" type="text"
+                placeholder="Enter Normalized Name" minlength="2" required />
+            <small class="p-error block" *ngIf="organizationRoleGroup.control?.get('NormalizedName')?.invalid">Name
+                is empty or invalid.
+            </small>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button pButton type="button" pRipple icon="pi pi-times" (click)="Close()" label="Close"
+            class="p-button-raised p-button-danger mr-3">
+        </button>
+        <button pButton type="button" pRipple icon="pi pi-check" (click)="submit(f)" label="Save"
+            class="p-button-raised p-button-success">
+        </button>
+    </div>
+</form>
+<p-toast key="tst"></p-toast>
