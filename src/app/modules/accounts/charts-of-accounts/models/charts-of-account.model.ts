@@ -6,7 +6,7 @@ export class AccountHeadsFilterRequest extends GenericBaseModel {
     PostingAccountsId: number = 0;
 }
 
-export class UiChartsOfAccount {
+export class TabsUIModel {
     ActiveTabIndex: number = 0;
 }
 

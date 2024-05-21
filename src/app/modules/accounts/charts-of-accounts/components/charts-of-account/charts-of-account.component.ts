@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AppBreadcrumbService } from 'src/app/layout/app.breadcrumb.service';
 import { COA } from 'src/app/shared/enums/rights.enum';
-import { UiChartsOfAccount } from '../../models/charts-of-account.model';
+import { TabsUIModel } from '../../models/charts-of-account.model';
 import { UiChartOfAccountQuery } from '../../states/ui-state/ui-chart-of-account.query';
 
 @Component({
@@ -18,7 +18,6 @@ export class ChartsOfAccountComponent implements OnInit {
     private breadcrumbService: AppBreadcrumbService,
     private _uiChartOfAccountQuery: UiChartOfAccountQuery,
     private route: ActivatedRoute
-
   ) {
     this.setBreadCrumb('Main Heads');
   }
@@ -32,7 +31,6 @@ export class ChartsOfAccountComponent implements OnInit {
       { label: 'Charts of Accounts' },
       { label: name },
     ]);
-
   }
 
   private uiDataBinding(): void {
@@ -49,10 +47,9 @@ export class ChartsOfAccountComponent implements OnInit {
     this.activeTabindex = event.index;
   }
 
-  private ngOnDestroy(): void {
-    let ui = new UiChartsOfAccount();
+  public ngOnDestroy(): void {
+    let ui = new TabsUIModel();
     ui.ActiveTabIndex = this.activeTabindex;
     this._uiChartOfAccountQuery.updateUi(ui);
   }
-
 }

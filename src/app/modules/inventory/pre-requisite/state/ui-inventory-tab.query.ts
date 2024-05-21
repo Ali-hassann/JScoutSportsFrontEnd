@@ -1,19 +1,19 @@
 import { Injectable } from "@angular/core";
 import { QueryEntity } from "@datorama/akita";
 import { Observable } from "rxjs";
-import { TabsUIModel } from "../../models/charts-of-account.model";
-import { UiChartOfAccountState, UiChartOfAccountStore } from "./ui-chart-of-account.store";
+import { UiInventoryTabState, UiInventoryTabStore } from "./ui-inventory-tab.store";
+import { TabsUIModel } from "src/app/modules/accounts/charts-of-accounts/models/charts-of-account.model";
 
 @Injectable({ providedIn: 'root' })
-export class UiChartOfAccountQuery extends QueryEntity<UiChartOfAccountState> {
+export class UiInventoryTabQuery extends QueryEntity<UiInventoryTabState> {
 
-  uiChartOfAccount$: Observable<TabsUIModel>;
+  uiInventoryTab$: Observable<TabsUIModel>;
 
   constructor(
-    override  store: UiChartOfAccountStore
+    override  store: UiInventoryTabStore
   ) {
     super(store);
-    this.uiChartOfAccount$ = this.select(state => state.ui);
+    this.uiInventoryTab$ = this.select(state => state.ui);
     this.initialStoreValues();
   }
 
@@ -38,5 +38,4 @@ export class UiChartOfAccountQuery extends QueryEntity<UiChartOfAccountState> {
     ui.ActiveTabIndex = 0;
     this.updateUi(ui);
   }
-
 }
