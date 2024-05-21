@@ -18,7 +18,7 @@ export class ItemsListComponent implements OnInit {
   itemToastIdKey: string = "";
 
   constructor(
-    private _messageService: MessageService, 
+    private _messageService: MessageService,
     private _itemsService: ItemsService,
     public _dialogService: DialogService,
     private _confirmationService: ConfirmationService,
@@ -27,13 +27,17 @@ export class ItemsListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getItemList();
+  }
+
+  private getItemList() {
     this._itemsQuery.itemsList$.subscribe(
       (data: ItemRequest[]) => {
         if (data) {
           this.itemList = data;
         }
       }
-    )
+    );
   }
 
   addItem(item?: ItemRequest) {
@@ -42,6 +46,10 @@ export class ItemsListComponent implements OnInit {
       data: item,
       width: '60%',
       height: '80%'
+    });
+    dialogRef.onClose.subscribe((isToRefresh: boolean) => {
+      debugger;
+      isToRefresh ? this.getItemList() : '';
     });
   }
 

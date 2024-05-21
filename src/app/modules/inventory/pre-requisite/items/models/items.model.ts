@@ -4,6 +4,13 @@ export class ItemRequest {
     UnitId: number;
     ItemName: string;
     PartNo: string;
+    Size: string = "";
+    Color: string = "";
+    GSM: string = "";
+    RackNo: number = 0;
+    RowNo: string = "";
+    BinNo: string = "";
+    LineNumber: string = "";
     PurchasePrice: number;
     SalePrice: number;
     ReorderLevel: number;

@@ -20,7 +20,6 @@ import { AddItemUnitsComponent } from '../../../item-units/components/add-item-u
   styleUrls: ['./add-items.component.scss']
 })
 export class AddItemsComponent implements OnInit {
-
   item: ItemRequest = new ItemRequest();
   itemCategoryList: ItemCategoryRequest[] = [];
   unitList: UnitRequest[] = [];
@@ -29,8 +28,8 @@ export class AddItemsComponent implements OnInit {
     private _authQuery: AuthQuery,
     private _itemsService: ItemsService,
     private _dialogService: DialogService,
-    public _configDialogRef: DynamicDialogRef,
-    public _configDialog: DynamicDialogConfig,
+    private _configDialogRef: DynamicDialogRef,
+    private _configDialog: DynamicDialogConfig,
     private _service: MessageService,
     private _itemQuery: ItemsQuery,
     private _itemCategoryQuery: ItemCategoryQuery,
@@ -57,8 +56,7 @@ export class AddItemsComponent implements OnInit {
         if (data) {
           this.unitList = data;
         }
-      }
-    );
+      });
   }
 
   private getCategoryList() {
@@ -71,20 +69,19 @@ export class AddItemsComponent implements OnInit {
     );
   }
 
-  public Close() {
-    this._configDialogRef.close();
+  public close(isToRefresh: boolean = false): void {
+    debugger;
+    this._configDialogRef.close(isToRefresh);
   }
 
-  addCategory() {
+  public addCategory(): void {
     let dialogRef = this._dialogService.open(AddItemCategoryComponent, {
       header: 'Add Category',
       data: null,
     });
 
     dialogRef.onClose.subscribe(isToRefresh => {
-      if (isToRefresh == true) {
-        this.getCategoryList();
-      }
+      isToRefresh ? this.getCategoryList() : '';
     });
   }
 
@@ -94,10 +91,8 @@ export class AddItemsComponent implements OnInit {
       data: null,
     });
 
-    dialogRef.onClose.subscribe(isToRefresh => {
-      if (isToRefresh == true) {
-        this.getUnitList();
-      }
+    dialogRef.onClose.subscribe((isToRefresh: boolean) => {
+      isToRefresh ? this.getUnitList() : '';
     });
   }
 
@@ -105,40 +100,33 @@ export class AddItemsComponent implements OnInit {
 
     if (!f.invalid) {
       this.item.OutletId = this._authQuery?.PROFILE?.OutletId;
-      if (this.item?.ItemId > 0) {
-        this.UpdateItem(this.item);
-      }
-      else {
-        this.addItem(this.item);
-      }
+      this.item?.ItemId > 0 ? this.UpdateItem() : this.addItem()
     }
     else {
       this._service.add({ severity: 'warn', summary: 'Forms Field is invalid', detail: 'Validation failed' });
     }
   }
 
-  private addItem(request: ItemRequest) {
-    this._itemsService.addItem(request).subscribe(
+  private addItem() {
+    this._itemsService.addItem(this.item).subscribe(
       (x: ItemRequest) => {
         if (x) {
           this._itemQuery.addItem(x);
           this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
-          this.Close();
+          this.close(true);
         }
-      }
-    )
+      });
   }
 
-  private UpdateItem(request: ItemRequest) {
-    this._itemsService.updateItem(request).subscribe(
+  private UpdateItem() {
+    this._itemsService.updateItem(this.item).subscribe(
       (x: ItemRequest) => {
         if (x) {
           this._itemQuery.updateItem(x);
           this._service.add({ severity: 'success', summary: 'Updated Sucessfully', detail: 'Saved Sucessfully' });
-          this.Close();
+          this.close(true);
         }
-      }
-    )
+      });
   }
 
   checkItemDuplication(itemName: string) {
