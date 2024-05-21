@@ -19,7 +19,7 @@ import { WellcomeComponent } from './wellcome.component';
 const routes: Routes = [
     {
         path: '',
-        data: { breadcrumb: "Wellcome" },
+        data: { breadcrumb: "Welcome" },
         component: WellcomeComponent, pathMatch: 'full',
     }
 ]

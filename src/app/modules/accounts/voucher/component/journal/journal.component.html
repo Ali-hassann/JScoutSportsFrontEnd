@@ -56,8 +56,8 @@
                         <div class=" col-12 md:col-3">
                             <label style="font-weight: bold;" htmlFor="Posting Account">Account Title
                                 <span>
-                                    <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add Posting Account"
-                                        (click)="addPostingAccount()"></i>
+                                    <i class="pi pi-plus-circle" dr-cursor-pointer
+                                        pTooltip="Click to add Posting Account" (click)="addPostingAccount()"></i>
                                 </span>
                             </label>
                             <p-dropdown [options]="(postingAccountsList)" optionLabel="PostingAccountsName"
@@ -208,17 +208,13 @@
                                 </td>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="footer">
-                            <tr>
-                                <td style="min-width: 3rem; color: black;"></td>
-                                <td style="min-width: 20rem; color: black;"></td>
-                                <td style="min-width: 22rem; color: black; text-align: end;">Total : </td>
-                                <td BoldAmount style="min-width: 10rem; color: black;">Dr : {{totalDebitAmount}}</td>
-                                <td BoldAmount style="min-width: 6rem; color: black;">Cr : {{totalCreditAmount}} </td>
-                                <td style="min-width: 8rem; color: black;"></td>
-                            </tr>
-                        </ng-template>
                     </p-table>
+                    <div class="grid">
+                        <div class="md:col-7"></div>
+                        <span BoldAmount class="md:col-1">Total:</span>
+                        <span BoldAmount class="md:col-1">Dr: {{totalDebitAmount}}</span>
+                        <span BoldAmount class="md:col-1">Cr: {{totalCreditAmount}}</span>
+                    </div>
 
                 </p-tabPanel>
                 <!-- <p-tabPanel header="Documents" leftIcon="pi pi-paperclip">

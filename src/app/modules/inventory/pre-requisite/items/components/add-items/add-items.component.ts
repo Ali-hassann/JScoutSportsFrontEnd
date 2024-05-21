@@ -30,8 +30,6 @@ export class AddItemsComponent implements OnInit {
     private _dialogService: DialogService,
     private _configDialogRef: DynamicDialogRef,
     private _configDialog: DynamicDialogConfig,
-    private _configDialogRef: DynamicDialogRef,
-    private _configDialog: DynamicDialogConfig,
     private _service: MessageService,
     private _itemQuery: ItemsQuery,
     private _itemCategoryQuery: ItemCategoryQuery,
@@ -59,7 +57,6 @@ export class AddItemsComponent implements OnInit {
           this.unitList = data;
         }
       });
-      });
   }
 
   private getCategoryList() {
@@ -77,14 +74,12 @@ export class AddItemsComponent implements OnInit {
   }
 
   public addCategory(): void {
-  public addCategory(): void {
     let dialogRef = this._dialogService.open(AddItemCategoryComponent, {
       header: 'Add Category',
       data: null,
     });
 
     dialogRef.onClose.subscribe(isToRefresh => {
-      isToRefresh ? this.getCategoryList() : '';
       isToRefresh ? this.getCategoryList() : '';
     });
   }
@@ -97,8 +92,6 @@ export class AddItemsComponent implements OnInit {
 
     dialogRef.onClose.subscribe((isToRefresh: boolean) => {
       isToRefresh ? this.getUnitList() : '';
-    dialogRef.onClose.subscribe((isToRefresh: boolean) => {
-      isToRefresh ? this.getUnitList() : '';
     });
   }
 
@@ -106,7 +99,6 @@ export class AddItemsComponent implements OnInit {
 
     if (!f.invalid) {
       this.item.OutletId = this._authQuery?.PROFILE?.OutletId;
-      this.item?.ItemId > 0 ? this.UpdateItem() : this.addItem()
       this.item?.ItemId > 0 ? this.UpdateItem() : this.addItem()
     }
     else {
@@ -116,21 +108,15 @@ export class AddItemsComponent implements OnInit {
 
   private addItem() {
     this._itemsService.addItem(this.item).subscribe(
-  private addItem() {
-    this._itemsService.addItem(this.item).subscribe(
       (x: ItemRequest) => {
         if (x) {
           this._itemQuery.addItem(x);
           this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
           this.close(true);
-          this.close(true);
         }
-      });
       });
   }
 
-  private UpdateItem() {
-    this._itemsService.updateItem(this.item).subscribe(
   private UpdateItem() {
     this._itemsService.updateItem(this.item).subscribe(
       (x: ItemRequest) => {
@@ -138,9 +124,7 @@ export class AddItemsComponent implements OnInit {
           this._itemQuery.updateItem(x);
           this._service.add({ severity: 'success', summary: 'Updated Sucessfully', detail: 'Saved Sucessfully' });
           this.close(true);
-          this.close(true);
         }
-      });
       });
   }
 

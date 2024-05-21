@@ -22,7 +22,7 @@ export class WellcomeComponent implements OnInit, OnDestroy {
 
     private setBreadCrumb(): void {
         this._breadCrumbService.setBreadcrumbs([
-            { label: 'Wellcome' }
+            { label: 'Welcome' }
         ]);
     }
 
