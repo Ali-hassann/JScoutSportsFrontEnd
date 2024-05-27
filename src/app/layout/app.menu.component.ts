@@ -442,6 +442,13 @@ export class AppMenuComponent implements OnInit {
                 routerLink: ["stock-management/purchase-order"],
             });
         }
+        // if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchase)) {
+            this.stockManagmentSubMenues.push({
+                label: "Purchase Requisition",
+                icon: "pi pi-copy",
+                routerLink: ["stock-management/purchase-requisition"],
+            });
+        // }
         if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchaseInvoice)) {
             this.stockManagmentSubMenues.push({
                 label: "Purchase Invoice",

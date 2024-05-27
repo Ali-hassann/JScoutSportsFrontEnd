@@ -337,6 +337,13 @@ const routes: Routes = [
                 resolve: [PreRequisteResolver, ParticularResolver]
             },
             {
+                path: 'stock-management/purchase-requisition',
+                loadChildren: () =>
+                    import('./modules/stock-management/purchase-requisition/purchase-requisition.module').then(
+                        m => m.PurchaseRequisitionModule),
+                resolve: [PreRequisteResolver, ParticularResolver]
+            },
+            {
                 path: 'logout',
                 loadChildren: () =>
                     import('./modules/common/auth/components/logout/logout/logout.module').then(
