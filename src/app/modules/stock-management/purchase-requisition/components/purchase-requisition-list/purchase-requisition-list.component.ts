@@ -15,6 +15,8 @@ import { StockManagementRights } from 'src/app/shared/enums/rights.enum';
 import { PurchaseRequisitionMasterRequest } from '../../models/purchase-requisition.model';
 import { PurchaseRequisitionService } from '../../services/purchase-requisition.service';
 import { AddPurchanseRequisitionComponent } from '../add-purchase-requisition/add-purchase-requisition.component';
+import { PurchaseOrderService } from '../../../purchase-order/services/purchase-order.service';
+import { PurchaseOrderDetailRequest, PurchaseOrderMasterRequest } from '../../../purchase-order/models/purchase-order.model';
 
 @Component({
   selector: 'app-puchase-requisition-list',
@@ -43,6 +45,7 @@ export class PurchaseRequisitionListComponent implements OnInit {
   constructor(
     private _messageService: MessageService,
     private _invoiceService: PurchaseRequisitionService,
+    private _purchaseOrderService: PurchaseOrderService,
     public _dialogService: DialogService,
     private _confirmationService: ConfirmationService,
     private _authQuery: AuthQuery,
@@ -125,24 +128,16 @@ export class PurchaseRequisitionListComponent implements OnInit {
   //   }, 10);
   // }
 
-  createPurhcaseInvoice(purchaseRequisition: PurchaseRequisitionMasterRequest) {
-    let selectedInvoice = new InvoiceMasterRequest();
-    selectedInvoice.BalanceAmount = purchaseRequisition.TotalAmount;
-    selectedInvoice.DocumentTypeId = InventoryDocumentType.Purchase;
-    selectedInvoice.InvoiceDate = purchaseRequisition.PurchaseRequisitionDate;
+  createPurhcaseRequisition(purchaseRequisition: PurchaseRequisitionMasterRequest) {
+    let selectedInvoice = new PurchaseOrderMasterRequest();
+    selectedInvoice.PurchaseOrderDate = purchaseRequisition.PurchaseRequisitionDate;
     selectedInvoice.Remarks = purchaseRequisition.Remarks;
     selectedInvoice.ReferenceNo = `${purchaseRequisition.PurchaseRequisitionMasterId}`;
-    selectedInvoice.InvoiceStatus = INVOICE_STATUS.UnPosted;
-    selectedInvoice.NetAmount = purchaseRequisition.TotalAmount;
-    selectedInvoice.TotalAmount = purchaseRequisition.TotalAmount;
     selectedInvoice.ParticularId = purchaseRequisition.ParticularId;
     // selectedInvoice.OrderMasterId = purchaseRequisition.ProjectsId;
-    selectedInvoice.OutletId = purchaseRequisition.OutletId;
-    selectedInvoice.PaymentMode = PaymentMode.Cash;
 
     let invoiceData = {
-      InvoiceMasterData: selectedInvoice,
-      DocumentTypeId: InventoryDocumentType.Purchase,
+      PurchaseOrderMasterData: selectedInvoice,
       isFromPurchaseRequisition: true
     }
     this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait purchase invoice is being generated.', sticky: true });
@@ -151,16 +146,15 @@ export class PurchaseRequisitionListComponent implements OnInit {
         this._messageService.clear();
         if (res?.length > 0) {
           res.forEach(detail => {
-            let invoiceDetail = new InvoiceDetailRequest();
+            let invoiceDetail = new PurchaseOrderDetailRequest();
             CommonHelperService.mapSourceObjToDestination(detail, invoiceDetail);
             if (invoiceDetail.ItemId > 0) {
-              invoiceDetail.TransactionType = TransactionTypeInvoiceENUM.StockIn;
-              invoiceData.InvoiceMasterData.InvoiceDetailsRequest.push(invoiceDetail);
+              invoiceData.PurchaseOrderMasterData.PurchaseOrderDetailRequest.push(invoiceDetail);
             }
           });
 
           let dialogRef = this._dialogService.open(AddInvoiceComponent, {
-            header: `Add Purchase Invoice of Requisition # ${purchaseRequisition.PurchaseRequisitionMasterId}`,
+            header: `Add Purchase Order of Requisition # ${purchaseRequisition.PurchaseRequisitionMasterId}`,
             data: invoiceData,
             maximizable: true,
             height: "95%"

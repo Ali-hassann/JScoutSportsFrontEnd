@@ -51,7 +51,6 @@ export class AddPurchanseRequisitionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItemList();
-    this.getParticularList();
   }
 
   private getItemList() {
@@ -60,30 +59,10 @@ export class AddPurchanseRequisitionComponent implements OnInit {
     });
   }
 
-  private getParticularList() {
-    this._particularQuery.VendorList$.subscribe((particulars: ParticularRequest[]) => {
-      this.particularList = particulars;
-    });
-  }
-
   public Close(successfull?: boolean) {
     this._configDialogRef.close(successfull);
   }
-
-  addVender() {
-    let dialogRef = this._dialogService.open(AddItemVendorsComponent, {
-      header: 'Add Vender',
-      data: { particularType: "Vendor" },
-      width: '60%'
-    });
-
-    dialogRef.onClose.subscribe(isToRefresh => {
-      if (isToRefresh == true) {
-        this.getParticularList();
-      }
-    });
-  }
-
+  
   addItem() {
     let dialogRef = this._dialogService.open(AddItemsComponent, {
       header: 'Add Item',
@@ -103,8 +82,6 @@ export class AddPurchanseRequisitionComponent implements OnInit {
       let request: PurchaseRequisitionMasterRequest = new PurchaseRequisitionMasterRequest();
       CommonHelperService.mapSourceObjToDestination(this.purchaseRequisitionMasterRequest, request);
       request.PurchaseRequisitionDate = DateHelperService.getServerDateFormat(request.PurchaseRequisitionDate);
-      request.OutletId = this._authQuery?.PROFILE?.OutletId;
-      request.TotalAmount = CommonHelperService.getSumofArrayPropert(request.PurchaseRequisitionDetailRequest, "Amount");
 
       if (request.PurchaseRequisitionMasterId > 0) {
         this.updatePurchaseRequisition(request, isToPrint);
@@ -169,12 +146,12 @@ export class AddPurchanseRequisitionComponent implements OnInit {
         this._messageService.add({ severity: 'warn', summary: 'Item Exist', detail: 'Selected Item is already in list we are increasing its quantity' });
         let updatedDetail: PurchaseRequisitionDetailRequest = matchingDetail;
         updatedDetail.Quantity += this.addPurchaseRequisitionDetailObj.Quantity
-        updatedDetail.Total = updatedDetail.Quantity * updatedDetail.Price;
+        // updatedDetail.Total = updatedDetail.Quantity * updatedDetail.Price;
         const index = this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest.indexOf(matchingDetail);
         this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest[index] = updatedDetail;
       }
       else {
-        this.addPurchaseRequisitionDetailObj.Total = this.addPurchaseRequisitionDetailObj.Quantity * this.addPurchaseRequisitionDetailObj.Price;
+        
         if (this.purchaseRequisitionMasterRequest?.PurchaseRequisitionMasterId > 0) {
           this.addPurchaseRequisitionDetailObj.PurchaseRequisitionMasterId = this.purchaseRequisitionMasterRequest.PurchaseRequisitionMasterId;
         }
@@ -183,33 +160,19 @@ export class AddPurchanseRequisitionComponent implements OnInit {
         this.addPurchaseRequisitionDetailObj = new PurchaseRequisitionDetailRequest();
         this.selectedItem = new ItemRequest();
       }
-      this.invoiceMasterSummaryUpdate();
     } else {
       this._messageService.add({ severity: 'error', summary: 'Quantity', detail: 'Please select item and quatity must be greaten than zero' });
     }
 
   }
 
-  invoiceMasterSummaryUpdate() {
-    this.purchaseRequisitionMasterRequest.TotalAmount = CommonHelperService.getSumofArrayPropert(this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest, 'Amount');
-    // this.purchaseRequisitionMasterRequest.NetAmount = this.purchaseRequisitionMasterRequest.TotalAmount - this.purchaseRequisitionMasterRequest.Discount;
-    // this.purchaseRequisitionMasterRequest.BalanceAmount = this.purchaseRequisitionMasterRequest.NetAmount - this.purchaseRequisitionMasterRequest.PaidReceivedAmount;
-  }
-
   deletePurchanseRequisitionDetail(index: number) {
     this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest.splice(index, 1);
-    this.invoiceMasterSummaryUpdate();
-  }
-
-  onDetailChange(detail: PurchaseRequisitionDetailRequest) {
-    detail.Total = detail.Quantity * detail.Price;
-    this.invoiceMasterSummaryUpdate();
   }
 
   onItemChange() {
     this.addPurchaseRequisitionDetailObj.ItemId = this.selectedItem.ItemId;
     this.addPurchaseRequisitionDetailObj.ItemName = this.selectedItem.ItemName;
     this.addPurchaseRequisitionDetailObj.UnitName = this.selectedItem.UnitName;
-    this.addPurchaseRequisitionDetailObj.Price = this.selectedItem.LastPrice;
   }
 }

@@ -7,8 +7,6 @@ export class PurchaseRequisitionMasterRequest {
     Remarks: string = "";
     Status: number = 0;
     ProjectsId: number = 0;
-    TotalAmount: number = 0;
-    OutletId: number = 0;
     PurchaseRequisitionDetailRequest: PurchaseRequisitionDetailRequest[] = [];
 }
 
@@ -22,6 +20,4 @@ export class PurchaseRequisitionDetailRequest {
     TypeName: string = "";
     BarCode: string = "";
     Quantity: number = 0;
-    Price: number = 0;
-    Total: number = 0;
 }

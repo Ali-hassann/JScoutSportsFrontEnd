@@ -2,34 +2,14 @@
     <form form #f="ngForm">
         <div ngModelGroup="addPurchaseGroup" #addPurchaseGroup="ngModelGroup">
             <div class="flex flex-wrap">
-                <div class="col-12 md:col-2">
+                <div class="col-12 md:col-4">
                     <label htmlFor="date" style="font-weight: bold;">Date</label>
                     <p-calendar [showIcon]="true" name="PurchaseRequisitionDate" dateFormat="d-M-y"
                         [(ngModel)]="purchaseRequisitionMasterRequest.PurchaseRequisitionDate" [required]="true">
                     </p-calendar>
                 </div>
 
-                <div class=" col-12 md:col-3">
-                    <span>
-                        <label htmlFor="head" style="font-weight: bold;">Vendors *
-                            <span>
-                                <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add vender"
-                                    (click)="addVender()"></i>
-                            </span>
-                        </label>
-                    </span>
-
-                    <p-dropdown [options]="particularList" [(ngModel)]="purchaseRequisitionMasterRequest.ParticularId"
-                        name="Particular" scrollHeight="130px" placeholder="Select Particular"
-                        optionLabel="ParticularName" optionValue="ParticularId" [filter]="true" [showClear]="true"
-                        [required]="true">
-                    </p-dropdown>
-                    <small class="p-error block" *ngIf="!purchaseRequisitionMasterRequest.ParticularId">Particular
-                        is empty or invalid.
-                    </small>
-                </div>
-
-                <div class="col-12 md:col-2">
+                <div class="col-12 md:col-4">
                     <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
                     <input pInputText name="ReferenceNo" id="RefNo" [(ngModel)]="purchaseRequisitionMasterRequest.ReferenceNo"
                         type="text" placeholder="Enter RefNo" />
@@ -39,7 +19,7 @@
                     </small>
                 </div>
 
-                <div class="col-12 md:col-3">
+                <div class="col-12 md:col-4">
                     <label htmlFor="Remarks" style="font-weight: bold;">Remarks</label>
                     <input pInputText name="Remarks" id="Remarks" [(ngModel)]="purchaseRequisitionMasterRequest.Remarks"
                         type="text" placeholder="Enter Remarks" />
@@ -48,7 +28,7 @@
             </div>
 
             <div class="flex flex-wrap">
-                <div class=" col-12 md:col-3">
+                <div class=" col-12 md:col-6">
                     <label htmlFor="head" style="font-weight: bold;">Item
                         <span>
                             <i class="pi pi-plus-circle" dr-cursor-pointer pTooltip="Click to add item"
@@ -80,7 +60,7 @@
             </div>
 
             <p-table [value]="purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest" dataKey="id" editMode="row"
-                responsiveLayout="scroll" scrollHeight="34vh" class="p-datatable-gridlines p-datatable-sm table-height">
+                responsiveLayout="scroll"  scrollHeight="34vh" class="p-datatable-gridlines p-datatable-sm table-height">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 6rem; color: black;">#Sr</th>
@@ -96,12 +76,6 @@
                             Quantity
                         </th>
 
-                        <!-- <th style="min-width: 9rem; color: black;">
-                            Price
-                        </th>
-                        <th style="min-width: 9rem; color: black;">
-                            Amount
-                        </th> -->
                         <th style="min-width: 8rem; color: black;">
                             Actions
                         </th>
@@ -125,11 +99,11 @@
                         </td>
 
                         <td style="min-width: 8rem;" pEditableColumn>
+
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="number" [(ngModel)]="PurchaseDetail.Quantity"
-                                        [ngModelOptions]="{standalone: true}"
-                                        (ngModelChange)="onDetailChange(PurchaseDetail)">
+                                        [ngModelOptions]="{standalone: true}">
 
                                 </ng-template>
 
@@ -139,28 +113,10 @@
                                         {{PurchaseDetail.Quantity}}</span>
                                 </ng-template>
                             </p-cellEditor>
-                        </td>
-
-                        <!-- <td style="min-width: 8rem;" pEditableColumn>
-
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="PurchaseDetail.Price"
-                                        [ngModelOptions]="{standalone: true}"
-                                        (ngModelChange)="onDetailChange(PurchaseDetail)">
-
-                                </ng-template>
-
-                                <ng-template pTemplate="output">
-
-                                    <span BoldAmount>
-                                        {{PurchaseDetail.Price}}</span>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td BoldAmount style="min-width: 8rem;">
+                        </td> 
+                        <!-- <td BoldAmount style="min-width: 8rem;">
                             {{ PurchaseDetail.Amount}}
-                        </td> -->
+                        </td>  -->
                         <td style="min-width: 8rem;">
                             <i class="pi pi-trash text-primary cursor-pointer" pTooltip="Click to delete"
                                 (click)="deletePurchanseRequisitionDetail(i)"></i>
