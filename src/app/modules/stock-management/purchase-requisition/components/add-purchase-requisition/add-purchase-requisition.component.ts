@@ -78,7 +78,7 @@ export class AddPurchanseRequisitionComponent implements OnInit {
   }
 
   public submit(f: NgForm, isToPrint: boolean) {
-    if (!f.invalid && this.purchaseRequisitionMasterRequest.ParticularId) {
+    if (!f.invalid) {
       let request: PurchaseRequisitionMasterRequest = new PurchaseRequisitionMasterRequest();
       CommonHelperService.mapSourceObjToDestination(this.purchaseRequisitionMasterRequest, request);
       request.PurchaseRequisitionDate = DateHelperService.getServerDateFormat(request.PurchaseRequisitionDate);

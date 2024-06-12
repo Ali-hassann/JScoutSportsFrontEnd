@@ -133,7 +133,6 @@ export class PurchaseRequisitionListComponent implements OnInit {
     selectedInvoice.PurchaseOrderDate = purchaseRequisition.PurchaseRequisitionDate;
     selectedInvoice.Remarks = purchaseRequisition.Remarks;
     selectedInvoice.ReferenceNo = `${purchaseRequisition.PurchaseRequisitionMasterId}`;
-    selectedInvoice.ParticularId = purchaseRequisition.ParticularId;
     // selectedInvoice.OrderMasterId = purchaseRequisition.ProjectsId;
 
     let invoiceData = {

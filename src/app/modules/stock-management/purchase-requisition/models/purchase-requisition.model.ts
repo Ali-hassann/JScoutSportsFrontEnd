@@ -1,8 +1,6 @@
 export class PurchaseRequisitionMasterRequest {
     PurchaseRequisitionMasterId: number = 0;
     PurchaseRequisitionDate: string | Date = new Date();
-    ParticularId: number = 0;
-    ParticularName: string = "";
     ReferenceNo: string = "";
     Remarks: string = "";
     Status: number = 0;

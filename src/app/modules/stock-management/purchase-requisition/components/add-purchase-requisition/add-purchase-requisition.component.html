@@ -1,7 +1,7 @@
 <div class="col-12 card p-fluid max-h-90vh">
     <form form #f="ngForm">
         <div ngModelGroup="addPurchaseGroup" #addPurchaseGroup="ngModelGroup">
-            <div class="flex flex-wrap">
+            <div  style="min-height: 100px; max-height: 10px;" class="flex flex-wrap">
                 <div class="col-12 md:col-4">
                     <label htmlFor="date" style="font-weight: bold;">Date</label>
                     <p-calendar [showIcon]="true" name="PurchaseRequisitionDate" dateFormat="d-M-y"
@@ -11,8 +11,9 @@
 
                 <div class="col-12 md:col-4">
                     <label htmlFor="RefNo" style="font-weight: bold;">Ref No</label>
-                    <input pInputText name="ReferenceNo" id="RefNo" [(ngModel)]="purchaseRequisitionMasterRequest.ReferenceNo"
-                        type="text" placeholder="Enter RefNo" />
+                    <input pInputText name="ReferenceNo" id="RefNo"
+                        [(ngModel)]="purchaseRequisitionMasterRequest.ReferenceNo" type="text"
+                        placeholder="Enter RefNo" />
                     <small class="p-error block"
                         *ngIf="addPurchaseGroup.control?.get('ReferenceNo')?.invalid">ReferenceNo
                         is empty or invalid.
@@ -59,8 +60,9 @@
                 </div>
             </div>
 
-            <p-table [value]="purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest" dataKey="id" editMode="row"
-                responsiveLayout="scroll"  scrollHeight="34vh" class="p-datatable-gridlines p-datatable-sm table-height">
+            <p-table [value]="purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest" dataKey="id"
+                editMode="row" responsiveLayout="scroll" scrollHeight="34vh"
+                class="p-datatable-gridlines p-datatable-sm table-height">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 6rem; color: black;">#Sr</th>
@@ -113,7 +115,7 @@
                                         {{PurchaseDetail.Quantity}}</span>
                                 </ng-template>
                             </p-cellEditor>
-                        </td> 
+                        </td>
                         <!-- <td BoldAmount style="min-width: 8rem;">
                             {{ PurchaseDetail.Amount}}
                         </td>  -->

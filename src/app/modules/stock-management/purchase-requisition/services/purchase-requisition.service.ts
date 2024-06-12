@@ -29,7 +29,7 @@ export class PurchaseRequisitionService {
   }
 
   getPurchaseRequisitionList(PurchaseRequisitionParameterRequest: InvoiceParameterRequest): Observable<PaginationResponse> {
-    const url = `PurchaseRequisitions/GetPurchaseRequisitionList`;
+    const url = `PurchaseRequisitions/GetPurchaseRequisitionListWithPagination`;
     return this._http.post<PaginationResponse>(url, PurchaseRequisitionParameterRequest) as Observable<PaginationResponse>;
   }
 
