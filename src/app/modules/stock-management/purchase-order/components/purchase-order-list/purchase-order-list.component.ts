@@ -77,18 +77,13 @@ export class PurchaseOrderListComponent implements OnInit {
     )
   }
 
-  addEditPurchaseOrder(purchaseOrder?: PurchaseOrderMasterRequest) {
+  addEditPurchaseOrder(purchaseOrder: PurchaseOrderMasterRequest = new PurchaseOrderMasterRequest()) {
     let selectedPurchaseOrder = new PurchaseOrderMasterRequest();
-    if (purchaseOrder) {
-      selectedPurchaseOrder = purchaseOrder
-    }
-    let purchaseOrderData = {
-      InvoiceMasterData: selectedPurchaseOrder,
-    }
+    purchaseOrder?.PurchaseOrderMasterId > 0 ? selectedPurchaseOrder = purchaseOrder : ''
 
     let dialogRef = this._dialogService.open(AddPurchanseOrderComponent, {
       header: `${purchaseOrder?.PurchaseOrderMasterId ?? 0 > 0 ? 'Edit' : 'Add'} Purchase Order`,
-      data: purchaseOrderData,
+      data: { purchaseOrderData: selectedPurchaseOrder, purchaseRequisitionIds: [] },
       maximizable: true,
       height: "95%"
     });

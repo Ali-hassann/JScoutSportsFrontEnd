@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { PurchaseOrderDetailRequest, PurchaseOrderMasterRequest } from '../models/purchase-order.model';
 import { InvoiceParameterRequest } from 'src/app/modules/inventory/invoice/models/invoice.model';
 import { PaginationResponse } from 'src/app/shared/models/pagination.model';
+import { PurchaseRequisitionDetailRequest } from '../../purchase-requisition/models/purchase-requisition.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,11 @@ export class PurchaseOrderService {
   PurchaseOrderReport(PurchaseOrderMasterId: number): Observable<any> {
     const url = `Reports/PrintPurchaseOrder?purchaseOrderMasterId=${PurchaseOrderMasterId}`;
     return this._http.get(url, { observe: "response", responseType: "blob" });
+  }
+
+  // for geting details of puchase requisition
+  getRequisitionDetailByIds(reqIds: number[]): Observable<PurchaseRequisitionDetailRequest[]> {
+    const url = `PurchaseRequisitions/GetRequisitionDetailByIds`;
+    return this._http.post<PurchaseRequisitionDetailRequest[]>(url, reqIds) as Observable<PurchaseRequisitionDetailRequest[]>;
   }
 }

@@ -434,7 +434,13 @@ export class AppMenuComponent implements OnInit {
             icon: "pi pi-copy",
             routerLink: ["production-order"],
         });
-
+        // if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchase)) {
+        this.stockManagmentSubMenues.push({
+            label: "Purchase Requisition",
+            icon: "pi pi-copy",
+            routerLink: ["stock-management/purchase-requisition"],
+        });
+        // }
         if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchaseOrder)) {
             this.stockManagmentSubMenues.push({
                 label: "Purchase Order",
@@ -442,13 +448,7 @@ export class AppMenuComponent implements OnInit {
                 routerLink: ["stock-management/purchase-order"],
             });
         }
-        // if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchase)) {
-            this.stockManagmentSubMenues.push({
-                label: "Purchase Requisition",
-                icon: "pi pi-copy",
-                routerLink: ["stock-management/purchase-requisition"],
-            });
-        // }
+
         if (this._userRightQuery.getHasRight(this.MainMenuRights.CanViewPurchaseInvoice)) {
             this.stockManagmentSubMenues.push({
                 label: "Purchase Invoice",

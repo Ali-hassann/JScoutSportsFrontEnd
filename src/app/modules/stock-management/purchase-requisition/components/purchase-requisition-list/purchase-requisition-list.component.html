@@ -38,11 +38,11 @@
                             icon="pi pi-check-circle" class="p-button-raised p-button-primary">
                         </button>
                     </div>
-                    <!-- <div class="col-12 md:col-1 lg:col-1 mt-3">
-                        <button pButton pRipple type="button" label="Print" icon="pi pi-print"
+                    <div *ngIf="isToShowOrderButton" class="col-12 md:col-2 lg:col-1 mt-3">
+                        <button pButton pRipple type="button" label="Order" (click)="createPurchaseOrder()" icon="pi pi-plus"
                             class="p-button-raised p-button-primary">
                         </button>
-                    </div> -->
+                    </div>
                 </div>
             </form>
 
@@ -50,6 +50,10 @@
 
                 <ng-template pTemplate="header">
                     <tr>
+                        <th>
+                            <p-checkbox (onChange)="onSelectAllChange($event)" [binary]="true"></p-checkbox>
+                        </th>
+
                         <th pSortableColumn="PurchaseRequisitionMasterId">
                             Requisition # <p-sortIcon field="PurchaseRequisitionMasterId"></p-sortIcon>
                         </th>
@@ -72,9 +76,15 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-purchaseRequisition>
                     <tr>
-                        <td class="cursor-pointer"
-                            (click)="printPurchaseRequisition(purchaseRequisition.PurchaseRequisitionMasterId)"
-                            pTooltip="Click to print PurchaseRequisition">
+                        <td>
+                            <p-checkbox [(ngModel)]="purchaseRequisition.Selected"
+                                (onChange)="onSingleSelectChange($event,purchaseRequisition)"
+                                [binary]="true"></p-checkbox>
+                        </td>
+
+                        <td class="cursor-pointer">
+                            <!-- (click)="printPurchaseRequisition(purchaseRequisition.PurchaseRequisitionMasterId)"
+                        pTooltip="Click to print PurchaseRequisition" -->
                             {{purchaseRequisition.PurchaseRequisitionMasterId}}
                         </td>
 
@@ -114,11 +124,11 @@
                                         arrow_circle_right
                                         </span> -->
                                 <!-- </ng-template> -->
-                                <span *hasRight="StockManagementRights.CanAddPurchaseInvoice">
+                                <!-- <span *hasRight="StockManagementRights.CanAddPurchaseInvoice">
                                     <i class="pi pi-chevron-circle-up mr-2 text-orange-700  cursor-pointer"
                                         pTooltip="Create Purchase Invoice"
                                         (click)="createPurhcaseRequisition(purchaseRequisition)"></i>
-                                </span>
+                                </span> -->
                                 <!-- <span *hasRight="StockManagementRights.CanPostPurchaseRequisition">
                                     <i *ngIf="!purchaseRequisition.PurchaseRequisitionStatus"
                                         class="pi pi-check text-orange-700  cursor-pointer" pTooltip="Click to post"

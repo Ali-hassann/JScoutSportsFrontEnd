@@ -6,6 +6,7 @@ export class PurchaseRequisitionMasterRequest {
     Status: number = 0;
     ProjectsId: number = 0;
     PurchaseRequisitionDetailRequest: PurchaseRequisitionDetailRequest[] = [];
+    Selected: boolean = false;
 }
 
 export class PurchaseRequisitionDetailRequest {

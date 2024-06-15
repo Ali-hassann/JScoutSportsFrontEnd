@@ -43,8 +43,9 @@ export class AddPurchanseRequisitionComponent implements OnInit {
       CommonHelperService.mapSourceObjToDestination(_configDialog?.data?.InvoiceMasterData, this.purchaseRequisitionMasterRequest);
       this.purchaseRequisitionMasterRequest.PurchaseRequisitionDate = DateHelperService.getDatePickerFormat(_configDialog?.data?.InvoiceMasterData?.PurchaseRequisitionDate);
       this._purchaseRequisitionService.getPurchaseRequisitionDetailById(this.purchaseRequisitionMasterRequest.PurchaseRequisitionMasterId)
-        .subscribe((invoiceDetail: PurchaseRequisitionDetailRequest[]) => {
-          this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest = invoiceDetail;
+        .subscribe((invoiceDetail: PurchaseRequisitionMasterRequest) => {
+          
+          this.purchaseRequisitionMasterRequest.PurchaseRequisitionDetailRequest = invoiceDetail.PurchaseRequisitionDetailRequest;
         });
     }
   }

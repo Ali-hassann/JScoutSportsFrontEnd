@@ -17,6 +17,7 @@ import { PurchaseRequisitionService } from '../../services/purchase-requisition.
 import { AddPurchanseRequisitionComponent } from '../add-purchase-requisition/add-purchase-requisition.component';
 import { PurchaseOrderService } from '../../../purchase-order/services/purchase-order.service';
 import { PurchaseOrderDetailRequest, PurchaseOrderMasterRequest } from '../../../purchase-order/models/purchase-order.model';
+import { AddPurchanseOrderComponent } from '../../../purchase-order/components/add-purchase-order/add-purchase-order.component';
 
 @Component({
   selector: 'app-puchase-requisition-list',
@@ -27,8 +28,8 @@ export class PurchaseRequisitionListComponent implements OnInit {
   purchaseMasterList: PurchaseRequisitionMasterRequest[] = [];
   purchaseRequisitionToastIdKey: string = "";
   purchaseRequisitionRequest: InvoiceParameterRequest = new InvoiceParameterRequest();
-  fromDate: Date = new Date()
-
+  fromDate: Date = new Date();
+  isToShowOrderButton: boolean = false;
   first: number = 0;
   rows: number = 10;
   options = [
@@ -44,8 +45,7 @@ export class PurchaseRequisitionListComponent implements OnInit {
   StockManagementRights = StockManagementRights;
   constructor(
     private _messageService: MessageService,
-    private _invoiceService: PurchaseRequisitionService,
-    private _purchaseOrderService: PurchaseOrderService,
+    private _purcaseRequisitionService: PurchaseRequisitionService,
     public _dialogService: DialogService,
     private _confirmationService: ConfirmationService,
     private _authQuery: AuthQuery,
@@ -65,19 +65,23 @@ export class PurchaseRequisitionListComponent implements OnInit {
   }
 
   getPurchaseRequisitionList() {
+    this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait purchase requisition list is being generated.', sticky: true });
+    this.isToShowOrderButton = false;
     let request: InvoiceParameterRequest = new InvoiceParameterRequest();
     request.FromDate = DateHelperService.getServerDateFormat(this.purchaseRequisitionRequest.FromDate);
     request.ToDate = DateHelperService.getServerDateFormat(this.purchaseRequisitionRequest.ToDate);
     request.OutletId = this._authQuery?.PROFILE?.OutletId;
     request.SearchQuery = this.purchaseRequisitionRequest.SearchQuery;
-    this._invoiceService.getPurchaseRequisitionList(request).subscribe(
+    this._purcaseRequisitionService.getPurchaseRequisitionList(request).subscribe(
       (data: PaginationResponse) => {
+        this._messageService.clear();
+        this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Purchase requisition list generated Successfully', life: 3000 });
         if (data) {
           this.paginationResponse = data;
           this.purchaseMasterList = data.Data;
         }
       }
-    )
+    );
   }
 
   addEditPurchaseRequisition(purchaseRequisition?: PurchaseRequisitionMasterRequest) {
@@ -103,6 +107,34 @@ export class PurchaseRequisitionListComponent implements OnInit {
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  onSelectAllChange(event: any) {
+    this.purchaseMasterList.forEach(r => r.Selected = event.checked);
+    this.showHideOrderButton();
+  }
+
+  onSingleSelectChange(event: any, salarySheet: PurchaseRequisitionMasterRequest) {
+    salarySheet.Selected = event.checked;
+    this.showHideOrderButton();
+  }
+
+  showHideOrderButton() {
+    this.isToShowOrderButton = false;
+    this.purchaseMasterList.filter(e => { e.Selected ? this.isToShowOrderButton = true : "" })
+  }
+
+  createPurchaseOrder() {
+    this.isToShowOrderButton = false;
+    const selectedList = this.purchaseMasterList.filter(e => e.Selected === true);
+    const requsitionIds = selectedList.map(e => { e.Selected = false; return e.PurchaseRequisitionMasterId });
+
+    let dialogRef = this._dialogService.open(AddPurchanseOrderComponent, {
+      header: `Add Purchase Order`,
+      data: { purchaseOrderData: null, purchaseRequisitionIds: requsitionIds },
+      maximizable: true,
+      height: "95%"
+    });
   }
 
   // postPurchaseRequisition(purchaseRequisition: PurchaseRequisitionMasterRequest) {
@@ -140,11 +172,11 @@ export class PurchaseRequisitionListComponent implements OnInit {
       isFromPurchaseRequisition: true
     }
     this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait purchase invoice is being generated.', sticky: true });
-    this._invoiceService.getPurchaseRequisitionDetailById(purchaseRequisition.PurchaseRequisitionMasterId)
+    this._purcaseRequisitionService.getPurchaseRequisitionDetailById(purchaseRequisition.PurchaseRequisitionMasterId)
       .subscribe(res => {
         this._messageService.clear();
-        if (res?.length > 0) {
-          res.forEach(detail => {
+        if (res?.PurchaseRequisitionDetailRequest.length > 0) {
+          res.PurchaseRequisitionDetailRequest.forEach(detail => {
             let invoiceDetail = new PurchaseOrderDetailRequest();
             CommonHelperService.mapSourceObjToDestination(detail, invoiceDetail);
             if (invoiceDetail.ItemId > 0) {
@@ -171,10 +203,10 @@ export class PurchaseRequisitionListComponent implements OnInit {
     this.purchaseRequisitionToastIdKey = purchaseRequisition.PurchaseRequisitionMasterId.toString()
     setTimeout(() => {
       this._confirmationService.confirm({
-        message: 'Are you sure you want to delete purchase order?',
+        message: 'Are you sure you want to delete purchase requisition?',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-          this._invoiceService.removePurchaseRequisition(purchaseRequisition.PurchaseRequisitionMasterId).subscribe(
+          this._purcaseRequisitionService.removePurchaseRequisition(purchaseRequisition.PurchaseRequisitionMasterId).subscribe(
             (x: boolean) => {
               if (x) {
                 this.getPurchaseRequisitionList();
@@ -192,7 +224,7 @@ export class PurchaseRequisitionListComponent implements OnInit {
 
   public printPurchaseRequisition(PurchaseRequisitionMasterId: number): void {
     this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait report is being generating', sticky: true });
-    this._invoiceService
+    this._purcaseRequisitionService
       .PurchaseRequisitionReport(PurchaseRequisitionMasterId).subscribe(reportResponse => {
         if (reportResponse) {
           this._messageService.clear();

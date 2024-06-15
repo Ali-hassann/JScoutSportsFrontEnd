@@ -38,11 +38,11 @@ export class PurchaseRequisitionService {
     return this._http.post<any>(url, PurchaseRequisitionMasterIds) as Observable<any>;
   }
 
-  getPurchaseRequisitionDetailById(PurchaseRequisitionMasterId: number): Observable<PurchaseRequisitionDetailRequest[]> {
+  getPurchaseRequisitionDetailById(PurchaseRequisitionMasterId: number): Observable<PurchaseRequisitionMasterRequest> {
     const url = `PurchaseRequisitions/GetPurchaseRequisitionById?purchaseRequisitionMasterId=${PurchaseRequisitionMasterId}`;
-    return this._http.get<PurchaseRequisitionDetailRequest[]>(url) as Observable<PurchaseRequisitionDetailRequest[]>;
+    return this._http.get<PurchaseRequisitionMasterRequest>(url) as Observable<PurchaseRequisitionMasterRequest>;
   }
-
+  
   PurchaseRequisitionReport(PurchaseRequisitionMasterId: number): Observable<any> {
     const url = `Reports/PrintPurchaseRequisition?purchaseRequisitionMasterId=${PurchaseRequisitionMasterId}`;
     return this._http.get(url, { observe: "response", responseType: "blob" });

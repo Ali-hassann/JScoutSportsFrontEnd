@@ -68,7 +68,7 @@ export class AddHeadCategoryComponent implements OnInit {
   }
 
   public submit(): void {
-    debugger;
+    
     if (!this.addHeadCategoryForm.valid) {
       this.addHeadCategoryForm.markAllAsTouched();
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Main head or name are empty or invalid', life: 3000 });

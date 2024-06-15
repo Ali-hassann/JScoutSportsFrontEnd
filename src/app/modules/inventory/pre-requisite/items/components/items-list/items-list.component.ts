@@ -48,7 +48,7 @@ export class ItemsListComponent implements OnInit {
       height: '80%'
     });
     dialogRef.onClose.subscribe((isToRefresh: boolean) => {
-      debugger;
+      
       isToRefresh ? this.getItemList() : '';
     });
   }

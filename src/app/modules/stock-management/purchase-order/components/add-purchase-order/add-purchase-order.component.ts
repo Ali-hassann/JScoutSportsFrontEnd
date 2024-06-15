@@ -14,6 +14,7 @@ import { ParticularQuery } from 'src/app/modules/inventory/item-particular/state
 import { FileViewerService } from 'src/app/modules/common/file-viewer/services/file-viewer.service';
 import { AddItemVendorsComponent } from 'src/app/modules/inventory/item-particular/components/add-item-vendors/add-item-vendors.component';
 import { AddItemsComponent } from 'src/app/modules/inventory/pre-requisite/items/components/add-items/add-items.component';
+import { PurchaseRequisitionDetailRequest } from '../../../purchase-requisition/models/purchase-requisition.model';
 
 @Component({
   selector: 'app-add-purchase-order',
@@ -39,12 +40,30 @@ export class AddPurchanseOrderComponent implements OnInit {
     private _particularQuery: ParticularQuery,
     private _fileViewerService: FileViewerService
   ) {
-    if (_configDialog?.data?.InvoiceMasterData?.PurchaseOrderMasterId > 0) {
-      CommonHelperService.mapSourceObjToDestination(_configDialog?.data?.InvoiceMasterData, this.purchaseOrderMasterRequest);
-      this.purchaseOrderMasterRequest.PurchaseOrderDate = DateHelperService.getDatePickerFormat(_configDialog?.data?.InvoiceMasterData?.PurchaseOrderDate);
+    if (_configDialog?.data?.purchaseOrderData?.PurchaseOrderMasterId > 0) {
+      this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait detail list is being generated.', sticky: true });
+      CommonHelperService.mapSourceObjToDestination(_configDialog?.data?.purchaseOrderData, this.purchaseOrderMasterRequest);
+      this.purchaseOrderMasterRequest.PurchaseOrderDate = DateHelperService.getDatePickerFormat(_configDialog?.data?.purchaseOrderData?.PurchaseOrderDate);
       this._purchaseOrderService.getPurchaseOrderDetailById(this.purchaseOrderMasterRequest.PurchaseOrderMasterId)
         .subscribe((invoiceDetail: PurchaseOrderDetailRequest[]) => {
+          this._messageService.clear();
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Purchase requisition list generated Successfully', life: 3000 });
           this.purchaseOrderMasterRequest.PurchaseOrderDetailRequest = invoiceDetail;
+        });
+    } else if (_configDialog?.data?.purchaseRequisitionIds?.length > 0) {
+      this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait detail list is being generated.', sticky: true });
+      this._messageService.clear();
+      this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Purchase requisition list generated Successfully', life: 3000 });
+      this.purchaseOrderMasterRequest.ReferenceNo = _configDialog?.data?.purchaseRequisitionIds?.join(',') ?? "";
+      let detailList: PurchaseRequisitionDetailRequest[] = [];
+      this._purchaseOrderService.getRequisitionDetailByIds(_configDialog?.data?.purchaseRequisitionIds)
+        .subscribe((purchaseRequisitionDetails: PurchaseRequisitionDetailRequest[]) => {
+          this.purchaseOrderMasterRequest.PurchaseOrderDetailRequest = purchaseRequisitionDetails.map(r => {
+
+            let detail = new PurchaseOrderDetailRequest();
+            CommonHelperService.mapSourceObjToDestination(r, detail);
+            return detail;
+          });
         });
     }
   }
