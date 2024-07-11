@@ -16,7 +16,7 @@ import { DateHelperService } from 'src/app/shared/services/date-helper.service';
 
 @Component({
   selector: 'app-receive-process-list',
-  templateUrl: './receive-process-list.component.html' 
+  templateUrl: './receive-process-list.component.html'
 })
 export class ReceiveProcessListComponent implements OnInit {
 
@@ -60,29 +60,41 @@ export class ReceiveProcessListComponent implements OnInit {
   }
 
   submit() {
-    var listToInsert = this.productionProcessList.filter(e => e.ReceiveDate != '' && e.ReceiveDate != null && e.ReceiveQuantity > 0);
+    this._messageService.add({ severity: 'info', summary: 'Saving Data.', detail: `Please wait data is being saved.` });
+    var listToInsert = this.productionProcessList.filter(e => e.ProductionDate != '' && e.ProductionDate != null && e.ReceiveQuantity > 0);
     listToInsert.forEach(r => {
       r.Status = ProcessStatusEnum.Receivance;
       r.IssueQuantity = 0;
-      r.ReceiveDate = DateHelperService.getServerDateFormat(r.ReceiveDate);
+      r.ProductionDate = DateHelperService.getServerDateFormat(r.ProductionDate);
       r.EntityState = EntityStateEnum.Inserted;
       r.IssuanceNo = 0;
       r.ProductionProcessId = 0;
     });
-    this._productionService.saveReceiveProcessList(listToInsert).subscribe(res => {
+    this._productionService.saveReceiveProcessList(listToInsert).subscribe((res: Boolean) => {
       if (res) {
+        this._messageService.clear();
+        this._messageService.add({ severity: 'success', summary: 'Succesfully', detail: `Succesfully data saved.`, life: 3000 });
+
         this.getReceivingProcessList();
+      } else {
+
       }
     });
   }
 
   private getReceivingProcessList() {
+    this._messageService.add({ severity: 'info', summary: 'Fetching Data.', detail: `Please wait data is being fetched.` });
     this.productionParameterRequest.OutletId = this._authQuery.PROFILE.CurrentOutletId;
     this.productionParameterRequest.EmployeeId = this.selectedEmployee.EmployeeId;
     this._productionService.getReceivingProcessList(this.productionParameterRequest).subscribe(
       (data: ProductionProcessRequest[]) => {
+        this._messageService.clear();
+        this._messageService.add({ severity: 'success', summary: 'Succesfully', detail: `Succesfully data fetched.`, life: 3000 });
         if (data) {
           this.productionProcessList = data;
+        }
+        else {
+          this.productionProcessList = [];
         }
       }
     );

@@ -115,7 +115,7 @@ export class EditIssueProcessComponent implements OnInit {
   }
 
   deleteDetail(index: number, process: ProductionProcessRequest) {
-    this.productToastIdKey = `${process.ProductId}${process.ProcessTypeId}`;
+    this.productToastIdKey = `${process.ProductId}${process.ProcessId}`;
     setTimeout(() => {
       this._confirmationService.confirm({
         message: `Are you sure you want to delete production ?`,
@@ -137,7 +137,7 @@ export class EditIssueProcessComponent implements OnInit {
         },
         reject: () => {
         },
-        key: `${process.ProductId}${process.ProcessTypeId}`
+        key: `${process.ProductId}${process.ProcessId}`
       });
     }, 10);
   }

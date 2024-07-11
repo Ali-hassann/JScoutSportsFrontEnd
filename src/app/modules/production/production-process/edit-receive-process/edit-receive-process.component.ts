@@ -52,8 +52,7 @@ export class EditReceiveProcessComponent implements OnInit {
     this._employeeQuery.employeeList$.subscribe(
       (data: EmployeeBasicRequest[]) => {
         this.employeeList = data;
-      }
-    );
+      });
   }
 
   public close(successfull?: boolean) {
@@ -68,7 +67,7 @@ export class EditReceiveProcessComponent implements OnInit {
       && this.receiveDate != null) {
       let updatedEntities = this.productionProcessList.filter(r => r.EntityState == EntityStateEnum.Updated);
       updatedEntities.forEach(e => {
-        e.ReceiveDate = DateHelperService.getServerDateFormat(e.ReceiveDate);
+        e.ProductionDate = DateHelperService.getServerDateFormat(e.ProductionDate);
       });
       this.saveReceiveProcessList(updatedEntities);
     }
@@ -115,7 +114,7 @@ export class EditReceiveProcessComponent implements OnInit {
   }
 
   deleteProcess(index: number, process: ProductionProcessRequest) {
-    this.productToastIdKey = `${process.ProductId}${process.ProcessTypeId}`;
+    this.productToastIdKey = `${process.ProductId}${process.ProcessId}`;
     setTimeout(() => {
       this._confirmationService.confirm({
         message: `Are you sure you want to delete production ?`,
@@ -135,7 +134,7 @@ export class EditReceiveProcessComponent implements OnInit {
         },
         reject: () => {
         },
-        key: `${process.ProductId}${process.ProcessTypeId}`
+        key: `${process.ProductId}${process.ProcessId}`
       });
     }, 10);
   }

@@ -43,7 +43,7 @@ export class ProcessQuery extends QueryEntity<ProcessState> {
         this.store.remove(CategoryId);
     }
 
-    public removeProcesstore(): void {
+    public removeProcesStore(): void {
         this.store.remove();
     }
 

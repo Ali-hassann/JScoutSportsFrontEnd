@@ -54,12 +54,15 @@ export class JournalComponent implements OnInit {
     private _voucherQuery: VoucherQuery,
     private _fileViewerService: FileViewerService
   ) {
-
+    
     this.voucher = _configDialog?.data ?? new VoucherMasterList();
-
+    
     if (this.voucher.VouchersMasterId > 0) {
+      this._service.add({ severity: 'info', summary: 'Loading', detail: 'Please wait data is being fetching.', sticky: true });
       this._voucherService.getVouchersById(this.voucher.VouchersMasterId).subscribe(
         (master: VouchersMasterRequest) => {
+          this._service.clear();
+          this._service.add({ severity: 'success', summary: 'Successful', detail: 'Report fetched successfully.', life: 3000 });
           if (master) {
             master.VoucherDate = DateHelperService.getDatePickerFormat(master.VoucherDate);
             this.voucherMasterRequest = master;

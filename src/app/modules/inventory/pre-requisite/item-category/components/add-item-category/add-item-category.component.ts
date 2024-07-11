@@ -78,6 +78,7 @@ export class AddItemCategoryComponent implements OnInit {
       request.ItemCategoryName = this.itemCategory.ItemCategoryName;
       request.ItemCategoryId = this.itemCategory.ItemCategoryId;
       request.OutletId = this._authQuery?.PROFILE?.OutletId;
+      this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being saving.' });
       if (request.ItemCategoryId > 0) {
         this.UpdateItemCategory(request);
       }

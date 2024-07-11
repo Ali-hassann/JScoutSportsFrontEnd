@@ -36,9 +36,12 @@ export class LoanApprovalListComponent implements OnInit {
   }
 
   private getLoanList() {
+    this._messageService.add({ severity: 'info', summary: 'Loading ...', detail: 'Please wait loan is being fetched.', life: 3000 });
     this._employeeLoanService.getApprovalLoanList(this._authService.OutletId).subscribe(
       (data: EmployeeLoanRequest[]) => {
+        this._messageService.clear();
         if (data) {
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Loan fetched successfully.', life: 3000 });
           this.loanList = data;
         }
       }
@@ -54,7 +57,7 @@ export class LoanApprovalListComponent implements OnInit {
     this.visible = false;
     this.selectedLoanRequest.IsApproved = true;
     this.selectedLoanRequest.IsToCreateVoucher = isToCreateVoucher;
-    this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait loan is being approved', sticky: true });
+    this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait loan is being approved', life: 3000 });
     this._employeeLoanService.updateEmployeeLoan(this.selectedLoanRequest).subscribe(res => {
       this._messageService.clear();
       if (res.VoucherMasterId > 0) {

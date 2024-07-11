@@ -45,6 +45,8 @@ export class AddItemTypesComponent implements OnInit {
       request.ItemTypeId = this.itemType.ItemTypeId;
       request.ItemTypeName = this.itemType.ItemTypeName;
       request.OutletId = this._authQuery?.PROFILE?.OutletId;
+      this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being saving.' });
+      
       if (request.ItemTypeId > 0) {
         this.UpdateItemType(request);
       }

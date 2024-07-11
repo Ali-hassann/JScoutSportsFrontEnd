@@ -27,8 +27,8 @@
                 <div class="col-12 md:col-3">
                     <label htmlFor="head" style="font-weight: bold;">Employee</label><br>
                     <p-dropdown [options]="employeeList" [(ngModel)]="selectedEmployee" optionLabel="EmployeeName"
-                        filterBy="EmployeeName" [showClear]="true"
-                        [ngModelOptions]="{standalone: true}" placeholder="Select an Employee" [filter]="true">
+                        filterBy="EmployeeName" [showClear]="true" [ngModelOptions]="{standalone: true}"
+                        placeholder="Select an Employee" [filter]="true">
                         <ng-template pTemplate="selectedItem">
                             <div class="flex align-items-center gap-2" *ngIf="selectedEmployee">
                                 <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedEmployee.code.toLowerCase()" style="width: 18px"/> -->
@@ -55,8 +55,8 @@
                 <div class="col-12 md:col-3 lg:col-3">
                     <label BoldAmount htmlFor="FromDate">Issue Date</label>
                     <br>
-                    <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="issueDate"
-                        dateFormat="d-M-y" name="FromDate" inputId="dateFormat">
+                    <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="issueDate" dateFormat="d-M-y"
+                        name="FromDate" inputId="dateFormat">
                     </p-calendar>
                     <small class="p-error block" *ngIf=" (issueDate ?? '') =='' || issueDate == null">Please select
                         Issue Date or Enter Valid Date '1-Jan-23'.
@@ -65,9 +65,9 @@
 
                 <div class="col-12 md:col-3 lg:col-3">
                     <label htmlFor="head" style="font-weight: bold;">Process</label>
-                    <p-dropdown [options]="processList" [(ngModel)]="selectedProcess"
+                    <p-dropdown [options]="processTypeList" [(ngModel)]="selectedProcess"
                         [ngModelOptions]="{standalone: true}" placeholder="Select Process" optionLabel="ProcessTypeName"
-                        [filter]="true" [showClear]="true" [required]="true" (ngModelChange)="getOrderDetails()">
+                        [filter]="true" [showClear]="true" [required]="true">
                     </p-dropdown>
                     <small class="p-error block" *ngIf="selectedProcess?.ProcessId==0">Please select
                         process.
@@ -77,25 +77,25 @@
             <hr>
             <!-- <div class="flex flex-wrap"> -->
 
-                <!-- <div class="col-12 md:col-3">
+            <!-- <div class="col-12 md:col-3">
                     <label htmlFor="Article" style="font-weight: bold;">Article</label>
                     <p-dropdown [options]="productList" [(ngModel)]="selectedProduct.ProductId"
                         [ngModelOptions]="{standalone: true}" placeholder="Select Product" optionLabel="ProductName"
                         optionValue="ProductId" [required]="true">
                     </p-dropdown> -->
-                <!-- <input pInputText type="text" [readOnly]="true" name="Article"
+            <!-- <input pInputText type="text" [readOnly]="true" name="Article"
                         [(ngModel)]="selectedProduct.ProductName" [ngModelOptions]="{standalone: true}"
                         placeholder="Enter Product" required /> -->
-                <!-- <small class="p-error block" *ngIf="selectedProduct?.ProductId==0 && issuanceNo==0">Please select
+            <!-- <small class="p-error block" *ngIf="selectedProduct?.ProductId==0 && issuanceNo==0">Please select
                         Article.
                     </small>
                 </div> -->
 
-                <!-- <div class="col-12 md:col-3">
+            <!-- <div class="col-12 md:col-3">
                    
                 </div> -->
 
-                <!-- <div class="col-12 md:col-2 ">
+            <!-- <div class="col-12 md:col-2 ">
                     <label htmlFor="Quantity" style="font-weight: bold;">Quantity</label>
                     <input pInputText id="Quantity" type="number" name="Quantity" [(ngModel)]="quantity"
                         [ngModelOptions]="{standalone: true}" placeholder="Enter Quantity" required />
@@ -103,7 +103,7 @@
                     </small>
                 </div> -->
 
-                <!-- <div class="col-6 md:col-1 mt-4">
+            <!-- <div class="col-6 md:col-1 mt-4">
                     <button *ngIf="quantity > 0 && orderMasterId>0 && (selectedEmployee?.EmployeeId??0)>0" pButton
                         pRipple icon="pi pi-plus" (click)="addProductionDetail(selectedProduct)"
                         class="p-button-rounded p-button-success">
@@ -204,13 +204,19 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th></th>
-                        <th *ngFor="let size of productSizeList">{{ size?.ProductSizeName }}</th>
+                        <th style="width: 8rem;" *ngFor="let size of productSizeList">{{ size?.ProductSizeName }}</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
+                    <tr style="background-color: aliceblue;">
+                        <td>Order Quantity</td>
+                        <td style="width: 8rem;" class="limited-width-input" *ngFor="let cell of row; let i = index" pEditableColumn>
+                            {{cell.OrderQuantity}}
+                        </td>
+                    </tr>
                     <tr>
                         <td>{{ row[0].ProductName }}</td>
-                        <td class="limited-width-input" *ngFor="let cell of row; let i = index" pEditableColumn>
+                        <td style="width: 8rem;" class="limited-width-input" *ngFor="let cell of row; let i = index" pEditableColumn>
                             <input class="p-inputtext-sm" pInputText type="number" [(ngModel)]="cell.IssueQuantity"
                                 [ngModelOptions]="{standalone: true}">
                             <!-- (ngModelChange)="onDetailChange(cell,cell.Quantity)" -->

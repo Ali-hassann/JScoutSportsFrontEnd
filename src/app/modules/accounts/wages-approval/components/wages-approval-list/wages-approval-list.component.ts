@@ -35,9 +35,12 @@ export class WagesApprovalListComponent implements OnInit {
   }
 
   private getWagesList() {
+    this._messageService.add({ severity: 'info', summary: 'Loading...', detail: 'Please wait data is fetching.' });
     let request = new PayrollReportRequest();
     this._wagesService.getWagesApprovalList(request).subscribe(
       (data: WagesRequest[]) => {
+        this._messageService.clear();
+        this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Data fetched successfully.', life: 3000 });
         if (data) {
           this.wagesList = data;
         }
@@ -64,12 +67,12 @@ export class WagesApprovalListComponent implements OnInit {
     this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait wages are being approved', sticky: true });
     this._wagesService.postWages(this.selectedWagesRequest).subscribe(res => {
       this._messageService.clear();
-       if (res > 0) {
-      this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Wages approved successfully', life: 3000 });
+      if (res > 0) {
+        this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Wages approved successfully', life: 3000 });
 
-      //print voucher
-      this.printVoucher(res);
-      
+        //print voucher
+        this.printVoucher(res);
+
       }
       // Refreshing Posting Accounts
       // this._financialReportResolverResolver.resolve().subscribe();

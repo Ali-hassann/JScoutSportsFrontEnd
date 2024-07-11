@@ -95,13 +95,13 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>{{isQuantitySelected===true ? "Quantity" : "Price"}}</th>
-                        <th *ngFor="let size of productSizeList">{{ size?.ProductSizeName }}</th>
+                        <th style="width: 6rem" *ngFor="let size of productSizeList">{{ size?.ProductSizeName }}</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
                     <tr>
                         <td>{{ row[0].ProductName }}</td>
-                        <td class="limited-width-input" (mouseenter)="toggleTooltip(true ,cell)"
+                        <td style="width: 6rem" class="limited-width-input" (mouseenter)="toggleTooltip(true ,cell)"
                             (mouseleave)="toggleTooltip(false,cell)" *ngFor="let cell of row; let i = index"
                             pEditableColumn>
                             <input *ngIf="isQuantitySelected" class="p-inputtext-sm" pInputText type="number"

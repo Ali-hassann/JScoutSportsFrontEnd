@@ -65,6 +65,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   getInvoiceListPagination() {
+    this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait data is being generating', sticky: true });
     let request: InvoiceParameterRequest = new InvoiceParameterRequest();
     if (this.InvoiceType == InventoryDocumentType.Issuance) {
       request.DocumentTypeId = InventoryDocumentType.Issuance;
@@ -92,7 +93,9 @@ export class InvoiceListComponent implements OnInit {
     request.SearchQuery = this.invoiceRequest.SearchQuery;
     this._invoiceService.getInvoiceList(request).subscribe(
       (data: InvoiceListResponse) => {
+        this._messageService.clear();
         if (data) {
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Data successfully generated.', life: 3000 });
           // this.invoiceListResponse = data;
           this.invoiceMasterList = data.Data;
         }

@@ -28,8 +28,8 @@ export class ItemOpeningListComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.setBreadCrumb();
     this.getItemOpeingList();
+    this.setBreadCrumb();
   }
 
   private setBreadCrumb(): void {
@@ -50,14 +50,12 @@ export class ItemOpeningListComponent implements OnInit {
   }
 
   getItemOpeingList() {
-    this._messageService.add({ severity: 'info', summary: 'Data is getting', detail: 'Data is getting' });
+    this._messageService.add({ severity: 'info', summary: 'Data is getting', detail: 'Data is getting from server.', life: 3000 });
     this._itemOpeningService.getItemOpeningList(this._authQuery.OutletId).subscribe(res => {
+      this._messageService.clear();
+      this._messageService.add({ severity: 'success', summary: 'Data is Fetched', detail: 'Data is Fetched' });
       res?.length > 0 ? this.itemOpeningeList = res : [];
     });
-  }
-
-  onOpeningChange(itemOpeing: ItemOpeningRequest) {
-
   }
 
   onGlobalFilter(table: Table, event: Event) {

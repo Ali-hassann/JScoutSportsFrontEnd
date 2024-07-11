@@ -2,7 +2,6 @@ import { EntityStateEnum } from "src/app/shared/enums/entity-state.enum";
 
 export class ProductionProcessRequest {
     ProductionProcessId: number;
-    OutletId: number;
     ProductId: number;
     ProductSizeId: number = 0;
     ProductName: string;
@@ -10,15 +9,16 @@ export class ProductionProcessRequest {
     IssuanceNo: number; // parent level prop
     EmployeeId: number; // parent level prop
     OrderMasterId: number; // parent level prop
-    ProcessTypeId: number;
+    ProcessId: number;
     OrderName: string; // parent level prop
     EmployeeName: string; // parent level prop
     Status: number; // parent level prop
     ProcessTypeName: string;
     ProductCategoryName: string;
     UnitName: string;
-    IssueDate?: string | Date; // parent level prop
-    ReceiveDate?: string | Date; // parent level prop
+    ProductionDate: string | Date; // parent level prop
+    // ReceiveDate?: string | Date; // parent level prop
+    OrderQuantity: number;
     IssueQuantity: number;
     ReceiveQuantity: number;
     AlreadyReceiveQuantity: number = 0;
@@ -27,19 +27,20 @@ export class ProductionProcessRequest {
 
     constructor() {
         this.ProductionProcessId = 0;
-        this.OutletId = 0;
         this.ProductId = 0;
         this.ProductName = "";
         this.IssuanceNo = 0;
         this.EmployeeId = 0;
         this.OrderMasterId = 0;
         this.OrderName = "";
-        this.ProcessTypeId = 0;
+        this.ProcessId = 0;
         this.EmployeeName = "";
         this.ProcessTypeName = "";
         this.ProductCategoryName = "";
+        this.ProductionDate = "";
         this.UnitName = "";
         this.Status = 1;
+        this.OrderQuantity = 0;
         this.IssueQuantity = 0;
         this.ReceiveQuantity = 0;
     }

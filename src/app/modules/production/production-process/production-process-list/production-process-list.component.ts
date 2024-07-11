@@ -62,12 +62,17 @@ export class ProductionProcessListComponent implements OnInit {
   }
 
   private getProductionProcessList() {
+    this._messageService.add({ severity: 'info', summary: 'Fetching Data.', detail: `Please wait data is being fetched.` });
     this.productionParameterRequest.OutletId = this._authQuery.PROFILE.CurrentOutletId;
     this.productionParameterRequest.EmployeeId = this.selectedEmployee.EmployeeId;
     this._productionService.getProductionProcessList(this.productionParameterRequest).subscribe(
       (data: ProductionProcessRequest[]) => {
+        this._messageService.clear();
+        this._messageService.add({ severity: 'success', summary: 'Succesfully', detail: `Succesfully data fetched.`, life: 3000 });
         if (data) {
           this.productionProcessList = data;
+        } else {
+          this.productionProcessList = [];
         }
       }
     );
@@ -75,7 +80,7 @@ export class ProductionProcessListComponent implements OnInit {
 
   addProductionProcess(productionProcess?: ProductionProcessRequest) {
     let dialogRef;
-    
+
     if (productionProcess?.IssuanceNo ?? 0 > 0) {
       dialogRef = this._dialogService.open(EditIssueProcessComponent, {
         header: `Edit Issuance # ${productionProcess?.IssuanceNo}`,

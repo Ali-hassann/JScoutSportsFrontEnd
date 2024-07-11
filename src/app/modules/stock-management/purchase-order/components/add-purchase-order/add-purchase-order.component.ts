@@ -54,14 +54,15 @@ export class AddPurchanseOrderComponent implements OnInit {
       this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait detail list is being generated.', sticky: true });
       this._messageService.clear();
       this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Purchase requisition list generated Successfully', life: 3000 });
-      this.purchaseOrderMasterRequest.ReferenceNo = _configDialog?.data?.purchaseRequisitionIds?.join(',') ?? "";
-      let detailList: PurchaseRequisitionDetailRequest[] = [];
+      this.purchaseOrderMasterRequest.ReferenceNo = `P.REQ #( ${_configDialog?.data?.purchaseRequisitionIds?.join(',') ?? ""} )`;
+
       this._purchaseOrderService.getRequisitionDetailByIds(_configDialog?.data?.purchaseRequisitionIds)
         .subscribe((purchaseRequisitionDetails: PurchaseRequisitionDetailRequest[]) => {
           this.purchaseOrderMasterRequest.PurchaseOrderDetailRequest = purchaseRequisitionDetails.map(r => {
-
             let detail = new PurchaseOrderDetailRequest();
             CommonHelperService.mapSourceObjToDestination(r, detail);
+            detail.Price = this.itemsList.find(e => e.ItemId === r.ItemId)?.LastPrice ?? 0;
+            detail.Amount = detail.Price * detail.Quantity;
             return detail;
           });
         });

@@ -48,7 +48,7 @@ export class TransferProcessComponent implements OnInit {
     this._processService.transferProcess(this.fromProductId, this.toProductIds).subscribe(
       (x: boolean) => {
         if (x) {
-          this._processQuery.removeProcesstore();
+          this._processQuery.removeProcesStore();
           this._processService.getProcessListForStore();
           this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
         }

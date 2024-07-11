@@ -41,7 +41,6 @@ export class AddProcessComponent implements OnInit {
     private _orderQuery: OrderQuery,
     private _processTypeQuery: ProcessTypeQuery,
   ) {
-    debugger
     if ((_configDialog?.data?.productId ?? 0) > 0) {
       this.orderMasterId = _configDialog?.data.orderMasterId;
       // this.productList = 
@@ -76,35 +75,39 @@ export class AddProcessComponent implements OnInit {
   }
 
   private getProcessList() {
-      let request: ProductionFilterRequest = new ProductionFilterRequest();
-      request.OrderMasterId = this.orderMasterId;
-      request.ProductSizeId = this.sizeIds[0];
-      request.ProductId = this.productIds[0];
+    let request: ProductionFilterRequest = new ProductionFilterRequest();
+    request.OrderMasterId = this.orderMasterId;
+    request.ProductSizeId = this.sizeIds[0];
+    request.ProductId = this.productIds[0];
+    this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Please wait data is being getting.' });
 
-      if (request.ProductSizeId > 0) {
-        this._processService.getProcessListByProduct(request).subscribe(res => {
-          if (res?.length > 0) {
-            this.processList = res;
+    this._service.add({})
+    if (request.ProductSizeId > 0) {
+      this._processService.getProcessListByProduct(request).subscribe(res => {
+        this._service.clear();
+        this._service.add({ severity: 'success', summary: 'Sucessfully', detail: 'Sucessfully get data', life: 3000 });
+        if (res?.length > 0) {
+          this.processList = res;
+        }
+      });
+    } else {
+      this.processList = [];
+      this._processTypeQuery.processTypeList$.subscribe(
+        res => {
+          if (res.length > 0) {
+            res.forEach(pro => {
+              let process = new ProcessRequest();
+              process.ProcessTypeId = pro.ProcessTypeId;
+              process.MainProcessTypeId = pro.MainProcessTypeId;
+              process.ProcessTypeName = pro.ProcessTypeName;
+              // process.ProductId = ;
+              process.OrderMasterId = this.orderMasterId;
+              this.processList.push(process);
+            });
           }
-        });
-      } else {
-        this.processList = [];
-        this._processTypeQuery.processTypeList$.subscribe(
-          res => {
-            if (res.length > 0) {
-              res.forEach(pro => {
-                let process = new ProcessRequest();
-                process.ProcessTypeId = pro.ProcessTypeId;
-                process.MainProcessTypeId = pro.MainProcessTypeId;
-                process.ProcessTypeName = pro.ProcessTypeName;
-                // process.ProductId = ;
-                process.OrderMasterId = this.orderMasterId;
-                this.processList.push(process);
-              });
-            }
-          }
-        );
-      }
+        }
+      );
+    }
   }
 
   onProductChange() {
@@ -151,6 +154,7 @@ export class AddProcessComponent implements OnInit {
   }
 
   private saveProcess() {
+    this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Please wait data is being saving.' });
     let processListToSave: ProcessRequest[] = [];
     this.productIds.forEach(productId => {
       this.sizeIds.forEach(size => {
@@ -173,8 +177,9 @@ export class AddProcessComponent implements OnInit {
 
     this._processService.saveProcess(processListToSave).subscribe(
       (x: boolean) => {
+        this._service.clear();
         if (x) {
-          this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
+          this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully', life: 3000 });
           this.Close(false);
         }
       }

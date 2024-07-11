@@ -69,12 +69,12 @@
                         </th>
 
                         <th style="min-width: 8rem;color: black;">
-                            Category
+                            Size
                         </th>
 
-                        <th style="min-width: 8rem;color: black;">
+                        <!-- <th style="min-width: 8rem;color: black;">
                             Unit
-                        </th>
+                        </th> -->
                         <th style="min-width: 8rem;color: black;">
                             Process
                         </th>
@@ -99,11 +99,11 @@
                             {{ item.ProductName}}
                         </td>
                         <td style="min-width: 3rem;">
-                            {{ item.ProductCategoryName}}
+                            {{ item.ProductSizeName}}
                         </td>
-                        <td style="min-width: 3rem;">
+                        <!-- <td style="min-width: 3rem;">
                             {{ item.UnitName}}
-                        </td>
+                        </td> -->
                         <td style="min-width: 3rem;">
                             {{ item.ProcessTypeName}}
                         </td>
@@ -126,14 +126,14 @@
                         <td style="min-width: 8rem;" pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-calendar (ngModelChange)="onQuantityChange(item)" appendTo="body" [showIcon]="true" [(ngModel)]="item.ReceiveDate" dateFormat="d-M-y"
+                                    <p-calendar (ngModelChange)="onQuantityChange(item)" appendTo="body" [showIcon]="true" [(ngModel)]="item.ProductionDate" dateFormat="d-M-y"
                                         name="FromDate" inputId="dateFormat">
                                     </p-calendar>
                                 </ng-template>
             
                                 <ng-template pTemplate="output">
                                     <span BoldAmount>
-                                        {{item.ReceiveDate | date}}</span>
+                                        {{item.ProductionDate | date}}</span>
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -147,8 +147,8 @@
                     <tr>
                         <td style="min-width: 2rem;color: black;"></td>
                         <td style="min-width: 20rem;color: black;"></td>
-                        <td style="min-width: 20rem;color: black;"></td>
-                        <td style="min-width: 10rem;color: black; text-align: end;"></td>
+                        <td style="min-width: 8rem;color: black;"></td>
+                        <!-- <td style="min-width: 10rem;color: black; text-align: end;"></td> -->
                         <td style="min-width: 10rem;color: black; text-align: end;"></td>
                         <td style="min-width: 10rem;color: black; text-align: end;"></td>
                         <td style="min-width: 10rem;color: black; text-align: end;">Total Article(s): </td>

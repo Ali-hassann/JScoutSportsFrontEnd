@@ -46,6 +46,9 @@ export class AddItemUnitsComponent implements OnInit {
       request.UnitId = this.itemUnit.UnitId;
       request.UnitName = this.itemUnit.UnitName;
       request.OutletId = this._authQuery?.PROFILE?.OutletId;
+      
+      this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being saving.' });
+
       if (request.UnitId > 0) {
         this.UpdateItemUnit(request);
       }

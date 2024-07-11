@@ -53,8 +53,7 @@
                         <td style="width:10%; min-width:8rem;" pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="itemOpeing.OpeningQuantity"
-                                        (ngModelChange)="onOpeningChange(itemOpeing)">
+                                    <input pInputText type="number" [(ngModel)]="itemOpeing.OpeningQuantity">
                                 </ng-template>
 
                                 <ng-template pTemplate="output">
@@ -71,8 +70,7 @@
                             *hasRight="InventoryRights.CanShowPurchaseInvoicePrice">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="number" [(ngModel)]="itemOpeing.OpeningPrice"
-                                        (ngModelChange)="onOpeningChange(itemOpeing)">
+                                    <input pInputText type="number" [(ngModel)]="itemOpeing.OpeningPrice">
 
                                 </ng-template>
 

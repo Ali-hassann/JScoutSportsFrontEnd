@@ -58,6 +58,7 @@ export class AddItemVendorsComponent implements OnInit {
         this.particular.ParticularType = ParticularType.CUSTOMER;
       }
       this.particular.OutletId = this._authQuery.PROFILE.CurrentOutletId;
+      this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being saving.' });
 
       if (this.particular?.ParticularId > 0) {
         this.UpdateItem(this.particular);
@@ -77,6 +78,7 @@ export class AddItemVendorsComponent implements OnInit {
         if (x) {
           this._particularQuery.addParticular(x);
           this._financialReportResolverResolver.resolve().subscribe();
+          this._service.clear();
           this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
           this.Close(true);
         }

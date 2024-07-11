@@ -37,8 +37,11 @@ export class AddItemVendorComponent implements OnInit {
 
   ngOnInit(): void {
     if (this._configDialog?.data?.TotalParticulars > 0) {
+      this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being fetching.' });
       this._itemVendorService.getItemVendorListByItemId(this._configDialog?.data?.ItemId)
         .subscribe(res => {
+          this._service.clear();
+          this._service.add({ severity: 'success', summary: 'Sucessfully', detail: 'Fetched Sucessfully' });
           if (res.length > 0) {
             this.vendorDetailList = res;
           }
@@ -81,8 +84,10 @@ export class AddItemVendorComponent implements OnInit {
   }
 
   public saveParticular() {
+    this._service.add({ severity: 'info', summary: 'Loading ...', detail: 'Data is being saving.' });
     this._itemVendorService.saveItemVendor(this.vendorDetailList).subscribe(
       (x: boolean) => {
+        this._service.clear();
         if (x) {
           this._service.add({ severity: 'success', summary: 'Saved Sucessfully', detail: 'Saved Sucessfully' });
           this.Close(true);

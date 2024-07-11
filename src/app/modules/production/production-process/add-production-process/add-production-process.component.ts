@@ -33,6 +33,7 @@ export class AddProductionComponent implements OnInit {
   public orderList: OrderMasterRequest[] = [];
   public employeeList: EmployeeBasicRequest[] = [];
   public selectedEmployee: EmployeeBasicRequest = new EmployeeBasicRequest();
+  public processTypeList: ProcessRequest[] = [];
   public processList: ProcessRequest[] = [];
   public selectedProcess: ProcessRequest = new ProcessRequest();
   productToastIdKey = "";
@@ -68,8 +69,7 @@ export class AddProductionComponent implements OnInit {
     this._orderQuery.orderList$.subscribe(
       (data: OrderMasterRequest[]) => {
         this.orderList = data;
-      }
-    );
+      });
 
     this._employeeQuery.employeeList$.subscribe(
       (data: EmployeeBasicRequest[]) => {
@@ -77,8 +77,7 @@ export class AddProductionComponent implements OnInit {
         if (this._configDialog?.data?.productionProcess?.EmployeeId > 0) {
           this.selectedEmployee = this.employeeList.find(e => e.EmployeeId == this._configDialog?.data?.productionProcess.EmployeeId) ?? new EmployeeBasicRequest();
         }
-      }
-    );
+      });
   }
 
   public close(successfull?: boolean) {
@@ -91,7 +90,9 @@ export class AddProductionComponent implements OnInit {
       && this.issueDate != ''
       && this.issueDate != null) {
       this.prepareDataForSave();
-      this.saveProductionProcess();
+      this.productionProcessList.length > 0 ?
+        this.saveProductionProcess()
+        : this._service.add({ severity: 'error', summary: 'ProductionProcess details are incorrect', detail: 'ProductionProcess details are incorrect' });;
     }
     else {
       this._service.add({ severity: 'error', summary: 'ProductionProcess details are incorrect', detail: 'ProductionProcess details are incorrect' });
@@ -109,28 +110,35 @@ export class AddProductionComponent implements OnInit {
           // this._service.add({ severity: 'error', summary: 'Please try again.', detail: 'Please fill correct Information.' });
           this.close();
         }
-      }
-    );
+      });
   }
 
-  prepareDataForSave() {
+  private prepareDataForSave(): void {
     let listToSave: any[] = [];
     this.bindingArray.forEach(col => {
       col.forEach((cell: ProductionProcessRequest) => {
         if (cell.IssueQuantity > 0) {
           cell.OrderMasterId = this.orderMasterId;
-          cell.IssueDate = this.issueDate;
+          cell.ProductionDate = this.issueDate;
           cell.EmployeeId = this.selectedEmployee.EmployeeId;
           cell.EntityState = EntityStateEnum.Inserted;
-          cell.OutletId = this._authQuery.OutletId;
-          cell.ProcessTypeId = this.selectedProcess.ProcessTypeId;
-          listToSave.push(cell);
+          const process = this.getProcess(cell);
+          cell.ProcessId = process?.ProcessId ?? 0;
+          cell.ProcessRate = process?.ProcessRate ?? 0;
+          cell.ProcessId > 0 ? listToSave.push(cell) : null;
         }
       });
-    })
+    });
+
     if (listToSave.length > 0) {
       this.productionProcessList = listToSave;
     }
+  }
+
+  getProcess(cell: ProductionProcessRequest): ProcessRequest {
+    return this.processList.find(e => e.ProductId === cell.ProductId
+      && e.ProcessTypeId === this.selectedProcess.ProcessTypeId
+      && cell.ProductSizeId === e.ProductSizeId) ?? new ProcessRequest;
   }
 
   masterChange(isOrderChange?: boolean) {
@@ -139,6 +147,7 @@ export class AddProductionComponent implements OnInit {
         if (data?.length > 0) {
           this.productList = data;
           this.setProcessList();
+          this.getOrderDetails();
         } else {
           this._service.add({ severity: 'error', summary: 'Detail', detail: 'No Article In that order' });
         }
@@ -146,24 +155,25 @@ export class AddProductionComponent implements OnInit {
     }
   }
 
-  setProcessList() {
+  private setProcessList(): void {
     this.selectedProcess = new ProcessRequest();
-    this._processQuery.selectProcessListByOrderId(this.orderMasterId,this.mainProcessTypeId).subscribe(
+    this._processQuery.selectProcessListByOrderId(this.orderMasterId, this.mainProcessTypeId).subscribe(
       (data: ProcessRequest[]) => {
+        this.processTypeList = [];
         this.processList = [];
+        this.processList = data;
         data.forEach(process => {
-          this.processList.findIndex(r => r.ProcessTypeName === process.ProcessTypeName) === -1 ? this.processList.push(process) : "";;
-        }
-        );
-      }
-    );
+          this.processTypeList.findIndex(r => r.ProcessTypeName === process.ProcessTypeName) === -1 ? this.processTypeList.push(process) : "";;
+        });
+      });
+
     this.generateMatrix();
   }
 
-  getOrderDetails() {
+  getOrderDetails(): void {
     let request = new ProductionParameterRequest();
     request.OrderMasterId = this.orderMasterId;
-    request.ProcessTypeId = this.selectedProcess.ProcessTypeId;
+   // request.ProcessTypeId = this.selectedProcess.ProcessTypeId;
     request.OutletId = this._authQuery.OutletId;
     this._productionService.getIssuanceListByOrder(request).subscribe(res => {
       this.productSizeList = [];
@@ -188,7 +198,7 @@ export class AddProductionComponent implements OnInit {
     });
   }
 
-  onQuantityChange(process: ProductionProcessRequest) {
+  onQuantityChange(process: ProductionProcessRequest): void {
     // if (process.ProductionProcessId > 0 && this.issuanceNo > 0) {
     //   let processProduct = this.productList.find(e => e.ProductId == process.ProductId);
     //   if (processProduct?.ProductId ?? 0 > 0) {
@@ -198,7 +208,7 @@ export class AddProductionComponent implements OnInit {
     // }
   }
 
-  private generateMatrix() {
+  private generateMatrix(): void {
     this.bindingArray = [];
     if (this.productSizeList.length > 0 && this.productList.length > 0) {
       this.productList.forEach(product => {
@@ -214,17 +224,19 @@ export class AddProductionComponent implements OnInit {
           detail.ProductName = product?.ProductName;
           detail.OrderMasterId = this.orderMasterId;
           detail.IssueQuantity = savedDetail.IssueQuantity;
+          detail.OrderQuantity = savedDetail.OrderQuantity;
           detail.ProcessRate = savedDetail.ProcessRate;
-          detail.IssueDate = this.issueDate;
+          detail.ProductionDate = this.issueDate;
 
           row.push(detail);
         });
+
         this.bindingArray.push(row);
       });
     }
   }
 
-  printIssuanceSlip(process: ProductionProcessRequest) {
+  printIssuanceSlip(process: ProductionProcessRequest): void {
     let request = new ProductionParameterRequest();
     request.EmployeeId = process.EmployeeId;
     request.OrderMasterId = process.OrderMasterId;

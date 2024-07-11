@@ -114,14 +114,14 @@
             <td style="min-width: 8rem;" pEditableColumn>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="item.ReceiveDate" dateFormat="d-M-y"
+                        <p-calendar appendTo="body" [showIcon]="true" [(ngModel)]="item.ProductionDate" dateFormat="d-M-y"
                             name="FromDate" inputId="dateFormat">
                         </p-calendar>
                     </ng-template>
 
                     <ng-template pTemplate="output">
                         <span BoldAmount>
-                            {{item.ReceiveDate | date}}</span>
+                            {{item.ProductionDate | date}}</span>
                     </ng-template>
                 </p-cellEditor>
             </td>

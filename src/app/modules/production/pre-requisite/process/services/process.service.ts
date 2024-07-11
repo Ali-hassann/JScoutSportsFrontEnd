@@ -42,7 +42,7 @@ export class ProcessService {
       .subscribe((data: ProcessRequest[]) => {
         this._processQuery.setLoading(false);
         if (data?.length > 0) {
-          this._processQuery.removeProcesstore();
+          this._processQuery.removeProcesStore();
           this._processQuery.addProcessList(data)
         } else {
           this._processQuery.addProcessList([]);

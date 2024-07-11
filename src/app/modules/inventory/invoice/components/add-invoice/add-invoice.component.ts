@@ -69,10 +69,13 @@ export class AddInvoiceComponent implements OnInit {
     this.documentTypeId = _configDialog?.data?.DocumentTypeId;
     this.isReturnFromList = _configDialog?.data?.ReturnInvoice ?? false;
     if (_configDialog?.data?.InvoiceMasterData?.InvoiceMasterId > 0) {
+      this._messageService.add({ severity: 'info', summary: 'Loading', detail: 'Please wait data is being generating', sticky: true });
       CommonHelperService.mapSourceObjToDestination(_configDialog?.data?.InvoiceMasterData, this.invoiceMasterRequest);
       this.invoiceMasterRequest.InvoiceDate = DateHelperService.getDatePickerFormat(this.invoiceMasterRequest.InvoiceDate);
       this._invoiceService.getInvoiceDetailListByInvoiceMasterId(this.invoiceMasterRequest.InvoiceMasterId)
         .subscribe((invoiceDetailList: InvoiceDetailRequest[]) => {
+          this._messageService.clear();
+          this._messageService.add({ severity: 'success', summary: 'Successful', detail: 'Data fetched successfully', life: 3000 });
           this.invoiceMasterRequest.InvoiceDetailsRequest = invoiceDetailList;
         });
     }
@@ -152,6 +155,7 @@ export class AddInvoiceComponent implements OnInit {
   }
 
   public submit(f: NgForm, isToPrint: boolean) {
+    this._messageService.add({ severity: 'info', summary: 'Loading...', detail: 'Data is being saving.' });
     if (!f.invalid && this.invoiceMasterRequest.ParticularId) {
       let request: InvoiceMasterRequest = new InvoiceMasterRequest();
       this.invoiceMasterRequest.DocumentTypeId = this._configDialog?.data?.DocumentTypeId;
@@ -187,6 +191,7 @@ export class AddInvoiceComponent implements OnInit {
   private addInvoice(request: InvoiceMasterRequest, isToPrint: boolean) {
     this._invoiceService.addInvoice(request).subscribe(
       (x: InvoiceMasterRequest) => {
+        this._messageService.clear();
         this._itemsQuery.removeItemStore();
         this._itemService.getItemList(this._authQuery.OutletId);
         if (x.InvoiceMasterId > 0) {
@@ -201,6 +206,7 @@ export class AddInvoiceComponent implements OnInit {
   private UpdateInvoice(request: InvoiceMasterRequest, isToPrint: boolean) {
     this._invoiceService.updateInvoice(request).subscribe(
       (x: InvoiceMasterRequest) => {
+        this._messageService.clear();
         this._itemsQuery.removeItemStore();
         this._itemService.getItemList(this._authQuery.OutletId);
         if (x.InvoiceMasterId > 0) {
