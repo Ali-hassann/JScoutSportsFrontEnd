@@ -117,12 +117,14 @@ export class AddProcessComponent implements OnInit {
   onOrderChange() {
     this.getProcessList();
   }
+
   public Close(isToRefresh: boolean) {
     this._configDialogRef.close(isToRefresh);
   }
 
   onSingleSelectChange(event: any, process: ProcessRequest) {
     process.Selected = event.checked;
+    process.EntityState = (event.checked && process.ProcessId === 0) ? EntityStateEnum.Inserted : (event.checked && process.ProcessId > 0) ? EntityStateEnum.Updated : EntityStateEnum.Deleted;
   }
 
   onSelectAllChange(event: any) {
@@ -137,11 +139,13 @@ export class AddProcessComponent implements OnInit {
   }
 
   onProcessChange(process: ProcessRequest) {
+    debugger;
     process.OrderMasterId = this.orderMasterId
     if (process?.ProcessId == 0) {
       process.EntityState = EntityStateEnum.Inserted;
     } else if (process?.ProcessId > 0) {
       process.EntityState = EntityStateEnum.Updated;
+
     } else {
       process.EntityState = EntityStateEnum.UnChange;
     }
@@ -159,16 +163,18 @@ export class AddProcessComponent implements OnInit {
     this.productIds.forEach(productId => {
       this.sizeIds.forEach(size => {
         this.processList.forEach(r => {
-          if (r.Selected) {
+          if (r.Selected || (r.EntityState === EntityStateEnum.Deleted && r.ProcessId > 0)) {
             let cell: ProcessRequest = new ProcessRequest();
             cell.OrderMasterId = this.orderMasterId;
             cell.Description = r.Description;
             cell.OtherRate = r.OtherRate;
+            cell.ProcessId = r.ProcessId;
             cell.ProcessRate = r.ProcessRate;
             cell.Selected = r.Selected;
             cell.ProcessTypeId = r.ProcessTypeId;
             cell.ProductId = productId;
             cell.ProductSizeId = size;
+            cell.EntityState = r.EntityState;
             processListToSave.push(cell);
           }
         });
@@ -183,6 +189,6 @@ export class AddProcessComponent implements OnInit {
           this.Close(false);
         }
       }
-    )
+    );
   }
 }
