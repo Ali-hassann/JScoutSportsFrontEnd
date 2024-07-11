@@ -47,7 +47,7 @@
                 <td pEditableColumn>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="number" [(ngModel)]="process.ProcessRate"
+                            <input pInputText selectAll type="number" [(ngModel)]="process.ProcessRate"
                                 [ngModelOptions]="{standalone: true}" (ngModelChange)="onProcessChange(process)">
                         </ng-template>
 
